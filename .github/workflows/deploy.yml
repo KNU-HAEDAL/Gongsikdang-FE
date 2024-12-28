@@ -5,7 +5,7 @@ on:
     branches: ['main']
 env:
   AWS_REGION: ap-northeast-2
-  S3_BUCKET_NAME: gong-sikdang
+  S3_BUCKET_NAME: gongsikdang
 permissions:
   contents: read
 
@@ -37,7 +37,7 @@ jobs:
         run: npm install
 
       - name: Lint Code
-        run: npm lint
+        run: npm run lint
 
       - name: Build
         run: npm run build
