@@ -10,8 +10,7 @@
     "plugin:import/warnings",
     "plugin:import/typescript",
     "plugin:cypress/recommended",
-    "plugin:jsx-a11y/recommended",
-    "@rushstack/eslint-config"
+    "plugin:jsx-a11y/recommended"
   ],
   "plugins": [
     "react",
@@ -23,7 +22,9 @@
   ],
   "parserOptions": {
     "ecmaVersion": 2021,
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "./jsconfig.json",
+    "createDefaultProgram": true
   },
   "settings": {
     "react": {
