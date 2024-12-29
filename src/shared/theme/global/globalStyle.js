@@ -9,8 +9,8 @@ const fontLg = '30px';
 // global color 정의
 const red = '#e10707';
 const lightGray = '#f6f3f3';
-const gray = '#cac2c2';
-const black = '#211f1f';
+const gray = '#c2c2c2';
+const black = '#2E2E2E';
 
 // 버튼 크기 및 여백
 const buttonPadding = '10px 16px';
