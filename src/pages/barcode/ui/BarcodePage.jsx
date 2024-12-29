@@ -74,9 +74,7 @@ const BarcodePage = () => {
 
           return (
             <div key={index} className='barcode-item'>
-              <p>
-                {barcode.name} - #{index + 1}
-              </p>{' '}
+              <p>{barcode.name}</p>
               {/* 순번 표시 */}
               {!isExpired ? (
                 <svg
