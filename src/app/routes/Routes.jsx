@@ -1,14 +1,19 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { BarcodePage } from '@/pages/barcode';
-import { CafeteriaPage } from '@/pages/cafeteria';
-import { ChooseRestaurantPage } from '@/pages/choose-restaurant';
-import { GongsikdangPage } from '@/pages/gongsikdang';
-import { LoginPage } from '@/pages/login';
-import { Mypage } from '@/pages/mypage';
-import { PaymentPage } from '@/pages/payment';
-import { RegisterPage } from '@/pages/register';
-import { RestaurantInfoPage } from '@/pages/restaurant-info';
+import {
+  BarcodePage,
+  CornerAPage,
+  CornerBPage,
+  CornerCPage,
+  CornerDPage,
+  LoginPage,
+  Mypage,
+  PaymentPage,
+  PointPage,
+  RegisterPage,
+  ReviewPage,
+  SelectCornerPage,
+} from '@/pages';
 
 const router = createBrowserRouter([
   {
@@ -21,35 +26,57 @@ const router = createBrowserRouter([
   },
   {
     path: '/mypage',
-    element: <Mypage />,
+    children: [
+      {
+        index: true,
+        element: <Mypage />,
+      },
+      {
+        path: 'point',
+        element: <PointPage />,
+      },
+      {
+        path: 'barcode',
+        element: <BarcodePage />,
+      },
+    ],
   },
   {
     path: '/payment',
     element: <PaymentPage />,
   },
   {
-    path: '/cafeteria',
-    element: <CafeteriaPage />,
-  },
-  {
-    path: '/barcode',
-    element: <BarcodePage />,
-  },
-  {
     path: '/register',
     element: <RegisterPage />,
   },
   {
-    path: '/choose-restaurant',
-    element: <ChooseRestaurantPage />,
+    path: '/corner',
+    children: [
+      {
+        index: true,
+        element: <SelectCornerPage />,
+      },
+      {
+        path: 'A',
+        element: <CornerAPage />,
+      },
+      {
+        path: 'B',
+        element: <CornerBPage />,
+      },
+      {
+        path: 'C',
+        element: <CornerCPage />,
+      },
+      {
+        path: 'D',
+        element: <CornerDPage />,
+      },
+    ],
   },
   {
-    path: '/gongsikdang',
-    element: <GongsikdangPage />,
-  },
-  {
-    path: '/restaurant-info',
-    element: <RestaurantInfoPage />,
+    path: '/review',
+    element: <ReviewPage />,
   },
 ]);
 
