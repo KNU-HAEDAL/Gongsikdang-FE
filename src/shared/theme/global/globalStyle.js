@@ -1,13 +1,15 @@
 import { css } from '@emotion/react';
 
 // font size 정의
-const fontXs = '14px';
-const fontSm = '18px';
-const fontMd = '24px';
-const fontLg = '30px';
+const fontSm = '14px';
+const fontMd = '16px';
+const fontLg = '18px';
+const fontXl = '20px';
+const fontXxl = '24px';
 
 // global color 정의
 const red = '#e10707';
+const pink = '#FFB3B3';
 const lightGray = '#f6f3f3';
 const gray = '#c2c2c2';
 const black = '#2E2E2E';
@@ -29,12 +31,14 @@ export const globalStyle = css`
   }
 
   :root {
-    --font-xs: ${fontXs};
     --font-sm: ${fontSm};
     --font-md: ${fontMd};
     --font-lg: ${fontLg};
+    --font-xl: ${fontXl};
+    --font-xxl: ${fontXxl};
 
     --red: ${red};
+    --pink: ${pink};
     --lightGray: ${lightGray};
     --gray: ${gray};
     --black: ${black};
