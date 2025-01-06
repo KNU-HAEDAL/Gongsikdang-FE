@@ -30,6 +30,14 @@ export const globalStyle = css`
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'BMJUA';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff')
+      format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   :root {
     --font-sm: ${fontSm};
     --font-md: ${fontMd};
@@ -56,7 +64,7 @@ export const globalStyle = css`
     box-sizing: border-box;
   }
   body {
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard-Regular', 'BMJUA', Arial, sans-serif;
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, #ffb3b3, #fffefe);
@@ -64,7 +72,6 @@ export const globalStyle = css`
     justify-content: center;
     align-items: center;
     height: 100vh;
-    font-family: 'Pretendard-Regular', Arial, sans-serif;
     overflow: hidden;
   }
 `;
