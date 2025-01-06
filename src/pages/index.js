@@ -8,5 +8,6 @@ export * from './mypage';
 export * from './payment';
 export * from './point';
 export * from './register';
-export * from './review';
+export * from './review-write';
+export * from './review-food';
 export * from './select-corner';
