@@ -1,1 +1,1 @@
-export { default as ReviewPage } from './ReviewPage';
+export { default as ReviewFoodPage } from './ReviewFoodPage';
