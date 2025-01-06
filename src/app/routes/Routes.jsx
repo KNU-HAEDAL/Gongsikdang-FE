@@ -11,7 +11,8 @@ import {
   PaymentPage,
   PointPage,
   RegisterPage,
-  ReviewPage,
+  ReviewFoodPage,
+  ReviewWritePage,
   SelectCornerPage,
 } from '@/pages';
 
@@ -75,8 +76,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/review',
-    element: <ReviewPage />,
+    path: '/review/food',
+    element: <ReviewFoodPage />,
+  },
+  {
+    path: '/review/write',
+    element: <ReviewWritePage />,
   },
 ]);
 
