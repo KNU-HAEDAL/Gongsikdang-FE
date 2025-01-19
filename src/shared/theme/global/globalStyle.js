@@ -13,6 +13,7 @@ const pink = '#FFB3B3';
 const lightGray = '#f6f3f3';
 const gray = '#c2c2c2';
 const black = '#2E2E2E';
+const pink = '#FFB3B3';
 
 // 버튼 크기 및 여백
 const buttonPadding = '10px 16px';
@@ -50,7 +51,7 @@ export const globalStyle = css`
     --lightGray: ${lightGray};
     --gray: ${gray};
     --black: ${black};
-
+    --pink: ${pink};
     --button-padding: ${buttonPadding};
     --button-border-radius: ${buttonBorderRadius};
 
