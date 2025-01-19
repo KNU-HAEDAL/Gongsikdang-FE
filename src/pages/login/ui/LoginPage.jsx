@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as Login from './LoginPage.style';
 import { fetchInstance } from '@/shared/instance/Instance';
+
+import * as Login from './LoginPage.style';
 
 const LoginPage = ({ onLogin }) => {
   const [id, setId] = useState('');
@@ -60,9 +61,7 @@ const LoginPage = ({ onLogin }) => {
         </Login.LoginBox>
         <Login.SignUpWrapper>
           아직 회원이 아니라면?{' '}
-          <Login.SignUpButton
-            onClick={() => navigate('/register')}
-          >
+          <Login.SignUpButton onClick={() => navigate('/register')}>
             회원가입하기
           </Login.SignUpButton>
         </Login.SignUpWrapper>
@@ -70,4 +69,5 @@ const LoginPage = ({ onLogin }) => {
     </Login.LoginPageLayout>
   );
 };
+
 export default LoginPage;
