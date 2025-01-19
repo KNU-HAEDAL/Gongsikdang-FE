@@ -70,6 +70,7 @@ export const globalStyle = css`
     background: linear-gradient(135deg, #ffb3b3, #fffefe);
     display: flex;
     justify-content: center;
+    font-size: var(--font-md);
     align-items: center;
     height: 100vh;
     overflow: hidden;
