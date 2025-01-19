@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as Login from './LoginPage.style';
 import { fetchInstance } from '@/shared/instance/Instance';
+
+import * as Login from './LoginPage.style';
 
 const LoginPage = ({ onLogin }) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -18,9 +20,9 @@ const LoginPage = ({ onLogin }) => {
       });
       if (response.data && response.data.message === 'Login successful') {
         alert('Login successful!');
-        sessionStorage.setItem('token', response.data.token); // JWT 토큰 저장
+        sessionStorage.setItem('token', response.data.token);
         onLogin();
-        navigate('/ChooseRestaurant'); // 식당 선택 페이지로 이동
+        navigate('/ChooseRestaurant');
       } else {
         alert(
           response.data.message || 'Invalid credentials, please try again.'
@@ -36,10 +38,10 @@ const LoginPage = ({ onLogin }) => {
     <Login.LoginPageLayout>
       <form onSubmit={handleSubmit}>
         <Login.LogoCircle>
-          <Login.SubLogoCircle />
+          <Login.SubLogoCircle>공식당</Login.SubLogoCircle>
         </Login.LogoCircle>
         <Login.LoginTitle>환영합니다!</Login.LoginTitle>
-        <Login.SubTitle>학교 식당 예약 사이트 입니다</Login.SubTitle>
+        <Login.SubTitle>공식당 예약 키오스크 서비스 입니다.</Login.SubTitle>
         <Login.LoginBox>
           <Login.LoginInput
             type='text'
@@ -57,12 +59,12 @@ const LoginPage = ({ onLogin }) => {
           />
           <Login.LoginButton type='submit'>로그인</Login.LoginButton>
         </Login.LoginBox>
-        <Login.SignUpButton
-          className='signup-button'
-          onClick={() => navigate('/register')}
-        >
-          회원가입
-        </Login.SignUpButton>
+        <Login.SignUpWrapper>
+          아직 회원이 아니라면?{' '}
+          <Login.SignUpButton onClick={() => navigate('/register')}>
+            회원가입하기
+          </Login.SignUpButton>
+        </Login.SignUpWrapper>
       </form>
     </Login.LoginPageLayout>
   );

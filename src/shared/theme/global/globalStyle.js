@@ -50,7 +50,7 @@ export const globalStyle = css`
     --lightGray: ${lightGray};
     --gray: ${gray};
     --black: ${black};
-
+    --pink: ${pink};
     --button-padding: ${buttonPadding};
     --button-border-radius: ${buttonBorderRadius};
 

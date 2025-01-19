@@ -1,5 +1,6 @@
-import { Routes } from './app/routes';
 import { globalStyle } from '@/shared';
+
+import { Routes } from './app/routes';
 import { Global } from '@emotion/react';
 
 const App = () => {
