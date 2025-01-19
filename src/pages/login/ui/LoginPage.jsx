@@ -38,7 +38,7 @@ const LoginPage = ({ onLogin }) => {
     <Login.LoginPageLayout>
       <form onSubmit={handleSubmit}>
         <Login.LogoCircle>
-          <Login.SubLogoCircle />
+          <Login.SubLogoCircle>공식당</Login.SubLogoCircle>
         </Login.LogoCircle>
         <Login.LoginTitle>환영합니다!</Login.LoginTitle>
         <Login.SubTitle>공식당 예약 키오스크 서비스 입니다.</Login.SubTitle>

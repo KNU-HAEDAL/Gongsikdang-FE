@@ -26,9 +26,16 @@ export const LogoCircle = styled.div`
 export const SubLogoCircle = styled.div`
   width: 80px;
   height: 80px;
+  background-color: #000;
+  color: #fff;
   background-size: cover;
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'BMJUA';
+  font-size: var(--font-xl);
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
 
 export const LoginTitle = styled.h1`
@@ -81,7 +88,9 @@ export const LoginButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 
   :hover {
     transform: translateY(-2px);

@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import JsBarcode from 'jsbarcode';
 
-import * as Barcode from './BarcodePage.style';
 import * as Common from '@/shared/styles';
+
+import * as Barcode from './BarcodePage.style';
 
 const BarcodePage = () => {
   const location = useLocation();
