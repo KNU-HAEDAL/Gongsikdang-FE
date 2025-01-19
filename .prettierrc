@@ -25,8 +25,9 @@
 
     "<THIRD_PARTY_MODULES>",
 
-    "^(@/components)(.*)$",
+    "^(@/app)(.*)$",
     "^(@/pages)(.*)$",
+    "^(@/shared)(.*)$",
 
     "^(.*)/(.*)$"
   ],
