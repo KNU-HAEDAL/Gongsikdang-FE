@@ -22,6 +22,7 @@
   "importOrder": [
     "^react(.*)$",
     "^@emotion/styled$",
+    "^@radix-ui/react-icons$",
 
     "<THIRD_PARTY_MODULES>",
 
