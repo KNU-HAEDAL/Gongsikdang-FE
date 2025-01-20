@@ -63,15 +63,14 @@ export const globalStyle = css`
     padding: 0;
     box-sizing: border-box;
   }
+
   body {
     font-family: 'Pretendard-Regular', 'BMJUA', Arial, sans-serif;
     width: 100%;
-    height: 100%;
     background: linear-gradient(135deg, #ffb3b3, #fffefe);
     display: flex;
     justify-content: center;
     font-size: var(--font-md);
-    align-items: center;
     height: 100vh;
     overflow: hidden;
   }
