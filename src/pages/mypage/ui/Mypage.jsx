@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as Mypage from './Mypage.style';
 import { fetchInstance } from '@/shared/instance/Instance';
 import * as Common from '@/shared/styles';
+
+import * as Mypage from './Mypage.style';
 
 const MyPage = () => {
   const [purchases, setPurchases] = useState([]); // 구매 내역

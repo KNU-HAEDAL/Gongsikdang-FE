@@ -26,13 +26,23 @@ export const LogoCircle = styled.div`
 export const SubLogoCircle = styled.div`
   width: 80px;
   height: 80px;
+<<<<<<< HEAD
   font-family: 'BMJUA';
+=======
+  background-color: #000;
+  color: #fff;
+>>>>>>> e85e8022869169d9e1c316dee45504b9f1c4a51d
   background-size: cover;
   font-size: 30px;
   color: var(--gray);
   background: var(--black);
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'BMJUA';
+  font-size: var(--font-xl);
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
 
 export const LoginTitle = styled.h1`
