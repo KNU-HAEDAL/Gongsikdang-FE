@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 export const LoginPageLayout = styled.div`
   width: var(--page-width);
   background-color: #fff;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 50px 30px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -15,8 +15,8 @@ export const LogoCircle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   background: #fff;
   border-radius: 50%;
   margin: -70px auto 20px;
@@ -24,13 +24,26 @@ export const LogoCircle = styled.div`
 `;
 
 export const SubLogoCircle = styled.div`
-  width: 80px;
-  height: 80px;
+  width: 95px;
+  height: 95px;
+  font-family: 'BMJUA';
+  background-color: #000;
+  color: #fff;
   background-size: cover;
+  background: var(--black);
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 34px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  .yellow {
+    color: #eff697;
+  }
+  .blue {
+    color: #57e7fe;
+  }
 `;
-
 export const LoginTitle = styled.h1`
   font-size: var(--font-xl);
   font-weight: 700;
