@@ -6,9 +6,10 @@ const SelectCornerPage = () => {
   return (
     <div>
       <h1>Select Corner Page</h1>
-      <button onClick={() => navigate('/corner/A')}>
-        A코너 페이지로 돌아가기
-      </button>
+      <button onClick={() => navigate('/corner/A')}>A코너</button>
+      <button onClick={() => navigate('/corner/B')}>B코너</button>
+      <button onClick={() => navigate('/corner/C')}>C코너</button>
+      <button onClick={() => navigate('/corner/D')}>D코너</button>
     </div>
   );
 };

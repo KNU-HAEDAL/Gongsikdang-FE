@@ -6,9 +6,8 @@ const CornerCPage = () => {
   return (
     <div>
       <h1>C Corner Page</h1>
-      <button onClick={() => navigate('/corner/D')}>
-        D코너 페이지로 돌아가기
-      </button>
+      <button onClick={() => navigate('/payment')}>결제페이지</button>
+      <button onClick={() => navigate('/review/food')}>리뷰보기</button>
     </div>
   );
 };

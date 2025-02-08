@@ -64,9 +64,9 @@ const MyPage = () => {
           ))}
         </Mypage.PurchaseHistoryList>
       </Mypage.PurchaseHistory>
-      <button onClick={() => navigate('/mypage/point')}>
-        포인트 페이지로 돌아가기
-      </button>
+      <button onClick={() => navigate('/mypage/point')}>포인트 페이지</button>
+      <button onClick={() => navigate('/review/write')}>리뷰쓰기</button>
+      <button onClick={() => navigate('/mypage/barcode')}>바코드</button>
     </Mypage.MypageLayout>
   );
 };

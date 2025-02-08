@@ -102,7 +102,11 @@ const RegisterPage = () => {
       <Register.RegisterPageLayout>
         {/* 로고 */}
         <Register.LogoCircle>
-          <Register.SubLogoCircle />
+          <Register.SubLogoCircle>
+            {' '}
+            <span className='yellow'>공</span>
+            <span className='blue'>식당</span>
+          </Register.SubLogoCircle>
         </Register.LogoCircle>
 
         {/* 제목 */}

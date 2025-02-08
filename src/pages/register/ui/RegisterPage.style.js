@@ -43,10 +43,23 @@ export const LogoCircle = styled.div`
 export const SubLogoCircle = styled.div`
   width: 95px;
   height: 95px;
-  top: 13px;
-  left: 12px;
+  font-family: 'BMJUA';
+  background-color: #000;
+  color: #fff;
+  background-size: cover;
+  background: var(--black);
   border-radius: 50%;
-  background: #2e2e2e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 34px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  .yellow {
+    color: #eff697;
+  }
+  .blue {
+    color: #57e7fe;
+  }
 `;
 
 /* 회원가입 페이지 제목 */

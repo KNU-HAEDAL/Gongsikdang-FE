@@ -69,13 +69,9 @@ const LoginPage = ({ onLogin }) => {
             회원가입하기
           </Login.SignUpButton>
         </Login.SignUpWrapper>
-        <button onClick={() => navigate('/register')}>
-          회원가입 페이지로 돌아가기
-        </button>
+        <button onClick={() => navigate('/mypage')}>마이페이지</button>
+        <button onClick={() => navigate('/corner')}>코너선택</button>
       </form>
-      <button onClick={() => navigate('/register')}>
-        회원가입 페이지로 돌아가기
-      </button>
     </Login.LoginPageLayout>
   );
 };
