@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as Mypage from './Mypage.style';
 import { fetchInstance } from '@/shared/instance/Instance';
 import * as Common from '@/shared/styles';
+
+import * as Mypage from './Mypage.style';
 
 const MyPage = () => {
   const [purchases, setPurchases] = useState([]); // 구매 내역
@@ -63,6 +64,9 @@ const MyPage = () => {
           ))}
         </Mypage.PurchaseHistoryList>
       </Mypage.PurchaseHistory>
+      <button onClick={() => navigate('/mypage/point')}>
+        포인트 페이지로 돌아가기
+      </button>
     </Mypage.MypageLayout>
   );
 };

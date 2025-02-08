@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 
 import {
   BarcodePage,
@@ -16,7 +16,8 @@ import {
   SelectCornerPage,
 } from '@/pages';
 
-const router = createBrowserRouter([
+// 🟢 createBrowserRouter → createHashRouter로 변경
+const router = createHashRouter([
   {
     path: '/',
     element: <LoginPage />,

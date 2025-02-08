@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { fetchInstance } from '@/shared/instance/Instance';
+import * as Common from '@/shared/styles';
+
 import kakaoPay from '../assets/kakao-pay.png';
 import tossPay from '../assets/toss-pay.png';
 import * as Payment from './PaymentPage.style';
-import { fetchInstance } from '@/shared/instance/Instance';
-import * as Common from '@/shared/styles';
 
 const PaymentPage = () => {
   const location = useLocation();
@@ -198,6 +199,9 @@ const PaymentPage = () => {
       <Payment.SubmitButton onClick={handlePayment}>
         결제하기
       </Payment.SubmitButton>
+      <button onClick={() => navigate('/review/food')}>
+        음식리뷰 페이지로 돌아가기
+      </button>
     </Payment.PaymentPageLayout>
   );
 };

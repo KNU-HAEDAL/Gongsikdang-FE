@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
+
+import InfoCircledIcon from '@/pages/_assets/icons/InfoCircledIcon';
 
 import * as Register from './RegisterPage.style';
 
@@ -109,69 +111,87 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit}>
           {/* 아이디 입력 */}
           <Register.FormSection>
-            <Register.Label>아이디를 입력해주세요.</Register.Label>
             <Register.InputGroup>
               <Register.FormInput
                 type='text'
                 value={id}
                 onChange={(e) => setId(e.target.value)}
-                placeholder='6 ~ 12 자로 입력해주세요'
+                placeholder='아이디를 입력해주세요'
               />
-              <Register.SmallButton
-                type='button'
-                onClick={handleIdDuplicationCheck}
-              >
-                중복확인
-              </Register.SmallButton>
             </Register.InputGroup>
+            <Register.Label>
+              <InfoCircledIcon
+                style={{ marginRight: '5px', verticalAlign: 'middle' }}
+              />
+              6~12자로 입력해주세요.
+            </Register.Label>
             {idError && (
               <Register.ErrorMessage>{idError}</Register.ErrorMessage>
             )}
           </Register.FormSection>
+          <Register.SmallButton
+            type='button'
+            onClick={handleIdDuplicationCheck}
+          >
+            중복확인
+          </Register.SmallButton>
 
           {/* 비밀번호 입력 */}
           <Register.FormSection>
-            <Register.Label>비밀번호를 입력해주세요.</Register.Label>
             <Register.FormInput
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onBlur={handlePasswordValidation}
-              placeholder='6자 이상, 영문자 및 숫자, 특수문자 포함해야합니다.'
+              placeholder='비밀번호를 입력해주세요.'
             />
             {passwordError && (
               <Register.ErrorMessage>{passwordError}</Register.ErrorMessage>
             )}
+            <Register.Label>
+              <InfoCircledIcon
+                style={{ marginRight: '5px', verticalAlign: 'middle' }}
+              />
+              6자 이상, 영문자 및 숫자, 특수문자 포함해야합니다.
+            </Register.Label>
           </Register.FormSection>
 
           {/* 비밀번호 확인 */}
           <Register.FormSection>
-            <Register.Label>비밀번호를 재입력해주세요.</Register.Label>
             <Register.FormInput
               type='password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               onBlur={handlePasswordConfirmValidation}
-              placeholder='동일한 비밀번호를 한 번 더 입력해주세요.'
+              placeholder='비밀번호를 재입력해주세요.'
             />
             {confirmPasswordError && (
               <Register.ErrorMessage>
                 {confirmPasswordError}
               </Register.ErrorMessage>
             )}
+            <Register.Label>
+              <InfoCircledIcon
+                style={{ marginRight: '5px', verticalAlign: 'middle' }}
+              />
+              동일한 비밀번호를 한 번 더 입력해주세요.
+            </Register.Label>
           </Register.FormSection>
 
           {/* 닉네임 입력 */}
           <Register.FormSection>
-            <Register.Label>
-              닉네임을 입력해주세요.(3글자 이상, 특수문자 제외)
-            </Register.Label>
             <Register.FormInput
               type='text'
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              placeholder='특수문자를 제외한 3글자 이상을 입력해주세요.'
+              placeholder='닉네임을 입력해주세요.(3글자 이상, 특수문자 제외)'
             />
+            <Register.Label>
+              <InfoCircledIcon
+                style={{ marginRight: '5px', verticalAlign: 'middle' }}
+              />
+              특수문자를 제외한 3글자 이상을 입력해주세요.
+            </Register.Label>
           </Register.FormSection>
 
           {/* 회원가입 및 취소 버튼 */}
@@ -193,6 +213,9 @@ const RegisterPage = () => {
             로그인하기
           </Register.LoginLink>
         </Register.Footer>
+        <button onClick={() => navigate('/corner')}>
+          코너선택 페이지로 돌아가기
+        </button>
       </Register.RegisterPageLayout>
     </Register.Background>
   );

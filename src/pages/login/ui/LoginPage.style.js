@@ -81,7 +81,9 @@ export const LoginButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 
   :hover {
     transform: translateY(-2px);
