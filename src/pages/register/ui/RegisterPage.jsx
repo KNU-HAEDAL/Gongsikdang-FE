@@ -55,7 +55,7 @@ const RegisterPage = () => {
     setPasswordValid(isValid);
     if (!isValid) {
       setPasswordError(
-        '비밀번호는 6~12자의 영문, 숫자, 특수문자를 포함해야 합니다.'
+        '비밀번호는 6자 이상의 영문, 숫자, 특수문자를 포함해야 합니다.'
       );
     } else {
       setPasswordError('');
@@ -122,16 +122,16 @@ const RegisterPage = () => {
                 onChange={(e) => setId(e.target.value)}
                 placeholder='아이디를 입력해주세요'
               />
+              {/* 에러 메시지: 입력 필드 바로 아래에 절대 위치 */}
+              <Register.ErrorMessage>{idError}</Register.ErrorMessage>
             </Register.InputGroup>
+            {/* 아이콘과 안내 메시지 */}
             <Register.Label>
               <InfoCircledIcon
                 style={{ marginRight: '5px', verticalAlign: 'middle' }}
               />
               6~12자로 입력해주세요.
             </Register.Label>
-            {idError && (
-              <Register.ErrorMessage>{idError}</Register.ErrorMessage>
-            )}
           </Register.FormSection>
           <Register.SmallButton
             type='button'

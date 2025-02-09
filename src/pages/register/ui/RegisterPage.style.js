@@ -11,6 +11,7 @@ export const RegisterPageLayout = styled.div`
     }
   }
 
+  top: 137px;
   width: 390px;
   height: 720px;
   background-color: #fff;
@@ -79,6 +80,7 @@ export const RegisterTitle = styled.span`
 
 /* 입력 폼 섹션 */
 export const FormSection = styled.section`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -131,7 +133,7 @@ export const FormButton = styled.button`
     box-shadow 0.2s;
 
   :hover {
-    transform: translateY(-2px);
+    transform: translateY(58px);
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   }
 `;
@@ -175,14 +177,20 @@ export const SmallButton = styled.button`
 
 /* 에러 메시지 스타일 */
 export const ErrorMessage = styled.span`
-  font-size: 14px;
+  font-size: 12px;
   color: #e10707;
+  height: 10px;
+  margin-top: 4px;
+  position: absolute;
+  top: 40px;
+  display: ${({ children }) => (children ? 'block' : 'none')};
 `;
 
 /* Label 스타일-밑줄 아래부분 */
 export const Label = styled.label`
   font-size: 14px;
   color: #777777;
+  margin-top: 5px;
 `;
 
 /* 버튼 그룹 스타일 */

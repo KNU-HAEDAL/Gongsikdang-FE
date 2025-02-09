@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 export const LoginPageLayout = styled.div`
+  top: 137px;
   width: var(--page-width);
   background-color: #fff;
   border-radius: 10px;
@@ -19,7 +20,7 @@ export const LogoCircle = styled.div`
   height: 120px;
   background: #fff;
   border-radius: 50%;
-  margin: -70px auto 20px;
+  margin: -100px auto 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 `;
 
