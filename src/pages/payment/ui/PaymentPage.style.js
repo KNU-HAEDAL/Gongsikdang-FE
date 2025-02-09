@@ -143,14 +143,6 @@ export const TotalText = styled.p`
   font-size: 16px;
   margin: 5px;
 `;
-export const SumText = styled.p`
-
-  color: black
-  font-size: 16px;
-  margin: 5px 0;
-   border-top: 1px solid gray; 
-  padding-top: 5px;
-`;
 
 export const SubmitButton = styled.button`
   width: 330px;
