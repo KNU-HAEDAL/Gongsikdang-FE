@@ -28,7 +28,7 @@ const menuData = [
     rating: 3,
     reviews: 200,
     stock: 200,
-    image: '/images/manduramen.jpg',
+    image: './images/manduramen.jpg',
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const menuData = [
     rating: 5,
     reviews: 200,
     stock: 200,
-    image: '/images/porkkimchisoup.jpg',
+    image: './images/porkkimchisoup.jpg',
   },
   {
     id: 4,
@@ -46,11 +46,12 @@ const menuData = [
     rating: 5,
     reviews: 200,
     stock: 200,
-    image: '/images/bombramen.jpg',
+    image: './images/bombramen.jpg',
   },
 ];
 
 const CornerDPage = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useState([]); // 장바구니 상태
   const [quantities, setQuantities] = useState(
     menuData.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {})
@@ -108,7 +109,9 @@ const CornerDPage = () => {
                   />
                 ))}
               </Styled.Review>
-              <Styled.ReviewButton>리뷰 보기</Styled.ReviewButton>
+              <Styled.ReviewButton onClick={() => navigate('/review/food')}>
+                리뷰보기
+              </Styled.ReviewButton>
               <Styled.QuantityControl>
                 <Styled.QuantityButton
                   onClick={() => handleQuantityChange(item.id, -1)}

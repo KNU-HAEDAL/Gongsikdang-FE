@@ -51,6 +51,7 @@ const menuData = [
 ];
 
 const CornerAPage = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useState([]); // 장바구니 상태
   const [quantities, setQuantities] = useState(
     menuData.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {})
@@ -108,7 +109,9 @@ const CornerAPage = () => {
                   />
                 ))}
               </Styled.Review>
-              <Styled.ReviewButton>리뷰 보기</Styled.ReviewButton>
+              <Styled.ReviewButton onClick={() => navigate('/review/food')}>
+                리뷰보기
+              </Styled.ReviewButton>
               <Styled.QuantityControl>
                 <Styled.QuantityButton
                   onClick={() => handleQuantityChange(item.id, -1)}
