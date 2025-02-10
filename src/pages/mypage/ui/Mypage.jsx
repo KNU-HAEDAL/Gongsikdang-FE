@@ -91,7 +91,9 @@ const MyPage = () => {
               <Mypage.UserText>
                 <Mypage.BoldText>호반우님</Mypage.BoldText>님 반갑습니다.
               </Mypage.UserText>
-              <Mypage.RedButton>로그아웃</Mypage.RedButton>
+              <Mypage.RedButton onClick={() => navigate('/login')}>
+                로그아웃
+              </Mypage.RedButton>
             </Mypage.Wrapper>
           </Mypage.InfoBox>
         </Mypage.Section>
@@ -103,7 +105,9 @@ const MyPage = () => {
               <Mypage.PointText>
                 <Mypage.BoldText>5,000점</Mypage.BoldText> 사용 가능합니다.
               </Mypage.PointText>
-              <Mypage.RedButton>충전하기</Mypage.RedButton>
+              <Mypage.RedButton onClick={() => navigate('/mypage/point')}>
+                충전하기
+              </Mypage.RedButton>
             </Mypage.Wrapper>
           </Mypage.PointBox>
         </Mypage.Section>
@@ -151,7 +155,7 @@ const MyPage = () => {
                 </Mypage.PurchaseCard>
               ))}
               <button onClick={() => navigate('/mypage/barcode')}>
-                바코드 페이지
+                바코드 확인
               </button>
             </Mypage.PurchaseList>
           </Mypage.PurchaseBox>

@@ -11,7 +11,7 @@ export const Background = styled.div`
 
 export const Layout = styled.div`
   width: 390px;
-  height: 1069px;
+  height: 876px;
   top: 1332px;
   left: 602px;
   border-radius: 20px;
