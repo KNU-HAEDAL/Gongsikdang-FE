@@ -155,7 +155,10 @@ const CornerAPage = () => {
               '장바구니가 비어 있습니다.'
             )}
           </Styled.CartSummary>
-          <Styled.CheckoutButton disabled={cart.length === 0}>
+          <Styled.CheckoutButton
+            onClick={() => navigate('/payment')}
+            disabled={cart.length === 0}
+          >
             결제하기
           </Styled.CheckoutButton>
         </Styled.CartSection>
