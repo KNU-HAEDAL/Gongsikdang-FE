@@ -150,6 +150,9 @@ const MyPage = () => {
                   </Mypage.ButtonBox>
                 </Mypage.PurchaseCard>
               ))}
+              <button onClick={() => navigate('/mypage/barcode')}>
+                바코드 페이지
+              </button>
             </Mypage.PurchaseList>
           </Mypage.PurchaseBox>
         </Mypage.Section>
