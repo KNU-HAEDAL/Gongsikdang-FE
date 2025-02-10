@@ -73,7 +73,7 @@ const MyPage = () => {
     );
   };
   const handleReviewClick = (purchase) => {
-    navigate('/review/food', {
+    navigate('/review/write', {
       state: {
         name: purchase.name,
         date: purchase.date,
