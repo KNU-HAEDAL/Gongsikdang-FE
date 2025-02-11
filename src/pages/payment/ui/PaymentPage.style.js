@@ -5,7 +5,7 @@ export const Background = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: 120vh;
   background-color: #ffe0e0;
 `;
 export const PaymentPageLayout = styled.div`
@@ -119,9 +119,9 @@ export const MethodBox = styled.div`
   padding: 15px;
   height: 100px;
   cursor: pointer;
-  transition:
-    background-color 0.3s,
-    transform 0.2s;
+  &.selected {
+    border: 2px solid #e10707;
+  }
 `;
 
 export const Image = styled.img`

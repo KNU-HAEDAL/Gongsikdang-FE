@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
 import { Header } from '@/shared/index.js';
 import { fetchInstance } from '@/shared/instance/Instance';
-import * as Common from '@/shared/styles';
 
 import creditCard from '../assets/credit-card.png';
 import kakaoPay from '../assets/kakao-pay.png';
@@ -17,8 +16,8 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const { cart } = location.state || { cart: [] };
 
-  const [selectedPayment, setSelectedPayment] = useState('credit-card'); // 기본 결제 수단: 신용카드
-  const [pgProvider, setPgProvider] = useState('html5_inicis'); // 기본 PG사: 이니시스 (신용카드)
+  const [selectedPayment, setSelectedPayment] = useState('card'); // 기본 결제 수단: 신용카드
+  const [pgProvider, setPgProvider] = useState('html5_inicis'); // 기본 PG사: KG이니시스
 
   const [usedPoints, setUsedPoints] = useState(0);
   const totalAmount = cart.reduce(
@@ -29,14 +28,42 @@ const PaymentPage = () => {
   const pointUsage = pointBalance >= totalAmount ? totalAmount : pointBalance;
   const finalAmount = totalAmount - pointUsage;
 
+  useEffect(() => {
+    if (!window.IMP) {
+      alert('포트원 결제 모듈이 로드되지 않았습니다.');
+    }
+  }, []);
+
   const handlePayment = () => {
+    if (!window.IMP) {
+      alert('포트원 결제 모듈이 로드되지 않았습니다.');
+      return;
+    }
+
     const IMP = window.IMP;
-    IMP.init('imp17808248');
+    IMP.init('store-136fc171-1746-4039-9d66-e38eba9da13a'); // 포트원 가맹점 Store ID (테스트 모드)
 
     const merchantUid = `mid_${new Date().getTime()}`;
+
+    // PG 설정
+    let pgCode = '';
+    switch (pgProvider) {
+      case 'html5_inicis':
+        pgCode = 'html5_inicis.INIpayTest'; // KG이니시스 (테스트 MID)
+        break;
+      case 'kakaopay':
+        pgCode = 'kakaopay.TC0ONETIME'; // 카카오페이 (테스트 MID)
+        break;
+      case 'tosspay':
+        pgCode = 'tosspay.tosstest'; // 토스페이 (테스트 MID)
+        break;
+      default:
+        pgCode = 'html5_inicis.INIpayTest';
+    }
+
     const paymentData = {
-      pg: pgProvider,
-      pay_method: selectedPayment,
+      pg: pgCode,
+      pay_method: selectedPayment, // 'card' (신용카드), 'trans' (계좌이체) 등
       merchant_uid: merchantUid,
       name: '주문 상품',
       amount: finalAmount,
@@ -61,7 +88,7 @@ const PaymentPage = () => {
 
           // 백엔드로 결제 데이터 전송
           await fetchInstance.post(
-            'http://localhost:8080/api/purchases', // 백엔드 API 주소
+            'http://localhost:8080/api/purchases',
             {
               merchantUid,
               date: new Date().toISOString(),
@@ -77,21 +104,21 @@ const PaymentPage = () => {
             },
             {
               headers: {
-                Authorization: `Bearer ${token}`, // JWT 토큰 전달
+                Authorization: `Bearer ${token}`,
               },
             }
           );
 
-          // **재고 감소 요청 추가**
+          // 재고 감소 요청
           await axios.post(
-            'http://localhost:8080/menu/reduce', // 백엔드 재고 감소 API 주소
+            'http://localhost:8080/menu/reduce',
             cart.map((item) => ({
               name: item.name,
               quantity: item.quantity,
             })),
             {
               headers: {
-                Authorization: `Bearer ${token}`, // JWT 토큰 전달
+                Authorization: `Bearer ${token}`,
               },
             }
           );
@@ -111,17 +138,14 @@ const PaymentPage = () => {
           alert('결제 성공했지만 재고 감소 중 문제가 발생했습니다.');
         }
       } else {
-        alert(
-          `결제 실패: ${response.error_msg || '알 수 없는 오류가 발생했습니다.'}`
-        );
+        alert(`결제 실패: ${response.error_msg || '알 수 없는 오류 발생'}`);
       }
     });
   };
-
   return (
     <Payment.Background>
       <Payment.PaymentPageLayout>
-        <Header title='리뷰 작성' />
+        <Header title='결제' />
         <Payment.SubTitle>상품 결제</Payment.SubTitle>
         <Payment.WhiteBox>
           <Payment.Wrapper>
@@ -135,19 +159,6 @@ const PaymentPage = () => {
           </Payment.WrapperWithBorder>
         </Payment.WhiteBox>
 
-        {/* {cart.map((item, index) => (
-        <Payment.WhiteBox key={index}>
-          <Payment.Wrapper>
-            <Payment.TotalText>
-              {item.name} x {item.quantity}개
-            </Payment.TotalText>
-          </Payment.Wrapper>
-          <Payment.Wrapper>
-            <Payment.TotalText>총수량 : {item.quantity}개</Payment.TotalText>
-            <Payment.TotalText>{totalAmount}원</Payment.TotalText>
-          </Payment.Wrapper>
-        </Payment.WhiteBox>
-      ))} */}
         <Payment.SubTitle>포인트 사용</Payment.SubTitle>
         <Payment.WhiteBox>
           <Payment.Wrapper>
