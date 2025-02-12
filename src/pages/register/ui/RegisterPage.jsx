@@ -12,24 +12,24 @@ const RegisterPage = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [name, setName] = useState('');
 
   // 에러 메시지 상태 관리
   const [idError, setIdError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  // 중복확인 및 비밀번호 유효성 상태
+  // 중복확인 상태 관리
   const [idValid, setIdValid] = useState(null);
-  const [passwordValid, setPasswordValid] = useState(false);
 
-  // 아이디 중복확인 함수
+  // 아이디 중복확인 함수 (✅ 복구 완료)
   const handleIdDuplicationCheck = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/user/checkDuplicateId',
+        'https://gongsikdang-be-production.up.railway.app/user/checkDuplicateId',
         { id }
       );
+
       if (response.data.isDuplicate) {
         setIdValid(false);
         setIdError('중복된 아이디입니다.');
@@ -52,7 +52,6 @@ const RegisterPage = () => {
       /\d/.test(password) &&
       /[!@#$%^&*]/.test(password);
 
-    setPasswordValid(isValid);
     if (!isValid) {
       setPasswordError(
         '비밀번호는 6자 이상의 영문, 숫자, 특수문자를 포함해야 합니다.'
@@ -75,18 +74,30 @@ const RegisterPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!idValid || !passwordValid || confirmPasswordError) {
+    if (
+      !idValid ||
+      !id ||
+      !password ||
+      !name ||
+      passwordError ||
+      confirmPasswordError
+    ) {
       alert('입력 정보를 확인해주세요.');
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/user/register', {
-        id,
-        password,
-        nickname,
-      });
-      if (response.data.message === 'Registration successful') {
+      const response = await axios.post(
+        'https://gongsikdang-be-production.up.railway.app/user/register',
+        {
+          id,
+          password,
+          name, // ✅ 기존 nickname → name 변경
+          point: 0, // 기본값 0 설정
+        }
+      );
+
+      if (response.status === 200) {
         alert('회원가입이 완료되었습니다.');
         navigate('/login');
       } else {
@@ -103,7 +114,6 @@ const RegisterPage = () => {
         {/* 로고 */}
         <Register.LogoCircle>
           <Register.SubLogoCircle>
-            {' '}
             <span className='yellow'>공</span>
             <span className='blue'>식당</span>
           </Register.SubLogoCircle>
@@ -122,10 +132,8 @@ const RegisterPage = () => {
                 onChange={(e) => setId(e.target.value)}
                 placeholder='아이디를 입력해주세요'
               />
-              {/* 에러 메시지: 입력 필드 바로 아래에 절대 위치 */}
-              <Register.ErrorMessage>{idError}</Register.ErrorMessage>
             </Register.InputGroup>
-            {/* 아이콘과 안내 메시지 */}
+            <Register.ErrorMessage>{idError}</Register.ErrorMessage>
             <Register.Label>
               <InfoCircledIcon
                 style={{ marginRight: '5px', verticalAlign: 'middle' }}
@@ -139,7 +147,6 @@ const RegisterPage = () => {
           >
             중복확인
           </Register.SmallButton>
-
           {/* 비밀번호 입력 */}
           <Register.FormSection>
             <Register.FormInput
@@ -156,7 +163,7 @@ const RegisterPage = () => {
               <InfoCircledIcon
                 style={{ marginRight: '5px', verticalAlign: 'middle' }}
               />
-              6자 이상, 영문자 및 숫자, 특수문자 포함해야합니다.
+              6자 이상, 영문자 및 숫자, 특수문자 포함해야 합니다.
             </Register.Label>
           </Register.FormSection>
 
@@ -182,19 +189,19 @@ const RegisterPage = () => {
             </Register.Label>
           </Register.FormSection>
 
-          {/* 닉네임 입력 */}
+          {/* 이름 입력 */}
           <Register.FormSection>
             <Register.FormInput
               type='text'
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              placeholder='닉네임을 입력해주세요.(3글자 이상, 특수문자 제외)'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder='이름을 입력해주세요.'
             />
             <Register.Label>
               <InfoCircledIcon
                 style={{ marginRight: '5px', verticalAlign: 'middle' }}
               />
-              특수문자를 제외한 3글자 이상을 입력해주세요.
+              실명을 입력해주세요.
             </Register.Label>
           </Register.FormSection>
 
