@@ -18,11 +18,9 @@ export const PageLayout = styled.div`
   align-items: center;
   width: 390px;
   height: 623px;
-  top: 1339px;
-  left: 1135px;
   background-color: #ffffff;
   border-radius: 20px;
-  padding: 10px;
+  padding: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 `;
 
@@ -30,12 +28,7 @@ export const PageLayout = styled.div`
 export const FoodTitle = styled.h2`
   font-size: 24px;
   font-weight: 700;
-  line-height: 28.64px;
   color: #2e2e2e;
-  width: 104px;
-  height: 29px;
-  top: 71px;
-  left: 143px;
   margin-top: 5px;
   margin-bottom: 10px;
 `;
@@ -53,27 +46,18 @@ export const Subtitle = styled.h3`
   font-weight: 700;
   color: #000000;
   margin-bottom: 20px;
-  line-height: 23.87px;
 `;
 
 /* 별점 컨테이너 */
 export const StarContainer = styled.div`
   display: flex;
   justify-content: center;
-  width: 240;
-  height: 50;
-  top: 154px;
-  left: 75px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-top: -5px;
   gap: 10px;
+  margin-top: -5px;
 `;
 
 /* 별점 스타일 */
 export const Star = styled.span`
-  width: 40;
-  height: 40;
   font-size: 50px;
   color: ${({ isActive }) =>
     isActive ? '#ffd700' : '#ccc'}; /* 활성화된 별은 노란색 */
@@ -94,8 +78,6 @@ export const Textarea = styled.textarea`
   font-size: 16px;
   resize: none;
   outline: none;
-  top: 280px;
-  left: 35px;
 
   &:focus {
     border-color: #e10707;
@@ -112,10 +94,7 @@ export const Button = styled.button`
   margin-top: 20px;
   width: 320px;
   height: 47px;
-  top: 544px;
-  left: 35px;
   border-radius: 10px;
-
   cursor: pointer;
 
   &:hover {

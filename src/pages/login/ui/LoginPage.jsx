@@ -14,13 +14,17 @@ const LoginPage = ({ onLogin }) => {
     event.preventDefault();
 
     try {
-      const response = await fetchInstance.post('/user/login', {
-        id,
-        password,
-      });
-      if (response.data && response.data.message === 'Login successful') {
+      const response = await fetchInstance.post(
+        'https://gongsikdang-be-production.up.railway.app/user/login',
+        {
+          id,
+          password, // ✅ name, point 제거
+        }
+      );
+
+      if (response.data && response.data.token) {
         alert('Login successful!');
-        sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('token', response.data.token); // ✅ JWT 저장
         onLogin();
         navigate('/ChooseRestaurant');
       } else {
@@ -34,12 +38,21 @@ const LoginPage = ({ onLogin }) => {
     }
   };
 
+  const handleNavigation = (path) => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+    navigate(path);
+  };
+
   return (
     <Login.LoginPageLayout>
       <form onSubmit={handleSubmit}>
         <Login.LogoCircle>
           <Login.SubLogoCircle>
-            {' '}
             <span className='yellow'>공</span>
             <span className='blue'>식당</span>
           </Login.SubLogoCircle>
@@ -69,8 +82,8 @@ const LoginPage = ({ onLogin }) => {
             회원가입하기
           </Login.SignUpButton>
         </Login.SignUpWrapper>
-        <button onClick={() => navigate('/mypage')}>마이페이지</button>
-        <button onClick={() => navigate('/corner')}>코너선택</button>
+        <button onClick={() => handleNavigation('/mypage')}>마이페이지</button>
+        <button onClick={() => handleNavigation('/corner')}>코너선택</button>
       </form>
     </Login.LoginPageLayout>
   );

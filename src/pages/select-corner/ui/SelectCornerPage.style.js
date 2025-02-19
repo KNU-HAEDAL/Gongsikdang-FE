@@ -40,26 +40,10 @@ export const Header = styled.div`
   overflow: hidden;
 `;
 
-export const Title = styled.h1`
-  font-size: 24px;
-  color: #e10707;
-  font-weight: 700;
-  line-height: 28.64px;
-`;
-
-export const ProfileButton = styled.button`
-  font-size: 18px;
-  background: none;
-  border: none;
-  cursor: pointer;
-`;
-
 /* 부제목 */
 export const Subtitle = styled.p`
   width: 336px;
   height: 24px;
-  top: 87px;
-  left: 27px;
   font-size: 19px;
   font-weight: 600;
   line-height: 23.87px;
@@ -76,12 +60,7 @@ export const Grid = styled.div`
   flex-grow: 1;
   width: 370px;
   height: 487px;
-  top: 138px;
-  left: 10px;
-  padding-top: 11px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 11px;
+  padding: 10px;
   gap: 20px;
   margin-top: 20px;
   margin-bottom: 70px;
@@ -92,9 +71,8 @@ export const CornerCard = styled.div`
   width: 160px;
   height: 223px;
   border-radius: 10px;
-  border-width: 1px;
-  background: #fff;
   border: 1px solid #c2c2c2;
+  background: #fff;
   padding: 15px;
   text-align: center;
   cursor: pointer;
@@ -110,13 +88,8 @@ export const CornerCard = styled.div`
   h2 {
     font-size: 24px;
     font-weight: 700;
-    line-height: 28.67px;
     color: #e10707;
     margin-bottom: 20px;
-    width: 116;
-    height: 37;
-    top: 12px;
-    left: 22px;
   }
 
   ul {
@@ -124,26 +97,16 @@ export const CornerCard = styled.div`
     padding: 0;
     font-size: 16px;
     font-weight: 500;
-    background: #ffffff;
-    width: 113;
-    height: 126;
-    top: 59px;
-    left: 23px;
-    line-height: 19.09px;
-    justify-content: space-between;
-    align-items: center;
   }
 
   li {
-    margin-bottom: 20px;
-    align-items: center;
+    margin-bottom: 10px;
     font-size: 16px;
     font-weight: 500;
     color: #000000;
   }
 `;
 
-/*뒤로가기 아이콘 디자인*/
 export const BackArrowIcon = styled.svg`
   width: 18.83px;
   height: 18.83px;

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
 
 import CloseIcon from '@/pages/_assets/icons/CloseIcon.jsx';
 import FilledStarIcon from '@/pages/_assets/icons/FilledStarIcon';
@@ -10,65 +12,62 @@ import { Header } from '@/shared/index.js';
 
 import * as Styled from './CornerDPage.style.js';
 
-// 임시 데이터
-const menuData = [
-  {
-    id: 1,
-    name: '떡라면',
-    price: 3000,
-    rating: 5,
-    reviews: 200,
-    stock: 200,
-    image: './images/dduckramen.jpg', // public 폴더 내 이미지 경로
-  },
-  {
-    id: 2,
-    name: '만두라면',
-    price: 3500,
-    rating: 3,
-    reviews: 200,
-    stock: 200,
-    image: './images/manduramen.jpg',
-  },
-  {
-    id: 3,
-    name: '삼겹김치전골',
-    price: 12000,
-    rating: 5,
-    reviews: 200,
-    stock: 200,
-    image: './images/porkkimchisoup.jpg',
-  },
-  {
-    id: 4,
-    name: '최루탄라면',
-    price: 3500,
-    rating: 5,
-    reviews: 200,
-    stock: 200,
-    image: './images/bombramen.jpg',
-  },
-];
-
 const CornerDPage = () => {
   const navigate = useNavigate();
-  const [cart, setCart] = useState([]); // 장바구니 상태
-  const [quantities, setQuantities] = useState(
-    menuData.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {})
-  ); // 수량 상태
+  const [menuData, setMenuData] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [quantities, setQuantities] = useState({});
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+          console.error('JWT 토큰이 없습니다. 로그인 후 시도하세요.');
+          return;
+        }
+
+        const response = await axios.get(
+          'https://gongsikdang-be-production.up.railway.app/api/menu/info/D',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json',
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setMenuData(response.data);
+          setQuantities(
+            response.data.reduce(
+              (acc, item) => ({ ...acc, [item.foodId]: 1 }),
+              {}
+            )
+          );
+        }
+      } catch (error) {
+        console.error('메뉴 데이터 불러오기 오류:', error);
+      }
+    };
+
+    fetchMenu();
+  }, []);
 
   const addToCart = (item) => {
-    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
+    const existingItem = cart.find(
+      (cartItem) => cartItem.foodId === item.foodId
+    );
     if (existingItem) {
       setCart(
         cart.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem.foodId === item.foodId
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         )
       );
     } else {
-      setCart([...cart, { ...item, quantity: quantities[item.id] }]);
+      setCart([...cart, { ...item, quantity: quantities[item.foodId] }]);
     }
   };
 
@@ -80,7 +79,7 @@ const CornerDPage = () => {
   };
 
   const removeFromCart = (id) => {
-    setCart(cart.filter((item) => item.id !== id));
+    setCart(cart.filter((item) => item.foodId !== id));
   };
 
   const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -95,9 +94,12 @@ const CornerDPage = () => {
         <Header title='D 코너' />
         <Styled.MenuList>
           {menuData.map((item) => (
-            <Styled.MenuCard key={item.id}>
-              <Styled.Image src={item.image} alt={item.name} />
-              <Styled.MenuTitle>{item.name}</Styled.MenuTitle>
+            <Styled.MenuCard key={item.foodId}>
+              <Styled.Image
+                src={item.image || '/images/default.jpg'}
+                alt={item.foodName}
+              />
+              <Styled.MenuTitle>{item.foodName}</Styled.MenuTitle>
               <Styled.MenuPrice>
                 {item.price.toLocaleString()}원
               </Styled.MenuPrice>
@@ -105,7 +107,7 @@ const CornerDPage = () => {
                 {[...Array(5)].map((_, index) => (
                   <FilledStarIcon
                     key={index}
-                    color={index < item.rating ? '#FFD600' : '#C0C0C0'}
+                    color={index < item.avgStarRating ? '#FFD600' : '#C0C0C0'}
                   />
                 ))}
               </Styled.Review>
@@ -114,20 +116,20 @@ const CornerDPage = () => {
               </Styled.ReviewButton>
               <Styled.QuantityControl>
                 <Styled.QuantityButton
-                  onClick={() => handleQuantityChange(item.id, -1)}
+                  onClick={() => handleQuantityChange(item.foodId, -1)}
                 >
                   <LeftTriangleIcon color='#000' />
                 </Styled.QuantityButton>
                 <Styled.QuantityValue>
-                  {quantities[item.id]}
+                  {quantities[item.foodId]}
                 </Styled.QuantityValue>
                 <Styled.QuantityButton
-                  onClick={() => handleQuantityChange(item.id, 1)}
+                  onClick={() => handleQuantityChange(item.foodId, 1)}
                 >
                   <RightTriangleIcon color='#000' />
                 </Styled.QuantityButton>
               </Styled.QuantityControl>
-              <Styled.Stock>남은 수량: {item.stock}개</Styled.Stock>
+              <Styled.Stock>남은 수량: {item.number}개</Styled.Stock>
               <Styled.AddToCartButton onClick={() => addToCart(item)}>
                 담기
               </Styled.AddToCartButton>
@@ -141,14 +143,16 @@ const CornerDPage = () => {
             {cart.length > 0 ? (
               <>
                 <Styled.CartItem>
-                  {cart[0].name}{' '}
+                  {cart[0].foodName}{' '}
                   <Styled.RedText>{totalQuantity}개</Styled.RedText>
                 </Styled.CartItem>
                 <Styled.CartPrice>
                   {totalPrice.toLocaleString()}원
                 </Styled.CartPrice>
-                <Styled.RemoveButton onClick={() => removeFromCart(cart[0].id)}>
-                  <CloseIcon color='#e10707' size={11} /> {/* CloseIcon 추가 */}
+                <Styled.RemoveButton
+                  onClick={() => removeFromCart(cart[0].foodId)}
+                >
+                  <CloseIcon color='#e10707' size={11} />
                 </Styled.RemoveButton>
               </>
             ) : (
