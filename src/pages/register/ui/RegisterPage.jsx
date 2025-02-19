@@ -22,8 +22,13 @@ const RegisterPage = () => {
   // 중복확인 상태 관리
   const [idValid, setIdValid] = useState(null);
 
-  // 아이디 중복확인 함수 (✅ 복구 완료)
+  // 아이디 중복 확인 API 요청
   const handleIdDuplicationCheck = async () => {
+    if (!id) {
+      setIdError('아이디를 입력해주세요.');
+      return;
+    }
+
     try {
       const response = await axios.post(
         'https://gongsikdang-be-production.up.railway.app/user/checkDuplicateId',
@@ -92,8 +97,8 @@ const RegisterPage = () => {
         {
           id,
           password,
-          name, // ✅ 기존 nickname → name 변경
-          point: 0, // 기본값 0 설정
+          name,
+          point: 0, // 기본값 설정
         }
       );
 
