@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
-
 import InfoCircledIcon from '@/pages/_assets/icons/InfoCircledIcon';
 
+import { duplicateIdApi, registerApi } from '../apis';
 import * as Register from './RegisterPage.style';
+import { useMutation } from '@tanstack/react-query';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -14,28 +14,15 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
 
-  // 에러 메시지 상태 관리
   const [idError, setIdError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
-  // 중복확인 상태 관리
   const [idValid, setIdValid] = useState(null);
 
-  // 아이디 중복 확인 API 요청
-  const handleIdDuplicationCheck = async () => {
-    if (!id) {
-      setIdError('아이디를 입력해주세요.');
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        'https://gongsikdang-be-production.up.railway.app/user/checkDuplicateId',
-        { id }
-      );
-
-      if (response.data.isDuplicate) {
+  const { mutate: checkIdDuplicate, isLoading: isCheckingId } = useMutation({
+    mutationFn: ({ id }) => duplicateIdApi({ id }),
+    onSuccess: (data) => {
+      if (data.isDuplicate) {
         setIdValid(false);
         setIdError('중복된 아이디입니다.');
       } else {
@@ -43,9 +30,30 @@ const RegisterPage = () => {
         setIdError('');
         alert('사용 가능한 아이디입니다.');
       }
-    } catch (error) {
+    },
+    onError: () => {
       setIdError('아이디 중복 확인 중 오류가 발생했습니다.');
+    },
+  });
+
+  const { mutate: registerUser } = useMutation({
+    mutationFn: ({ id, password, name }) => registerApi({ id, password, name }),
+    onSuccess: () => {
+      alert('회원가입 성공!');
+      navigate('/login');
+    },
+    onError: () => {
+      alert('회원가입 실패');
+    },
+  });
+
+  const handleCheckId = () => {
+    if (!id.trim()) {
+      setIdError('아이디를 입력해주세요.');
+      return;
     }
+
+    checkIdDuplicate({ id });
   };
 
   // 비밀번호 유효성 검사
@@ -57,28 +65,23 @@ const RegisterPage = () => {
       /\d/.test(password) &&
       /[!@#$%^&*]/.test(password);
 
-    if (!isValid) {
-      setPasswordError(
-        '비밀번호는 6자 이상의 영문, 숫자, 특수문자를 포함해야 합니다.'
-      );
-    } else {
-      setPasswordError('');
-    }
+    setPasswordError(
+      isValid
+        ? ''
+        : '비밀번호는 6자 이상의 영문, 숫자, 특수문자를 포함해야 합니다.'
+    );
   };
 
-  // 비밀번호 재확인 검사
+  // 비밀번호 확인 검사
   const handlePasswordConfirmValidation = () => {
-    if (confirmPassword !== password) {
-      setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
-    } else {
-      setConfirmPasswordError('');
-    }
+    setConfirmPasswordError(
+      confirmPassword !== password ? '비밀번호가 일치하지 않습니다.' : ''
+    );
   };
 
-  // 회원가입 제출 함수
-  const handleSubmit = async (event) => {
+  // 회원가입 제출
+  const handleSubmit = (event) => {
     event.preventDefault();
-
     if (
       !idValid ||
       !id ||
@@ -91,26 +94,7 @@ const RegisterPage = () => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        'https://gongsikdang-be-production.up.railway.app/user/register',
-        {
-          id,
-          password,
-          name,
-          point: 0, // 기본값 설정
-        }
-      );
-
-      if (response.status === 200) {
-        alert('회원가입이 완료되었습니다.');
-        navigate('/login');
-      } else {
-        alert('회원가입에 실패했습니다.');
-      }
-    } catch (error) {
-      alert('회원가입 중 오류가 발생했습니다.');
-    }
+    registerUser({ id, password, name });
   };
 
   return (
@@ -148,10 +132,12 @@ const RegisterPage = () => {
           </Register.FormSection>
           <Register.SmallButton
             type='button'
-            onClick={handleIdDuplicationCheck}
+            onClick={handleCheckId}
+            disabled={isCheckingId}
           >
-            중복확인
+            {isCheckingId ? '확인 중...' : '중복확인'}
           </Register.SmallButton>
+
           {/* 비밀번호 입력 */}
           <Register.FormSection>
             <Register.FormInput
@@ -161,9 +147,7 @@ const RegisterPage = () => {
               onBlur={handlePasswordValidation}
               placeholder='비밀번호를 입력해주세요.'
             />
-            {passwordError && (
-              <Register.ErrorMessage>{passwordError}</Register.ErrorMessage>
-            )}
+            <Register.ErrorMessage>{passwordError}</Register.ErrorMessage>
             <Register.Label>
               <InfoCircledIcon
                 style={{ marginRight: '5px', verticalAlign: 'middle' }}
@@ -181,11 +165,9 @@ const RegisterPage = () => {
               onBlur={handlePasswordConfirmValidation}
               placeholder='비밀번호를 재입력해주세요.'
             />
-            {confirmPasswordError && (
-              <Register.ErrorMessage>
-                {confirmPasswordError}
-              </Register.ErrorMessage>
-            )}
+            <Register.ErrorMessage>
+              {confirmPasswordError}
+            </Register.ErrorMessage>
             <Register.Label>
               <InfoCircledIcon
                 style={{ marginRight: '5px', verticalAlign: 'middle' }}
@@ -224,7 +206,7 @@ const RegisterPage = () => {
 
         {/* 로그인 링크 */}
         <Register.Footer>
-          이미 회원이라면?{' '}
+          이미 회원이라면?&nbsp;
           <Register.LoginLink onClick={() => navigate('/login')}>
             로그인하기
           </Register.LoginLink>
