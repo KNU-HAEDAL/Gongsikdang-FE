@@ -1,91 +1,57 @@
-import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+import { LoadingView } from '@/shared';
 
-import { Header } from '@/shared/index.js';
-
+import { useGetMenuList } from '../hooks/useGetMenuList.js';
 import * as Styled from './SelectCornerPage.style.js';
 
 const SelectCornerPage = () => {
   const navigate = useNavigate();
-  const [menuData, setMenuData] = useState([]);
 
-  useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        const token = localStorage.getItem('jwtToken'); // ✅ JWT 토큰 가져오기
+  const { data: menuListData, isError, isPending } = useGetMenuList();
 
-        console.log('현재 사용 중인 JWT 토큰:', token);
+  if (isPending) return <LoadingView />;
 
-        if (!token) {
-          console.error('JWT 토큰이 없음! 먼저 로그인하세요.');
-          return;
-        }
-
-        const response = await axios.get(
-          'https://gongsikdang-be-production.up.railway.app/api/menu',
-          {
-            headers: {
-              Authorization: `Bearer ${token.trim()}`, // ✅ JWT 토큰 추가
-              Accept: 'application/json',
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          setMenuData(response.data);
-        } else {
-          console.error('메뉴 데이터를 불러오는 데 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('메뉴 불러오기 오류:', error);
+  const menuByCorner =
+    menuListData?.data?.reduce((acc, menu) => {
+      if (!acc[menu.sector]) {
+        acc[menu.sector] = [];
       }
-    };
-
-    fetchMenu();
-  }, []);
-
-  // 코너별 메뉴 분류
-  const menuByCorner = {
-    A: [],
-    B: [],
-    C: [],
-    D: [],
-  };
-
-  menuData.forEach((menu) => {
-    if (menu.sector in menuByCorner) {
-      menuByCorner[menu.sector].push(menu.foodName);
-    }
-  });
+      acc[menu.sector].push(menu.foodName);
+      return acc;
+    }, {}) || {};
 
   return (
-    <Styled.Background>
-      <Styled.PageLayout>
-        <Header title='코너 선택' />
-        <Styled.Subtitle>
-          구매하고 싶은 식권의 코너를 선택해주세요.
-        </Styled.Subtitle>
-        <Styled.Grid>
-          {Object.entries(menuByCorner).map(([corner, menuList]) => (
-            <Styled.CornerCard
-              key={corner}
-              onClick={() => navigate(`/corner/${corner}`)}
-            >
-              <h2>{corner} 코너</h2>
-              <ul>
-                {menuList.length > 0 ? (
-                  menuList.map((item, index) => <li key={index}>{item}</li>)
-                ) : (
-                  <li>메뉴 없음</li>
-                )}
-              </ul>
-            </Styled.CornerCard>
-          ))}
-        </Styled.Grid>
-      </Styled.PageLayout>
-    </Styled.Background>
+    <Styled.PageLayout>
+      <Styled.Subtitle>
+        구매하고 싶은 식권의 코너를 선택해주세요.
+      </Styled.Subtitle>
+
+      {isError && (
+        <Styled.ErrorMessage>데이터를 불러올 수 없습니다.</Styled.ErrorMessage>
+      )}
+
+      <Styled.Grid>
+        {Object.entries(menuByCorner).map(([corner, menuList]) => (
+          <Styled.CornerCard
+            key={corner}
+            onClick={() => navigate(`/corner/${corner}`)}
+          >
+            <h2>
+              {corner}
+              &nbsp;코너
+            </h2>
+            <ul>
+              {menuList.length > 0 ? (
+                menuList.map((item, index) => <li key={index}>{item}</li>)
+              ) : (
+                <li>메뉴 없음</li>
+              )}
+            </ul>
+          </Styled.CornerCard>
+        ))}
+      </Styled.Grid>
+    </Styled.PageLayout>
   );
 };
 
