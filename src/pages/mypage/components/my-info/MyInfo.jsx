@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import * as Mypage from '../../ui/Mypage.style';
@@ -6,8 +7,11 @@ export const MyInfo = () => {
   const navigate = useNavigate();
 
   const onClickLogout = () => {
+    toast.success('로그아웃 되었습니다.');
     sessionStorage.removeItem('token');
-    navigate('/login');
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
   };
   return (
     <Mypage.Section>

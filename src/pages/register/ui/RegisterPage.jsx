@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import InfoCircledIcon from '@/pages/_assets/icons/InfoCircledIcon';
@@ -28,7 +29,7 @@ const RegisterPage = () => {
       } else {
         setIdValid(true);
         setIdError('');
-        alert('사용 가능한 아이디입니다.');
+        toast.success('사용 가능한 아이디입니다.');
       }
     },
     onError: () => {
@@ -39,11 +40,13 @@ const RegisterPage = () => {
   const { mutate: registerUser } = useMutation({
     mutationFn: ({ id, password, name }) => registerApi({ id, password, name }),
     onSuccess: () => {
-      alert('회원가입 성공!');
-      navigate('/login');
+      toast.success('회원가입 성공!');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
     },
     onError: () => {
-      alert('회원가입 실패');
+      toast.error('회원가입 실패. 다시 시도해주세요.');
     },
   });
 
@@ -90,7 +93,7 @@ const RegisterPage = () => {
       passwordError ||
       confirmPasswordError
     ) {
-      alert('입력 정보를 확인해주세요.');
+      toast.error('입력 정보를 확인해주세요.');
       return;
     }
 
@@ -98,124 +101,114 @@ const RegisterPage = () => {
   };
 
   return (
-    <Register.Background>
-      <Register.RegisterPageLayout>
-        {/* 로고 */}
-        <Register.LogoCircle>
-          <Register.SubLogoCircle>
-            <span className='yellow'>공</span>
-            <span className='blue'>식당</span>
-          </Register.SubLogoCircle>
-        </Register.LogoCircle>
+    <Register.RegisterPageLayout>
+      {/* 로고 */}
+      <Register.LogoCircle>
+        <Register.SubLogoCircle>
+          <span className='yellow'>공</span>
+          <span className='blue'>식당</span>
+        </Register.SubLogoCircle>
+      </Register.LogoCircle>
 
-        {/* 제목 */}
-        <Register.RegisterTitle>회원가입</Register.RegisterTitle>
+      {/* 제목 */}
+      <Register.RegisterTitle>회원가입</Register.RegisterTitle>
 
-        <form onSubmit={handleSubmit}>
-          {/* 아이디 입력 */}
-          <Register.FormSection>
-            <Register.InputGroup>
-              <Register.FormInput
-                type='text'
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                placeholder='아이디를 입력해주세요'
-              />
-            </Register.InputGroup>
-            <Register.ErrorMessage>{idError}</Register.ErrorMessage>
-            <Register.Label>
-              <InfoCircledIcon
-                style={{ marginRight: '5px', verticalAlign: 'middle' }}
-              />
-              6~12자로 입력해주세요.
-            </Register.Label>
-          </Register.FormSection>
-          <Register.SmallButton
-            type='button'
-            onClick={handleCheckId}
-            disabled={isCheckingId}
-          >
-            {isCheckingId ? '확인 중...' : '중복확인'}
-          </Register.SmallButton>
-
-          {/* 비밀번호 입력 */}
-          <Register.FormSection>
-            <Register.FormInput
-              type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={handlePasswordValidation}
-              placeholder='비밀번호를 입력해주세요.'
-            />
-            <Register.ErrorMessage>{passwordError}</Register.ErrorMessage>
-            <Register.Label>
-              <InfoCircledIcon
-                style={{ marginRight: '5px', verticalAlign: 'middle' }}
-              />
-              6자 이상, 영문자 및 숫자, 특수문자 포함해야 합니다.
-            </Register.Label>
-          </Register.FormSection>
-
-          {/* 비밀번호 확인 */}
-          <Register.FormSection>
-            <Register.FormInput
-              type='password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              onBlur={handlePasswordConfirmValidation}
-              placeholder='비밀번호를 재입력해주세요.'
-            />
-            <Register.ErrorMessage>
-              {confirmPasswordError}
-            </Register.ErrorMessage>
-            <Register.Label>
-              <InfoCircledIcon
-                style={{ marginRight: '5px', verticalAlign: 'middle' }}
-              />
-              동일한 비밀번호를 한 번 더 입력해주세요.
-            </Register.Label>
-          </Register.FormSection>
-
-          {/* 이름 입력 */}
-          <Register.FormSection>
+      <form onSubmit={handleSubmit}>
+        {/* 아이디 입력 */}
+        <Register.FormSection>
+          <Register.InputGroup>
             <Register.FormInput
               type='text'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder='이름을 입력해주세요.'
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder='아이디를 입력해주세요'
             />
-            <Register.Label>
-              <InfoCircledIcon
-                style={{ marginRight: '5px', verticalAlign: 'middle' }}
-              />
-              실명을 입력해주세요.
-            </Register.Label>
-          </Register.FormSection>
+          </Register.InputGroup>
+          <Register.ErrorMessage>{idError}</Register.ErrorMessage>
+          <Register.Label>
+            <InfoCircledIcon
+              style={{ marginRight: '5px', verticalAlign: 'middle' }}
+            />
+            6~12자로 입력해주세요.
+          </Register.Label>
+        </Register.FormSection>
+        <Register.SmallButton
+          type='button'
+          onClick={handleCheckId}
+          disabled={isCheckingId}
+        >
+          {isCheckingId ? '확인 중...' : '중복확인'}
+        </Register.SmallButton>
 
-          {/* 회원가입 및 취소 버튼 */}
-          <Register.ButtonGroup>
-            <Register.FormButton type='submit'>회원가입</Register.FormButton>
-            <Register.CancelButton
-              type='button'
-              onClick={() => navigate('/login')}
-            >
-              취소
-            </Register.CancelButton>
-          </Register.ButtonGroup>
-        </form>
+        {/* 비밀번호 입력 */}
+        <Register.FormSection>
+          <Register.FormInput
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={handlePasswordValidation}
+            placeholder='비밀번호를 입력해주세요.'
+          />
+          <Register.ErrorMessage>{passwordError}</Register.ErrorMessage>
+          <Register.Label>
+            <InfoCircledIcon
+              style={{ marginRight: '5px', verticalAlign: 'middle' }}
+            />
+            6자 이상, 영문자 및 숫자, 특수문자 포함해야 합니다.
+          </Register.Label>
+        </Register.FormSection>
 
-        {/* 로그인 링크 */}
-        <Register.Footer>
-          이미 회원이라면?&nbsp;
-          <Register.LoginLink onClick={() => navigate('/login')}>
-            로그인하기
-          </Register.LoginLink>
-        </Register.Footer>
-        <button onClick={() => navigate('/corner')}>
-          코너선택 페이지로 돌아가기
-        </button>
-      </Register.RegisterPageLayout>
-    </Register.Background>
+        {/* 비밀번호 확인 */}
+        <Register.FormSection>
+          <Register.FormInput
+            type='password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={handlePasswordConfirmValidation}
+            placeholder='비밀번호를 재입력해주세요.'
+          />
+          <Register.ErrorMessage>{confirmPasswordError}</Register.ErrorMessage>
+          <Register.Label>
+            <InfoCircledIcon
+              style={{ marginRight: '5px', verticalAlign: 'middle' }}
+            />
+            동일한 비밀번호를 한 번 더 입력해주세요.
+          </Register.Label>
+        </Register.FormSection>
+
+        {/* 이름 입력 */}
+        <Register.FormSection>
+          <Register.FormInput
+            type='text'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder='이름을 입력해주세요.'
+          />
+          <Register.Label>
+            <InfoCircledIcon
+              style={{ marginRight: '5px', verticalAlign: 'middle' }}
+            />
+            특수문자를 제외한 3글자 이상을 입력해주세요.
+          </Register.Label>
+        </Register.FormSection>
+
+        {/* 회원가입 및 취소 버튼 */}
+        <Register.ButtonGroup>
+          <Register.FormButton type='submit'>회원가입</Register.FormButton>
+          <Register.CancelButton onClick={() => navigate('/login')}>
+            취소
+          </Register.CancelButton>
+        </Register.ButtonGroup>
+      </form>
+
+      {/* 로그인 링크 */}
+      <Register.Footer>
+        이미 회원이라면?&nbsp;
+        <Register.LoginLink onClick={() => navigate('/login')}>
+          로그인하기
+        </Register.LoginLink>
+      </Register.Footer>
+    </Register.RegisterPageLayout>
   );
 };
 

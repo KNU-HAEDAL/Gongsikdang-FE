@@ -10,7 +10,7 @@ export const RegisterPageLayout = styled.div`
   }
 
   top: 60px;
-  width: 390px;
+  width: 370px;
   height: 100%;
   background-color: #fff;
   border-radius: 20px;
@@ -19,7 +19,7 @@ export const RegisterPageLayout = styled.div`
   text-align: center;
   animation: fadeIn 1s ease-out forwards;
   position: relative;
-  padding-bottom: 80px;
+  padding-bottom: 100px;
 `;
 
 /* 상단 로고 외부 원 */
@@ -65,8 +65,8 @@ export const SubLogoCircle = styled.div`
 export const RegisterTitle = styled.span`
   width: 104px;
   height: 36px;
-  top: 90px;
-  left: 143px;
+  top: 80px;
+  left: 135px;
   font-size: 30px;
   font-weight: 500;
   line-height: 35.8px;
@@ -117,7 +117,7 @@ export const FormButton = styled.button`
   height: 40px;
   font-size: 16px;
   font-weight: 500;
-  background-color: #e10707;
+  background-color: var(--red);
   color: #ffffff;
   border: none;
   border-radius: 100px;
@@ -137,12 +137,12 @@ export const FormButton = styled.button`
 /* 취소 버튼 스타일 */
 export const CancelButton = styled(FormButton)`
   background-color: #ffffff;
-  color: #e10707;
-  border: 3px solid #e10707;
+  color: var(--red);
+  border: 3px solid var(--red);
 
   :hover {
     background-color: #f9f9f9;
-    color: #e10707;
+    color: var(--red);
   }
 `;
 
@@ -152,10 +152,10 @@ export const SmallButton = styled.button`
   height: 40px;
   position: absolute;
   top: 130px;
-  left: 265px;
+  left: 245px;
   font-size: 16px;
   font-weight: 500;
-  background-color: #e10707;
+  background-color: var(--red);
   color: #ffffff;
   border: none;
   border-radius: 100px;
@@ -174,7 +174,7 @@ export const SmallButton = styled.button`
 /* 에러 메시지 스타일 */
 export const ErrorMessage = styled.span`
   font-size: 12px;
-  color: #e10707;
+  color: var(--red);
   height: 10px;
   margin-top: 4px;
   position: absolute;
@@ -208,7 +208,7 @@ export const Footer = styled.div`
 /* 로그인 링크 스타일 */
 export const LoginLink = styled.span`
   margin-left: 5px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--red);
   background: none;
@@ -219,12 +219,6 @@ export const LoginLink = styled.span`
   :hover {
     transform: translateY(-2px);
   }
-`;
-
-export const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 /*아이콘 디자인*/
