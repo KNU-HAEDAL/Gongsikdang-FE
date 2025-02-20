@@ -39,6 +39,9 @@ export const globalStyle = css`
   }
 
   :root {
+    height: 100vh;
+    width: 100%;
+
     --font-sm: ${fontSm};
     --font-md: ${fontMd};
     --font-lg: ${fontLg};
@@ -66,12 +69,11 @@ export const globalStyle = css`
 
   body {
     font-family: 'Pretendard-Regular', 'BMJUA', Arial, sans-serif;
-    width: 100%;
+    font-size: var(--font-md);
     background: linear-gradient(135deg, #ffb3b3, #fffefe);
     display: flex;
+    align-items: center;
     justify-content: center;
-    font-size: var(--font-md);
-    height: 100vh;
     overflow: hidden;
   }
 `;

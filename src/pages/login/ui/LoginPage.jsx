@@ -1,56 +1,36 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { fetchInstance } from '@/shared/instance/Instance';
-
+import { loginAPI } from '../apis';
 import * as Login from './LoginPage.style';
+import { useMutation } from '@tanstack/react-query';
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const { mutate: loginData } = useMutation({
+    mutationFn: loginAPI,
+    onSuccess: (response) => {
+      alert('로그인 성공!');
+      sessionStorage.setItem('token', response.data.token);
+      navigate('/corner');
+    },
+    onError: () => {
+      alert('로그인 실패');
+    },
+  });
+
+  const onSubmit = (event) => {
     event.preventDefault();
-
-    try {
-      const response = await fetchInstance.post(
-        'https://gongsikdang-be-production.up.railway.app/user/login',
-        {
-          id,
-          password, // ✅ name, point 제거
-        }
-      );
-
-      if (response.data && response.data.token) {
-        alert('Login successful!');
-        sessionStorage.setItem('token', response.data.token); // ✅ JWT 저장
-        onLogin();
-        navigate('/ChooseRestaurant');
-      } else {
-        alert(
-          response.data.message || 'Invalid credentials, please try again.'
-        );
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      alert('An error occurred. Please try again later.');
-    }
-  };
-
-  const handleNavigation = (path) => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
-      return;
-    }
-    navigate(path);
+    loginData({ id, password });
   };
 
   return (
     <Login.LoginPageLayout>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => onSubmit(e)}>
         <Login.LogoCircle>
           <Login.SubLogoCircle>
             <span className='yellow'>공</span>
@@ -77,13 +57,11 @@ const LoginPage = ({ onLogin }) => {
           <Login.LoginButton type='submit'>로그인</Login.LoginButton>
         </Login.LoginBox>
         <Login.SignUpWrapper>
-          아직 회원이 아니라면?{' '}
+          아직 회원이 아니라면?&nbsp;
           <Login.SignUpButton onClick={() => navigate('/register')}>
             회원가입하기
           </Login.SignUpButton>
         </Login.SignUpWrapper>
-        <button onClick={() => handleNavigation('/mypage')}>마이페이지</button>
-        <button onClick={() => handleNavigation('/corner')}>코너선택</button>
       </form>
     </Login.LoginPageLayout>
   );

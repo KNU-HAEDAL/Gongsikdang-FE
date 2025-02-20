@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-// import { InfoCircledIcon } from '../_assets/icons/icons';
-
 /* 회원가입 페이지 전체 레이아웃 */
 export const RegisterPageLayout = styled.div`
   @keyframes fadeIn {
@@ -11,9 +9,9 @@ export const RegisterPageLayout = styled.div`
     }
   }
 
-  top: 137px;
+  top: 60px;
   width: 390px;
-  height: 720px;
+  height: 100%;
   background-color: #fff;
   border-radius: 20px;
   padding: 50px 30px;
@@ -21,7 +19,7 @@ export const RegisterPageLayout = styled.div`
   text-align: center;
   animation: fadeIn 1s ease-out forwards;
   position: relative;
-  padding-top: 100px;
+  padding-bottom: 80px;
 `;
 
 /* 상단 로고 외부 원 */
@@ -117,8 +115,6 @@ export const InputGroup = styled.div`
 export const FormButton = styled.button`
   width: 150px;
   height: 40px;
-  top: 594px;
-  left: 33px;
   font-size: 16px;
   font-weight: 500;
   background-color: #e10707;
@@ -155,7 +151,7 @@ export const SmallButton = styled.button`
   width: 90px;
   height: 40px;
   position: absolute;
-  top: 184px;
+  top: 130px;
   left: 265px;
   font-size: 16px;
   font-weight: 500;

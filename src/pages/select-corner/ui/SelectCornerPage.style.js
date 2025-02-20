@@ -1,43 +1,13 @@
 import styled from '@emotion/styled';
 
-/* 전체 배경 */
-export const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #ffe0e0;
-`;
-
 /* 페이지 레이아웃 */
 export const PageLayout = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 390px;
-  height: 720px;
-  background-color: #fff;
-  border-radius: 20px;
-  padding: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-`;
-
-/* 헤더 */
-export const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   text-align: center;
-  margin-bottom: 0px;
-  width: 390px;
-  height: 60px;
-  border-radius: 15px;
-  padding: 12px 10px;
-  box-sizing: border-box;
-  overflow: hidden;
+  align-items: center;
+  border-radius: 20px;
+  flex-direction: column;
 `;
 
 /* 부제목 */
@@ -58,7 +28,7 @@ export const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   flex-grow: 1;
-  width: 370px;
+  /* width: 370px; */
   height: 487px;
   padding: 10px;
   gap: 20px;
@@ -96,20 +66,19 @@ export const CornerCard = styled.div`
     list-style: none;
     padding: 0;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   li {
     margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 700;
     color: #000000;
   }
 `;
 
-export const BackArrowIcon = styled.svg`
-  width: 18.83px;
-  height: 18.83px;
-  color: #ffffff;
-  fill: currentColor;
+export const ErrorMessage = styled.p`
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 `;
