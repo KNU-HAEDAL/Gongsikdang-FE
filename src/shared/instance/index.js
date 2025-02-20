@@ -1,1 +1,2 @@
-export { fetchInstance, BASE_URI } from './Instance';
+export * from './Instance';
+export * from './query-instance';
