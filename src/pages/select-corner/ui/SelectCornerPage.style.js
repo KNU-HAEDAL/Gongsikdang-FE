@@ -6,7 +6,6 @@ export const PageLayout = styled.div`
   justify-content: center;
   text-align: center;
   align-items: center;
-  border-radius: 20px;
   flex-direction: column;
 `;
 
@@ -28,7 +27,6 @@ export const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   flex-grow: 1;
-  /* width: 370px; */
   height: 487px;
   padding: 10px;
   gap: 20px;
@@ -41,7 +39,7 @@ export const CornerCard = styled.div`
   width: 160px;
   height: 223px;
   border-radius: 10px;
-  border: 1px solid #c2c2c2;
+  border: 1px solid var(--gray);
   background: #fff;
   padding: 15px;
   text-align: center;

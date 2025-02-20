@@ -1,0 +1,38 @@
+export const PURCHASE_MOCK_DATA = [
+  {
+    id: 1,
+    name: '육회비빔밥',
+    date: '3월 13일 14:00 구매',
+    status: '사용 가능',
+    buttonType: '구매확정',
+    buttonColor: 'blue',
+    disabled: false,
+  },
+  {
+    id: 2,
+    name: '육회비빔밥',
+    date: '3월 13일 14:00 구매',
+    status: '사용 불가',
+    buttonType: '환불완료',
+    buttonColor: 'red',
+    disabled: false,
+  },
+  {
+    id: 3,
+    name: '육회비빔밥',
+    date: '3월 13일 14:00 사용',
+    status: '사용 완료',
+    buttonType: '리뷰작성',
+    buttonColor: 'gray',
+    disabled: true,
+  },
+  {
+    id: 4,
+    name: '육회비빔밥',
+    date: '3월 13일 14:00 사용',
+    status: '사용 완료',
+    buttonType: '리뷰작성',
+    buttonColor: 'red',
+    disabled: false,
+  },
+];

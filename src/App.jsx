@@ -1,3 +1,5 @@
+import { Toaster } from 'react-hot-toast';
+
 import { globalStyle, queryClient } from '@/shared';
 
 import { Routes } from './app/routes';
@@ -9,6 +11,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <Global styles={globalStyle} />
       <Routes />
+      <Toaster />
     </QueryClientProvider>
   );
 };

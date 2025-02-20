@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import { loginAPI } from '../apis';
@@ -14,17 +15,20 @@ const LoginPage = () => {
   const { mutate: loginData } = useMutation({
     mutationFn: loginAPI,
     onSuccess: (response) => {
-      alert('로그인 성공!');
+      toast.success('로그인 성공!');
       sessionStorage.setItem('token', response.data.token);
-      navigate('/corner');
+      setTimeout(() => {
+        navigate('/corner');
+      }, 1000);
     },
     onError: () => {
-      alert('로그인 실패');
+      toast.error('로그인 실패');
     },
   });
 
   const onSubmit = (event) => {
     event.preventDefault();
+
     loginData({ id, password });
   };
 
