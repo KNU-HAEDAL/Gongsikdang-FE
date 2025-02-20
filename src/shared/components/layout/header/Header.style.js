@@ -3,15 +3,16 @@ import styled from '@emotion/styled';
 import { PersonIcon, ThickArrowLeftIcon } from '@radix-ui/react-icons';
 
 export const HEADER_HEIGHT = '64px';
+export const HEADER_WIDTH = '390px';
 
 export const HeaderLayout = styled.div`
   z-index: 9999;
   display: flex;
-  width: 390px;
-  max-width: 100vw;
+  width: ${HEADER_WIDTH};
+
   height: ${HEADER_HEIGHT};
   background-color: #fff;
-  padding: 10px;
+  padding: 0 16px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 `;
