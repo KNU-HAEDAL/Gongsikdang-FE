@@ -16,7 +16,7 @@ const LoginPage = () => {
     mutationFn: loginAPI,
     onSuccess: (response) => {
       toast.success('로그인 성공!');
-      sessionStorage.setItem('token', response.data.token);
+      localStorage.setItem('jwtToken', response.data.token);
       setTimeout(() => {
         navigate('/corner');
       }, 1000);
