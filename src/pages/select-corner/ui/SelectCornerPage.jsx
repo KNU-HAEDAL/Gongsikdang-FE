@@ -1,25 +1,57 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { LoadingView } from '@/shared';
+import axios from 'axios';
 
-import { useGetMenuList } from '../hooks/useGetMenuList.js';
 import * as Styled from './SelectCornerPage.style.js';
 
 const SelectCornerPage = () => {
   const navigate = useNavigate();
+  const [menuListData, setMenuListData] = useState([]);
+  const [isError, setIsError] = useState(false);
 
-  const { data: menuListData, isError, isPending } = useGetMenuList();
+  useEffect(() => {
+    const fetchMenuData = async () => {
+      try {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+          throw new Error('JWT 토큰이 없습니다. 로그인 후 다시 시도하세요.');
+        }
 
-  if (isPending) return <LoadingView />;
+        const response = await axios.get(
+          'https://gongsikdang-be-production.up.railway.app/api/menu',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json',
+            },
+          }
+        );
+
+        setMenuListData(response.data);
+      } catch (error) {
+        console.error('메뉴 데이터 불러오기 오류:', error);
+        setIsError(true);
+      }
+    };
+
+    fetchMenuData();
+  }, []); //
 
   const menuByCorner =
-    menuListData?.data?.reduce((acc, menu) => {
+    menuListData?.reduce((acc, menu) => {
       if (!acc[menu.sector]) {
         acc[menu.sector] = [];
       }
       acc[menu.sector].push(menu.foodName);
       return acc;
     }, {}) || {};
+
+  if (isError) {
+    return (
+      <Styled.ErrorMessage>데이터를 불러올 수 없습니다.</Styled.ErrorMessage>
+    );
+  }
 
   return (
     <Styled.PageLayout>
