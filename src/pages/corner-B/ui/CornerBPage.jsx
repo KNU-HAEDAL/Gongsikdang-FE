@@ -55,20 +55,24 @@ const CornerBPage = () => {
   }, []);
 
   const addToCart = (item) => {
-    const existingItem = cart.find(
-      (cartItem) => cartItem.foodId === item.foodId
-    );
-    if (existingItem) {
-      setCart(
-        cart.map((cartItem) =>
-          cartItem.foodId === item.foodId
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        )
+    setCart((prevCart) => {
+      const existingItem = prevCart.find(
+        (cartItem) => cartItem.foodId === item.foodId
       );
-    } else {
-      setCart([...cart, { ...item, quantity: quantities[item.foodId] }]);
-    }
+
+      if (existingItem) {
+        return prevCart.map((cartItem) =>
+          cartItem.foodId === item.foodId
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + quantities[item.foodId],
+              }
+            : cartItem
+        );
+      } else {
+        return [...prevCart, { ...item, quantity: quantities[item.foodId] }];
+      }
+    });
   };
 
   const handleQuantityChange = (id, delta) => {
@@ -89,85 +93,78 @@ const CornerBPage = () => {
   );
 
   return (
-    <Styled.Background>
-      <Styled.PageLayout>
-        <Header title='B 코너' />
-        <Styled.MenuList>
-          {menuData.map((item) => (
-            <Styled.MenuCard key={item.foodId}>
-              <Styled.Image
-                src={item.image || '/images/default.jpg'}
-                alt={item.foodName}
-              />
-              <Styled.MenuTitle>{item.foodName}</Styled.MenuTitle>
-              <Styled.MenuPrice>
-                {item.price.toLocaleString()}원
-              </Styled.MenuPrice>
-              <Styled.Review>
-                {[...Array(5)].map((_, index) => (
-                  <FilledStarIcon
-                    key={index}
-                    color={index < item.avgStarRating ? '#FFD600' : '#C0C0C0'}
-                  />
-                ))}
-              </Styled.Review>
-              <Styled.ReviewButton onClick={() => navigate('/review/food')}>
-                리뷰보기
-              </Styled.ReviewButton>
-              <Styled.QuantityControl>
-                <Styled.QuantityButton
-                  onClick={() => handleQuantityChange(item.foodId, -1)}
-                >
-                  <LeftTriangleIcon color='#000' />
-                </Styled.QuantityButton>
-                <Styled.QuantityValue>
-                  {quantities[item.foodId]}
-                </Styled.QuantityValue>
-                <Styled.QuantityButton
-                  onClick={() => handleQuantityChange(item.foodId, 1)}
-                >
-                  <RightTriangleIcon color='#000' />
-                </Styled.QuantityButton>
-              </Styled.QuantityControl>
-              <Styled.Stock>남은 수량: {item.number}개</Styled.Stock>
-              <Styled.AddToCartButton onClick={() => addToCart(item)}>
-                담기
-              </Styled.AddToCartButton>
-            </Styled.MenuCard>
-          ))}
-        </Styled.MenuList>
+    <div>
+      <Styled.MenuList>
+        {menuData.map((item) => (
+          <Styled.MenuCard key={item.foodId}>
+            <Styled.Image
+              src={item.image || '/images/default.jpg'}
+              alt={item.foodName}
+            />
+            <Styled.MenuTitle>{item.foodName}</Styled.MenuTitle>
+            <Styled.MenuPrice>{item.price.toLocaleString()}원</Styled.MenuPrice>
+            <Styled.Review>
+              {[...Array(5)].map((_, index) => (
+                <FilledStarIcon
+                  key={index}
+                  color={index < item.avgStarRating ? '#FFD600' : '#C0C0C0'}
+                />
+              ))}
+            </Styled.Review>
+            <Styled.ReviewButton onClick={() => navigate('/review/food')}>
+              리뷰보기
+            </Styled.ReviewButton>
+            <Styled.QuantityControl>
+              <Styled.QuantityButton
+                onClick={() => handleQuantityChange(item.foodId, -1)}
+              >
+                <LeftTriangleIcon color='#000' />
+              </Styled.QuantityButton>
+              <Styled.QuantityValue>
+                {quantities[item.foodId]}
+              </Styled.QuantityValue>
+              <Styled.QuantityButton
+                onClick={() => handleQuantityChange(item.foodId, 1)}
+              >
+                <RightTriangleIcon color='#000' />
+              </Styled.QuantityButton>
+            </Styled.QuantityControl>
+            <Styled.Stock>남은 수량: {item.number}개</Styled.Stock>
+            <Styled.AddToCartButton onClick={() => addToCart(item)}>
+              담기
+            </Styled.AddToCartButton>
+          </Styled.MenuCard>
+        ))}
+      </Styled.MenuList>
 
-        <Styled.Cart>장바구니</Styled.Cart>
-        <Styled.CartSection>
-          <Styled.CartSummary>
-            {cart.length > 0 ? (
-              <>
-                <Styled.CartItem>
-                  {cart[0].foodName}{' '}
-                  <Styled.RedText>{totalQuantity}개</Styled.RedText>
+      <Styled.Cart>장바구니</Styled.Cart>
+      <Styled.CartSection>
+        <Styled.CartSummary>
+          {cart.length > 0
+            ? cart.map((item) => (
+                <Styled.CartItem key={item.foodId}>
+                  {item.foodName}{' '}
+                  <Styled.RedText>{item.quantity}개</Styled.RedText>
+                  <Styled.CartPrice>
+                    {totalPrice.toLocaleString()}원
+                  </Styled.CartPrice>
+                  <Styled.RemoveButton
+                    onClick={() => removeFromCart(item.foodId)}
+                  >
+                    <CloseIcon color='#e10707' size={11} />
+                  </Styled.RemoveButton>
                 </Styled.CartItem>
-                <Styled.CartPrice>
-                  {totalPrice.toLocaleString()}원
-                </Styled.CartPrice>
-                <Styled.RemoveButton
-                  onClick={() => removeFromCart(cart[0].foodId)}
-                >
-                  <CloseIcon color='#e10707' size={11} />
-                </Styled.RemoveButton>
-              </>
-            ) : (
-              '장바구니가 비어 있습니다.'
-            )}
-          </Styled.CartSummary>
-          <Styled.CheckoutButton
-            onClick={() => navigate('/payment')}
-            disabled={cart.length === 0}
-          >
-            결제하기
-          </Styled.CheckoutButton>
-        </Styled.CartSection>
-      </Styled.PageLayout>
-    </Styled.Background>
+              ))
+            : '장바구니가 비어 있습니다.'}
+        </Styled.CartSummary>
+        <Styled.CheckoutButton
+          onClick={() => navigate('/payment')}
+          disabled={cart.length === 0}
+        >
+          결제하기
+        </Styled.CheckoutButton>
+      </Styled.CartSection>
+    </div>
   );
 };
 
