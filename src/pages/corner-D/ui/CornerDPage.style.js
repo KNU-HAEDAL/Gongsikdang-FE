@@ -195,8 +195,8 @@ export const Cart = styled.div`
 `;
 
 export const CartSection = styled.div`
-  width: 358px;
-  height: 135px;
+  width: 100%;
+  height: auto;
   top: 1229px;
   left: 16px;
   border-radius: 10px;
@@ -212,19 +212,27 @@ export const CartSection = styled.div`
 export const CartSummary = styled.div`
   display: flex;
   width: 328px;
-  height: 47px;
+  height: auto;
   justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   font-size: 20px;
   font-weight: 400;
-  padding-right: 10px;
-  padding-left: 10px;
+  min-height: 50px;
+  max-height: 300px;
+  overflow-y: auto;
+  gap: 10px;
 `;
 
 export const CartItem = styled.span`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 400;
   font-size: 20px;
   color: #000000;
+  gap: 10px;
 `;
 
 export const CartPrice = styled.span`
@@ -256,7 +264,7 @@ export const CheckoutButton = styled.button`
   border-radius: 10px;
   font-size: 20px;
   margin: 0 auto;
-  margin-bottom: 20px;
+  gap: 10px;
   cursor: pointer;
 
   &:disabled {

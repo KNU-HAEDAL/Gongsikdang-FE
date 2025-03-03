@@ -55,20 +55,24 @@ const CornerCPage = () => {
   }, []);
 
   const addToCart = (item) => {
-    const existingItem = cart.find(
-      (cartItem) => cartItem.foodId === item.foodId
-    );
-    if (existingItem) {
-      setCart(
-        cart.map((cartItem) =>
-          cartItem.foodId === item.foodId
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        )
+    setCart((prevCart) => {
+      const existingItem = prevCart.find(
+        (cartItem) => cartItem.foodId === item.foodId
       );
-    } else {
-      setCart([...cart, { ...item, quantity: quantities[item.foodId] }]);
-    }
+
+      if (existingItem) {
+        return prevCart.map((cartItem) =>
+          cartItem.foodId === item.foodId
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + quantities[item.foodId],
+              }
+            : cartItem
+        );
+      } else {
+        return [...prevCart, { ...item, quantity: quantities[item.foodId] }];
+      }
+    });
   };
 
   const handleQuantityChange = (id, delta) => {
@@ -136,24 +140,22 @@ const CornerCPage = () => {
       <Styled.Cart>장바구니</Styled.Cart>
       <Styled.CartSection>
         <Styled.CartSummary>
-          {cart.length > 0 ? (
-            <>
-              <Styled.CartItem>
-                {cart[0].foodName}{' '}
-                <Styled.RedText>{totalQuantity}개</Styled.RedText>
-              </Styled.CartItem>
-              <Styled.CartPrice>
-                {totalPrice.toLocaleString()}원
-              </Styled.CartPrice>
-              <Styled.RemoveButton
-                onClick={() => removeFromCart(cart[0].foodId)}
-              >
-                <CloseIcon color='#e10707' size={11} />
-              </Styled.RemoveButton>
-            </>
-          ) : (
-            '장바구니가 비어 있습니다.'
-          )}
+          {cart.length > 0
+            ? cart.map((item) => (
+                <Styled.CartItem key={item.foodId}>
+                  {item.foodName}{' '}
+                  <Styled.RedText>{item.quantity}개</Styled.RedText>
+                  <Styled.CartPrice>
+                    {totalPrice.toLocaleString()}원
+                  </Styled.CartPrice>
+                  <Styled.RemoveButton
+                    onClick={() => removeFromCart(item.foodId)}
+                  >
+                    <CloseIcon color='#e10707' size={11} />
+                  </Styled.RemoveButton>
+                </Styled.CartItem>
+              ))
+            : '장바구니가 비어 있습니다.'}
         </Styled.CartSummary>
         <Styled.CheckoutButton
           onClick={() => navigate('/payment')}
