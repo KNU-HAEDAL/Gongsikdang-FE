@@ -1,26 +1,5 @@
 import styled from '@emotion/styled';
 
-export const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #ffe0e0;
-`;
-
-export const PageLayout = styled.div`
-  width: 390px;
-  height: 1100px;
-  top: 1332px;
-  left: -441px;
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  margin-bottom: 20px;
-`;
-
 export const MenuList = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
