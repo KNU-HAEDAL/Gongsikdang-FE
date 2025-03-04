@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
-
 import CloseIcon from '@/pages/_assets/icons/CloseIcon.jsx';
 import FilledStarIcon from '@/pages/_assets/icons/FilledStarIcon';
 import LeftTriangleIcon from '@/pages/_assets/icons/LeftTriangleIcon';
 import RightTriangleIcon from '@/pages/_assets/icons/RightTriangleIcon';
 
-import { Header } from '@/shared/index.js';
-
+import { cornerBListAPI } from '../apis/cornerB.api.js';
 import * as Styled from './CornerBPage.style.js';
 
 const CornerBPage = () => {
@@ -21,31 +18,17 @@ const CornerBPage = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const token = localStorage.getItem('jwtToken');
-        if (!token) {
-          console.error('JWT 토큰이 없습니다. 로그인 후 시도하세요.');
-          return;
-        }
+        console.log('메뉴 데이터 요청 시작');
+        const response = await cornerBListAPI();
+        console.log('API 응답 데이터:', response.data);
 
-        const response = await axios.get(
-          'https://gongsikdang-be-production.up.railway.app/api/menu/info/B',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: 'application/json',
-            },
-          }
+        setMenuData(response.data);
+        setQuantities(
+          response.data.reduce(
+            (acc, item) => ({ ...acc, [item.foodId]: 1 }),
+            {}
+          )
         );
-
-        if (response.status === 200) {
-          setMenuData(response.data);
-          setQuantities(
-            response.data.reduce(
-              (acc, item) => ({ ...acc, [item.foodId]: 1 }),
-              {}
-            )
-          );
-        }
       } catch (error) {
         console.error('메뉴 데이터 불러오기 오류:', error);
       }
