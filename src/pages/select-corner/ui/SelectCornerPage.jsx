@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
-
+import { menuListAPI } from '../apis';
 import * as Styled from './SelectCornerPage.style.js';
 
 const SelectCornerPage = () => {
@@ -13,21 +12,7 @@ const SelectCornerPage = () => {
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const token = localStorage.getItem('jwtToken');
-        if (!token) {
-          throw new Error('JWT 토큰이 없습니다. 로그인 후 다시 시도하세요.');
-        }
-
-        const response = await axios.get(
-          'https://gongsikdang-be-production.up.railway.app/api/menu',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: 'application/json',
-            },
-          }
-        );
-
+        const response = await menuListAPI();
         setMenuListData(response.data);
       } catch (error) {
         console.error('메뉴 데이터 불러오기 오류:', error);
@@ -58,10 +43,6 @@ const SelectCornerPage = () => {
       <Styled.Subtitle>
         구매하고 싶은 식권의 코너를 선택해주세요.
       </Styled.Subtitle>
-
-      {isError && (
-        <Styled.ErrorMessage>데이터를 불러올 수 없습니다.</Styled.ErrorMessage>
-      )}
 
       <Styled.Grid>
         {Object.entries(menuByCorner).map(([corner, menuList]) => (
