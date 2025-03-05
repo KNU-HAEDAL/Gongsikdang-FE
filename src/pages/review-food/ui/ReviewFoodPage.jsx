@@ -36,52 +36,44 @@ const reviewsData = [
 ];
 
 const ReviewFoodPage = () => {
-  const [reviews, setReviews] = useState(reviewsData); // 임시 데이터로 초기화
-  const foodName = '육회비빔밥'; // 음식 이름
+  const [reviews] = useState(reviewsData);
+  const foodName = '육회비빔밥';
 
   return (
-    <Styled.Background>
-      <Styled.PageLayout>
-        {/* Header */}
-        <Header title='음식 리뷰' />
+    <div>
+      <Styled.FoodTitle>{foodName}</Styled.FoodTitle>
+      <Styled.FilterContainer>
+        <Styled.FilterButton>
+          <FilledStarIcon color='#FFD600' />
+          별점 높은 순
+        </Styled.FilterButton>
+        <Styled.FilterButton>
+          <EmptyStarIcon color='#c2c2c2' />
+          별점 낮은 순
+        </Styled.FilterButton>
+      </Styled.FilterContainer>
 
-        {/* 음식이름 */}
-        <Styled.FoodTitle>{foodName}</Styled.FoodTitle>
-
-        {/* 정렬 버튼 */}
-        <Styled.FilterContainer>
-          <Styled.FilterButton>
-            <FilledStarIcon color='#FFD600' />
-            별점 높은 순
-          </Styled.FilterButton>
-          <Styled.FilterButton>
-            <EmptyStarIcon color='#c2c2c2' />
-            별점 낮은 순
-          </Styled.FilterButton>
-        </Styled.FilterContainer>
-
-        {/* 리뷰 전체 */}
-        <Styled.ReviewList>
-          {reviews.map((review) => (
-            <Styled.ReviewCard key={review.id}>
-              <Styled.ReviewHeader>
-                <Styled.ReviewerName>{review.user}</Styled.ReviewerName>
-                <Styled.Stars>
-                  {[...Array(5)].map((_, index) =>
-                    index < review.rating ? (
-                      <FilledStarIcon key={index} color='#FFD600' />
-                    ) : (
-                      <EmptyStarIcon key={index} color='#c2c2c2' />
-                    )
-                  )}
-                </Styled.Stars>
-              </Styled.ReviewHeader>
-              <Styled.ReviewText>{review.text}</Styled.ReviewText>
-            </Styled.ReviewCard>
-          ))}
-        </Styled.ReviewList>
-      </Styled.PageLayout>
-    </Styled.Background>
+      {/* 리뷰 전체 */}
+      <Styled.ReviewList>
+        {reviews.map((review) => (
+          <Styled.ReviewCard key={review.id}>
+            <Styled.ReviewHeader>
+              <Styled.ReviewerName>{review.user}</Styled.ReviewerName>
+              <Styled.Stars>
+                {[...Array(5)].map((_, index) =>
+                  index < review.rating ? (
+                    <FilledStarIcon key={index} color='#FFD600' />
+                  ) : (
+                    <EmptyStarIcon key={index} color='#c2c2c2' />
+                  )
+                )}
+              </Styled.Stars>
+            </Styled.ReviewHeader>
+            <Styled.ReviewText>{review.text}</Styled.ReviewText>
+          </Styled.ReviewCard>
+        ))}
+      </Styled.ReviewList>
+    </div>
   );
 };
 

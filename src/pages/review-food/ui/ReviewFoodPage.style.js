@@ -1,30 +1,5 @@
 import styled from '@emotion/styled';
 
-/* 전체 배경 */
-export const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #ffe0e0;
-`;
-
-/* 페이지 레이아웃 */
-export const PageLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 390px;
-  height: 720px;
-  top: 2297px;
-  left: 61px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 4px 4px 20px 2px #0000001a;
-  padding: 20px;
-`;
-
 /* 음식 이름 */
 export const FoodTitle = styled.h2`
   font-size: 24px;
