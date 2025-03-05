@@ -1,33 +1,5 @@
 import styled from '@emotion/styled';
 
-export const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #ffe0e0;
-`;
-export const PaymentPageLayout = styled.div`
-  justify-content: center;
-  align-items: center;
-  flex-direction :column;
-  display:flex;
-  width: 390px
-  height: 885px;
-  top: 1332px;
-  left: 61px;
-  border-radius: 20px;
-  box-shadow: 4px 4px 20px 2px #0000001a;
-
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 400px;
-  max-height: 90vh;
-  text-align: center;
-`;
-
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
