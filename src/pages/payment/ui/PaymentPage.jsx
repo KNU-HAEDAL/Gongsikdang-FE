@@ -119,23 +119,21 @@ const PaymentPage = () => {
   };
 
   return (
-    <Payment.Background>
-      <Payment.PaymentPageLayout>
-        <Header title='리뷰 작성' />
-        <Payment.SubTitle>상품 결제</Payment.SubTitle>
-        <Payment.WhiteBox>
+    <div>
+      <Payment.SubTitle>상품 결제</Payment.SubTitle>
+      <Payment.WhiteBox>
+        <Payment.Wrapper>
+          <Payment.TotalText>육회비빔밥 x 1개</Payment.TotalText>
+        </Payment.Wrapper>
+        <Payment.WrapperWithBorder>
           <Payment.Wrapper>
-            <Payment.TotalText>육회비빔밥 x 1개</Payment.TotalText>
-          </Payment.Wrapper>
-          <Payment.WrapperWithBorder>
-            <Payment.Wrapper>
-              <Payment.TotalText> 총 수량 :1개</Payment.TotalText>
-              <Payment.TotalText>{totalAmount}원</Payment.TotalText>
-            </Payment.Wrapper>{' '}
-          </Payment.WrapperWithBorder>
-        </Payment.WhiteBox>
+            <Payment.TotalText> 총 수량 :1개</Payment.TotalText>
+            <Payment.TotalText>{totalAmount}원</Payment.TotalText>
+          </Payment.Wrapper>{' '}
+        </Payment.WrapperWithBorder>
+      </Payment.WhiteBox>
 
-        {/* {cart.map((item, index) => (
+      {/* {cart.map((item, index) => (
         <Payment.WhiteBox key={index}>
           <Payment.Wrapper>
             <Payment.TotalText>
@@ -148,81 +146,80 @@ const PaymentPage = () => {
           </Payment.Wrapper>
         </Payment.WhiteBox>
       ))} */}
-        <Payment.SubTitle>포인트 사용</Payment.SubTitle>
-        <Payment.WhiteBox>
+      <Payment.SubTitle>포인트 사용</Payment.SubTitle>
+      <Payment.WhiteBox>
+        <Payment.Wrapper>
+          <Payment.TotalText>현재 내 포인트: </Payment.TotalText>
+          <Payment.TotalText>100,000 point</Payment.TotalText>
+          <Payment.PointButton>충전하기</Payment.PointButton>
+        </Payment.Wrapper>
+        <Payment.Wrapper>
+          <Payment.TotalText>사용할 포인트: </Payment.TotalText>
+          <Payment.TotalText>
+            <Payment.PointInput
+              min='0'
+              max={pointBalance}
+              value={usedPoints}
+              onChange={(e) =>
+                setUsedPoints(Math.min(e.target.value, pointBalance))
+              }
+            />
+            point
+          </Payment.TotalText>
+          <Payment.PointButton>사용</Payment.PointButton>
+        </Payment.Wrapper>
+      </Payment.WhiteBox>
+      <Payment.SubTitle>총 결제 금액</Payment.SubTitle>
+      <Payment.WhiteBox>
+        <Payment.Wrapper>
+          <Payment.TotalText>총 주문 금액</Payment.TotalText>
+          <Payment.TotalText>{totalAmount}원</Payment.TotalText>
+        </Payment.Wrapper>
+        <Payment.Wrapper>
+          <Payment.TotalText> 포인트 사용 </Payment.TotalText>
+          <Payment.TotalText> 1,000 point</Payment.TotalText>
+        </Payment.Wrapper>
+        <Payment.WrapperWithBorder>
           <Payment.Wrapper>
-            <Payment.TotalText>현재 내 포인트: </Payment.TotalText>
-            <Payment.TotalText>100,000 point</Payment.TotalText>
-            <Payment.PointButton>충전하기</Payment.PointButton>
+            <Payment.TotalText>총 결제 금액</Payment.TotalText>
+            <Payment.TotalText>{totalAmount}원 </Payment.TotalText>
           </Payment.Wrapper>
-          <Payment.Wrapper>
-            <Payment.TotalText>사용할 포인트: </Payment.TotalText>
-            <Payment.TotalText>
-              <Payment.PointInput
-                min='0'
-                max={pointBalance}
-                value={usedPoints}
-                onChange={(e) =>
-                  setUsedPoints(Math.min(e.target.value, pointBalance))
-                }
-              />
-              point
-            </Payment.TotalText>
-            <Payment.PointButton>사용</Payment.PointButton>
-          </Payment.Wrapper>
-        </Payment.WhiteBox>
-        <Payment.SubTitle>총 결제 금액</Payment.SubTitle>
-        <Payment.WhiteBox>
-          <Payment.Wrapper>
-            <Payment.TotalText>총 주문 금액</Payment.TotalText>
-            <Payment.TotalText>{totalAmount}원</Payment.TotalText>
-          </Payment.Wrapper>
-          <Payment.Wrapper>
-            <Payment.TotalText> 포인트 사용 </Payment.TotalText>
-            <Payment.TotalText> 1,000 point</Payment.TotalText>
-          </Payment.Wrapper>
-          <Payment.WrapperWithBorder>
-            <Payment.Wrapper>
-              <Payment.TotalText>총 결제 금액</Payment.TotalText>
-              <Payment.TotalText>{totalAmount}원 </Payment.TotalText>
-            </Payment.Wrapper>
-          </Payment.WrapperWithBorder>
-        </Payment.WhiteBox>
-        <Payment.SubTitle>결제 수단</Payment.SubTitle>
-        <Payment.PaymentMethods>
-          <Payment.MethodBox
-            className={selectedPayment === 'credit-card' ? 'selected' : ''}
-            onClick={() => {
-              setSelectedPayment('credit-card');
-              setPgProvider('html5_inicis');
-            }}
-          >
-            <Payment.Image src={creditCard} />
-          </Payment.MethodBox>
-          <Payment.MethodBox
-            className={selectedPayment === 'kakaopay' ? 'selected' : ''}
-            onClick={() => {
-              setSelectedPayment('kakaopay');
-              setPgProvider('kakaopay');
-            }}
-          >
-            <Payment.Image src={kakaoPay} />
-          </Payment.MethodBox>
-          <Payment.MethodBox
-            className={selectedPayment === 'tosspay' ? 'selected' : ''}
-            onClick={() => {
-              setSelectedPayment('tosspay');
-              setPgProvider('tosspay');
-            }}
-          >
-            <Payment.Image src={tossPay} />
-          </Payment.MethodBox>
-        </Payment.PaymentMethods>
-        <Payment.SubmitButton onClick={handlePayment}>
-          결제하기
-        </Payment.SubmitButton>
-      </Payment.PaymentPageLayout>
-    </Payment.Background>
+        </Payment.WrapperWithBorder>
+      </Payment.WhiteBox>
+      <Payment.SubTitle>결제 수단</Payment.SubTitle>
+      <Payment.PaymentMethods>
+        <Payment.MethodBox
+          className={selectedPayment === 'credit-card' ? 'selected' : ''}
+          onClick={() => {
+            setSelectedPayment('credit-card');
+            setPgProvider('html5_inicis');
+          }}
+        >
+          <Payment.Image src={creditCard} />
+        </Payment.MethodBox>
+        <Payment.MethodBox
+          className={selectedPayment === 'kakaopay' ? 'selected' : ''}
+          onClick={() => {
+            setSelectedPayment('kakaopay');
+            setPgProvider('kakaopay');
+          }}
+        >
+          <Payment.Image src={kakaoPay} />
+        </Payment.MethodBox>
+        <Payment.MethodBox
+          className={selectedPayment === 'tosspay' ? 'selected' : ''}
+          onClick={() => {
+            setSelectedPayment('tosspay');
+            setPgProvider('tosspay');
+          }}
+        >
+          <Payment.Image src={tossPay} />
+        </Payment.MethodBox>
+      </Payment.PaymentMethods>
+      <Payment.SubmitButton onClick={handlePayment}>
+        결제하기
+      </Payment.SubmitButton>
+    </div>
   );
 };
 
