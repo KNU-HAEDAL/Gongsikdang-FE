@@ -119,7 +119,7 @@ const PaymentPage = () => {
   };
 
   return (
-    <div>
+    <Payment.Page>
       <Payment.SubTitle>상품 결제</Payment.SubTitle>
       <Payment.WhiteBox>
         <Payment.Wrapper>
@@ -219,7 +219,7 @@ const PaymentPage = () => {
       <Payment.SubmitButton onClick={handlePayment}>
         결제하기
       </Payment.SubmitButton>
-    </div>
+    </Payment.Page>
   );
 };
 
