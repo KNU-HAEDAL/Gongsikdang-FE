@@ -1,17 +1,13 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { LoadingView } from '@/shared';
 
 import { useGetPurchaseList } from '../../hooks';
-import { PURCHASE_MOCK_DATA } from '../../mock';
 import { Section, Title } from '../../ui';
 import * as Mypage from './PurchasesList.style';
 
 export const PurchasesList = () => {
   const { data: purchaseListData, isPending } = useGetPurchaseList();
-
-  const [purchases, setPurchases] = useState(PURCHASE_MOCK_DATA);
 
   const purchasesList = Array.isArray(purchaseListData) ? purchaseListData : [];
 
@@ -26,24 +22,24 @@ export const PurchasesList = () => {
     });
   };
 
-  const handleButtonClick = (id) => {
-    setPurchases((prevPurchases) =>
-      prevPurchases.map((purchase) =>
-        purchase.id === id
-          ? {
-              ...purchase,
-              date: purchase.date.replace('구매', '사용'),
-              status: '사용 완료',
-              buttonType: '리뷰작성',
-              buttonColor: 'red',
-              disabled: false,
-            }
-          : purchase
-      )
-    );
+  // const handleButtonClick = (id) => {
+  //   setPurchases((prevPurchases) =>
+  //     prevPurchases.map((purchase) =>
+  //       purchase.id === id
+  //         ? {
+  //             ...purchase,
+  //             date: purchase.date.replace('구매', '사용'),
+  //             status: '사용 완료',
+  //             buttonType: '리뷰작성',
+  //             buttonColor: 'red',
+  //             disabled: false,
+  //           }
+  //         : purchase
+  //     )
+  //   );
 
-    console.log(`구매 ID ${id} 버튼 클릭`);
-  };
+  //   console.log(`구매 ID ${id} 버튼 클릭`);
+  // };
 
   const handleReviewClick = (purchase) => {
     navigate('/review/write', {
@@ -62,9 +58,9 @@ export const PurchasesList = () => {
     <Section>
       <Title>구매 내역</Title>
       <Mypage.PurchaseBox>
-        {purchases.length > 0 ? (
+        {purchasesList.length > 0 ? (
           <Mypage.PurchaseList>
-            {purchases.map((purchase) => {
+            {purchasesList.map((purchase) => {
               const buttonType = purchase.buttonType || 'QR 확인';
               const buttonColor = purchase.buttonColor || 'gray';
               const isDisabled = purchase.disabled ?? true;
@@ -92,15 +88,15 @@ export const PurchasesList = () => {
                               : '#d3d3d3',
                       }}
                       disabled={isDisabled}
-                      onClick={() => {
-                        if (buttonType === '구매확정') {
-                          handleButtonClick(purchase.purchaseId);
-                        } else if (buttonType === '리뷰작성') {
-                          handleReviewClick(purchase);
-                        } else {
-                          handleBarcodeClick(purchase);
-                        }
-                      }}
+                      // onClick={() => {
+                      //   if (buttonType === '구매확정') {
+                      //     handleButtonClick(purchase.purchaseId);
+                      //   } else if (buttonType === '리뷰작성') {
+                      //     handleReviewClick(purchase);
+                      //   } else {
+                      //     handleBarcodeClick(purchase);
+                      //   }
+                      // }}
                     >
                       {buttonType}
                     </Mypage.ActionButton>

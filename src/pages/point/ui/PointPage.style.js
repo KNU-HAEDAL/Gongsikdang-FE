@@ -1,30 +1,10 @@
 import styled from '@emotion/styled';
 
-export const Background = styled.div`
+export const Layout = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #f8f8f8;
-`;
-
-export const Container = styled.div`
-  justify-content: center;
+  text-align: center;
   align-items: center;
   flex-direction: column;
-  display: flex;
-  width: 390;
-  height: 885;
-  top: 1332px;
-  left: 61px;
-  border-radius: 20px;
-  background: #fff;
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 400px;
-  max-height: 90vh;
-  text-align: center;
 `;
 
 export const Header = styled.div`
