@@ -6,4 +6,5 @@ export const registerApi = async ({ id, password, name }) => {
     password,
     name,
   });
+  return response.data;
 };
