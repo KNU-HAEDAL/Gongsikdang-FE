@@ -1,7 +1,7 @@
-import { getPurchasesList, pointApiPath } from '../apis';
+import { getPurchasesList, purchaseApiPath } from '../apis';
 import { useQuery } from '@tanstack/react-query';
 
-const purchaseListQueryKey = [pointApiPath];
+const purchaseListQueryKey = [purchaseApiPath];
 
 export const useGetPurchaseList = () => {
   return useQuery({
