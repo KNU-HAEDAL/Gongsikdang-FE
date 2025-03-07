@@ -11,7 +11,6 @@ export const MyInfo = () => {
 
   const { data: nameData, isPending } = useGetName();
 
-  console.log(nameData);
   const onClickLogout = () => {
     toast.success('로그아웃 되었습니다.');
     sessionStorage.removeItem('token');
