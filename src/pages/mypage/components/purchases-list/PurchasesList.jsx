@@ -9,15 +9,19 @@ import { Section, Title } from '../../ui';
 import * as Mypage from './PurchasesList.style';
 
 export const PurchasesList = () => {
-  const { data: purchasesList, isPending } = useGetPurchaseList();
+  const { data: purchaseListData, isPending } = useGetPurchaseList();
 
   const [purchases, setPurchases] = useState(PURCHASE_MOCK_DATA);
+
+  const purchasesList = Array.isArray(purchaseListData) ? purchaseListData : [];
+
+  const navigate = useNavigate();
 
   const handleBarcodeClick = (purchase) => {
     navigate('/barcode', {
       state: {
-        name: purchase.name,
-        date: purchase.date,
+        name: purchase.items[0]?.foodName || '상품명 없음',
+        date: purchase.status,
       },
     });
   };
@@ -37,62 +41,73 @@ export const PurchasesList = () => {
           : purchase
       )
     );
+
+    console.log(`구매 ID ${id} 버튼 클릭`);
   };
+
   const handleReviewClick = (purchase) => {
     navigate('/review/write', {
       state: {
-        name: purchase.name,
-        date: purchase.date,
+        name: purchase.items[0]?.foodName || '상품명 없음',
+        date: purchase.status,
       },
     });
   };
-  const navigate = useNavigate();
 
   if (isPending) {
     return <LoadingView />;
   }
+
   return (
     <Section>
       <Title>구매 내역</Title>
       <Mypage.PurchaseBox>
-        {purchases !== undefined && purchases.length === 0 ? (
+        {purchases.length > 0 ? (
           <Mypage.PurchaseList>
-            {purchases.map((purchase) => (
-              <Mypage.PurchaseCard key={purchase.id}>
-                <Mypage.PurchaseTitle>{purchase.name}</Mypage.PurchaseTitle>
-                <Mypage.PurchaseDate>{purchase.date}</Mypage.PurchaseDate>
-                <Mypage.QRCode />
-                <Mypage.QRText isFirstCase={purchase.buttonType === '구매확정'}>
-                  QR코드확인하기
-                </Mypage.QRText>
+            {purchases.map((purchase) => {
+              const buttonType = purchase.buttonType || 'QR 확인';
+              const buttonColor = purchase.buttonColor || 'gray';
+              const isDisabled = purchase.disabled ?? true;
 
-                <Mypage.ButtonBox>
-                  <Mypage.Status>{purchase.status}</Mypage.Status>
-                  <Mypage.ActionButton
-                    style={{
-                      backgroundColor:
-                        purchase.buttonColor === 'blue'
-                          ? '#007bff'
-                          : purchase.buttonColor === 'red'
-                            ? '#e10707'
-                            : '#d3d3d3',
-                    }}
-                    disabled={purchase.disabled}
-                    onClick={() => {
-                      if (purchase.buttonType === '구매확정') {
-                        handleButtonClick(purchase.id);
-                      } else if (purchase.buttonType === '리뷰작성') {
-                        handleReviewClick(purchase);
-                      } else {
-                        handleBarcodeClick(purchase);
-                      }
-                    }}
-                  >
-                    {purchase.buttonType}
-                  </Mypage.ActionButton>
-                </Mypage.ButtonBox>
-              </Mypage.PurchaseCard>
-            ))}
+              return (
+                <Mypage.PurchaseCard key={purchase.purchaseId ?? Math.random()}>
+                  <Mypage.PurchaseTitle>
+                    {purchase.items[0]?.foodName || '상품명 없음'}
+                  </Mypage.PurchaseTitle>
+                  <Mypage.PurchaseDate>{purchase.status}</Mypage.PurchaseDate>
+                  <Mypage.QRCode />
+                  <Mypage.QRText isFirstCase={buttonType === '구매확정'}>
+                    QR코드확인하기
+                  </Mypage.QRText>
+
+                  <Mypage.ButtonBox>
+                    <Mypage.Status>{purchase.status}</Mypage.Status>
+                    <Mypage.ActionButton
+                      style={{
+                        backgroundColor:
+                          buttonColor === 'blue'
+                            ? '#007bff'
+                            : buttonColor === 'red'
+                              ? '#e10707'
+                              : '#d3d3d3',
+                      }}
+                      disabled={isDisabled}
+                      onClick={() => {
+                        if (buttonType === '구매확정') {
+                          handleButtonClick(purchase.purchaseId);
+                        } else if (buttonType === '리뷰작성') {
+                          handleReviewClick(purchase);
+                        } else {
+                          handleBarcodeClick(purchase);
+                        }
+                      }}
+                    >
+                      {buttonType}
+                    </Mypage.ActionButton>
+                  </Mypage.ButtonBox>
+                </Mypage.PurchaseCard>
+              );
+            })}
             <button onClick={() => navigate('/mypage/barcode')}>
               바코드 확인
             </button>
