@@ -16,6 +16,8 @@ import {
   SelectCornerPage,
 } from '@/pages';
 
+import { Layout } from '@/shared';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -26,62 +28,155 @@ const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+
+  {
     path: '/mypage',
     children: [
       {
-        index: true,
-        element: <Mypage />,
+        element: <Layout title='마이페이지' />,
+        children: [
+          {
+            index: true,
+            element: <Mypage />,
+          },
+        ],
       },
       {
         path: 'point',
-        element: <PointPage />,
+        element: <Layout title='포인트 충전' />,
+        children: [
+          {
+            index: true,
+            element: <PointPage />,
+          },
+        ],
       },
       {
         path: 'barcode',
-        element: <BarcodePage />,
+        element: <Layout title='바코드 확인' />,
+        children: [
+          {
+            index: true,
+            element: <BarcodePage />,
+          },
+        ],
       },
     ],
   },
   {
     path: '/payment',
-    element: <PaymentPage />,
-  },
-  {
-    path: '/register',
-    element: <RegisterPage />,
+    children: [
+      {
+        element: <Layout title='상품 결제' />,
+        children: [
+          {
+            index: true,
+            element: <PaymentPage />,
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/corner',
     children: [
       {
-        index: true,
-        element: <SelectCornerPage />,
+        element: <Layout title='코너 선택' />,
+        children: [
+          {
+            index: true,
+            element: <SelectCornerPage />,
+          },
+        ],
       },
       {
         path: 'A',
-        element: <CornerAPage />,
+        children: [
+          {
+            element: <Layout title='A 코너' />,
+            children: [
+              {
+                index: true,
+                element: <CornerAPage />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'B',
-        element: <CornerBPage />,
+        children: [
+          {
+            element: <Layout title='B 코너' />,
+            children: [
+              {
+                index: true,
+                element: <CornerBPage />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'C',
-        element: <CornerCPage />,
+        children: [
+          {
+            element: <Layout title='C 코너' />,
+            children: [
+              {
+                index: true,
+                element: <CornerCPage />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'D',
-        element: <CornerDPage />,
+        children: [
+          {
+            element: <Layout title='D 코너' />,
+            children: [
+              {
+                index: true,
+                element: <CornerDPage />,
+              },
+            ],
+          },
+        ],
       },
     ],
   },
   {
     path: '/review/food',
-    element: <ReviewFoodPage />,
+    children: [
+      {
+        element: <Layout title='음식 리뷰' />,
+        children: [
+          {
+            index: true,
+            element: <ReviewFoodPage />,
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/review/write',
-    element: <ReviewWritePage />,
+    children: [
+      {
+        element: <Layout title='리뷰 작성' />,
+        children: [
+          {
+            index: true,
+            element: <ReviewWritePage />,
+          },
+        ],
+      },
+    ],
   },
 ]);
 

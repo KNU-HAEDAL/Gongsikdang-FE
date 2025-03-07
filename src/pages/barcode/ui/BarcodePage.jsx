@@ -1,98 +1,41 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import JsBarcode from 'jsbarcode';
-
-import * as Common from '@/shared/styles';
-
-import * as Barcode from './BarcodePage.style';
+import * as Styled from './BarcodePage.style.js';
 
 const BarcodePage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { cart, merchantUid } = location.state || {
-    cart: [],
-    merchantUid: null,
+
+  // 임시 데이터
+  const menuName = '육회비빔밥'; // 메뉴 이름
+
+  const handlePurchaseConfirmation = () => {
+    alert('구매가 확인되었습니다!');
+    navigate('/'); // 홈으로 이동 예시
   };
 
-  const [barcodes, setBarcodes] = useState([]);
-
-  // 유니코드 문자열을 Base64로 변환하는 함수
-  const encodeToBase64 = (input) => btoa(unescape(encodeURIComponent(input)));
-
-  useEffect(() => {
-    if (!merchantUid) {
-      alert('잘못된 접근입니다.');
-      navigate('/mypage');
-      return;
-    }
-
-    // 바코드 생성 함수
-    const generateBarcodes = () => {
-      const generatedBarcodes = [];
-      cart.forEach((item) => {
-        for (let i = 0; i < item.quantity; i++) {
-          const uniqueUid = `${merchantUid}_${item.name}_${Date.now()}_${Math.random()}`; // 고유 UID 생성
-          generatedBarcodes.push({
-            name: item.name,
-            price: item.price,
-            merchantUid: encodeToBase64(uniqueUid), // Base64로 변환
-            expiration: Date.now() + 2 * 60 * 60 * 1000, // 유효시간: 2시간
-          });
-        }
-      });
-      return generatedBarcodes;
-    };
-
-    setBarcodes(generateBarcodes());
-  }, [cart, merchantUid, navigate]);
-
   return (
-    <Barcode.BarcodePageLayout>
-      {/* 상단 버튼 영역 */}
-      <Common.TopButtons>
-        {/* 뒤로 버튼 */}
-        <Common.TopButton
-          className='top-button back-button'
-          onClick={() => navigate(-1)} // 이전 페이지로 이동
-        >
-          뒤로
-        </Common.TopButton>
+    <Styled.PageLayout>
+      {/* 메뉴 이름 */}
+      <Styled.FoodTitle>{menuName}</Styled.FoodTitle>
 
-        {/* 홈 버튼 */}
-        <Common.TopButton
-          className='top-button home-button'
-          onClick={() => navigate('/chooseRestaurant')} // ChooseRestaurant.js로 이동
-        >
-          홈
-        </Common.TopButton>
-      </Common.TopButtons>
-      <Barcode.BarcodePageHeader>바코드 확인</Barcode.BarcodePageHeader>
-      <Barcode.BarcodeSection>
-        <h2>바코드</h2>
-        {barcodes.map((barcode, index) => {
-          const isExpired = Date.now() > barcode.expiration;
+      {/* 안내 문구 */}
+      <Styled.Message>
+        <p>바코드 사용 후&nbsp;</p>
+        <Styled.Highlight>구매 확정</Styled.Highlight>
+        <p>을 꼭 해주세요!</p>
+      </Styled.Message>
 
-          return (
-            <div key={index} className='barcode-item'>
-              <p>{barcode.name}</p>
-              {/* 순번 표시 */}
-              {!isExpired ? (
-                <svg
-                  ref={(el) => {
-                    if (el) {
-                      JsBarcode(el, barcode.merchantUid, { format: 'CODE128' });
-                    }
-                  }}
-                ></svg>
-              ) : (
-                <p className='expired'>바코드 만료 (2시간 초과)</p>
-              )}
-            </div>
-          );
-        })}
-      </Barcode.BarcodeSection>
-    </Barcode.BarcodePageLayout>
+      {/* 바코드 자리 */}
+      <Styled.BarcodeContainer>
+        {/* 바코드 이미지는 비워둠 */}
+        <Styled.BarcodePlaceholder />
+      </Styled.BarcodeContainer>
+
+      {/* 구매 확정 버튼 */}
+      <Styled.Button onClick={handlePurchaseConfirmation}>
+        구매 확정
+      </Styled.Button>
+    </Styled.PageLayout>
   );
 };
 

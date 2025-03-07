@@ -1,66 +1,98 @@
 import styled from '@emotion/styled';
 
-export const MypageLayout = styled.div`
-  width: var(--page-width);
-  max-width: 100%;
-  background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* 더 부드러운 그림자 */
-  margin: 20px auto;
-`;
-
-export const MypageTitle = styled.h1`
-  color: var(--red);
+export const Layout = styled.div`
+  display: flex;
   text-align: center;
-  font-size: var(--font-lg); /* 더 큰 제목 */
-  font-weight: bold;
-  margin-bottom: 20px;
-  letter-spacing: 1.5px; /* 제목에 여유 추가 */
+  align-items: center;
+  flex-direction: column;
 `;
 
-export const MypageSubTitle = styled.h3`
-  margin: 0;
-  font-size: var(--font-md);
-  color: var(--black);
-  font-weight: bold;
-`;
-
-export const PurchaseHistory = styled.section`
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-`;
-
-export const PurchaseHistoryList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  font-size: var(--font-sm);
-  color: var(--gray);
-
-  :hover {
-    cursor: pointer;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-color: var(--red);
-  }
-`;
-
-export const PurchaseHistoryItem = styled.li`
+export const Title = styled.p`
+  font-weight: 700;
+  font-size: 20px;
   margin: 10px 0;
-  padding: 10px;
-  background-color: var(--white);
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  transition: all 0.3s ease-in-out;
+`;
 
-  :hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-color: var(--red);
+export const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const RedButton = styled.button`
+  width: 76px;
+  height: 29px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: var(--red);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: #c30606;
   }
+`;
+
+export const PointBox = styled.div`
+  width: 337px;
+  height: 55px;
+  border-radius: 10px;
+  border-width: 1px;
+
+  background-color: #fff;
+  border: 1px solid lightgray;
+  padding: 15px;
+  margin: auto;
+  margin-top: 10px;
+
+  box-sizing: border-box;
+  text-align: left;
+`;
+
+export const PointText = styled.span`
+  font-size: 16px;
+`;
+
+export const Description = styled.p`
+  font-size: 16px;
+  background-color: #000000;
+  margin-bottom: 15px;
+`;
+
+export const BoldText = styled.span`
+  font-size: 24px;
+  font-weight: bold;
+`;
+
+export const BoldRed = styled.span`
+  color: red;
+  font-size: 16px;
+  margin: 5px;
+  text-align: center;
+  font-weight: bold;
+`;
+
+export const Section = styled.section`
+  margin-bottom: 20px;
+`;
+
+export const InfoBox = styled.div`
+  width: 337px;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #fff;
+  border: 1px solid var(--gray);
+  padding: 15px;
+  margin-top: 10px;
+
+  border-radius: 10px;
+  box-sizing: border-box;
+  text-align: left;
+`;
+
+export const TextBox = styled.div`
+  display: flex;
+  align-items: end;
 `;

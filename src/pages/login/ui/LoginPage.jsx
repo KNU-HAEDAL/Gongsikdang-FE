@@ -1,44 +1,45 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-import { fetchInstance } from '@/shared/instance/Instance';
-
+import { loginAPI } from '../apis';
 import * as Login from './LoginPage.style';
+import { useMutation } from '@tanstack/react-query';
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const { mutate: loginData } = useMutation({
+    mutationFn: loginAPI,
+    onSuccess: (response) => {
+      toast.success('로그인 성공!');
+      sessionStorage.setItem('token', response.data.token);
+      setTimeout(() => {
+        navigate('/corner');
+      }, 1000);
+    },
+    onError: () => {
+      toast.error('로그인 실패');
+    },
+  });
+
+  const onSubmit = (event) => {
     event.preventDefault();
 
-    try {
-      const response = await fetchInstance.post('/user/login', {
-        id,
-        password,
-      });
-      if (response.data && response.data.message === 'Login successful') {
-        alert('Login successful!');
-        sessionStorage.setItem('token', response.data.token);
-        onLogin();
-        navigate('/ChooseRestaurant');
-      } else {
-        alert(
-          response.data.message || 'Invalid credentials, please try again.'
-        );
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      alert('An error occurred. Please try again later.');
-    }
+    loginData({ id, password });
   };
 
   return (
     <Login.LoginPageLayout>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => onSubmit(e)}>
         <Login.LogoCircle>
-          <Login.SubLogoCircle>공식당</Login.SubLogoCircle>
+          <Login.SubLogoCircle>
+            <span className='yellow'>공</span>
+            <span className='blue'>식당</span>
+          </Login.SubLogoCircle>
         </Login.LogoCircle>
         <Login.LoginTitle>환영합니다!</Login.LoginTitle>
         <Login.SubTitle>공식당 예약 키오스크 서비스 입니다.</Login.SubTitle>
@@ -60,7 +61,7 @@ const LoginPage = ({ onLogin }) => {
           <Login.LoginButton type='submit'>로그인</Login.LoginButton>
         </Login.LoginBox>
         <Login.SignUpWrapper>
-          아직 회원이 아니라면?{' '}
+          아직 회원이 아니라면?&nbsp;
           <Login.SignUpButton onClick={() => navigate('/register')}>
             회원가입하기
           </Login.SignUpButton>

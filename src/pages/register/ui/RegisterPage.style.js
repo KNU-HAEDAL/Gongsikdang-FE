@@ -9,185 +9,222 @@ export const RegisterPageLayout = styled.div`
     }
   }
 
-  width: 390px; /* 페이지 너비 */
-  height: 720px; /* 페이지 높이 */
-  background-color: #ffffff; /* 배경색 */
-  padding: 50px 30px; /* 내부 여백 */
-  border-radius: 20px; /* 모서리 둥글기 */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* 그림자 */
-  text-align: center; /* 텍스트 정렬 */
-  animation: fadeIn 1s ease-out forwards; /* 페이드인 애니메이션 */
+  top: 60px;
+  width: 370px;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 50px 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 1s ease-out forwards;
+  position: relative;
+  padding-bottom: 100px;
 `;
 
-/* 상단 로고를 감싸는 원형 컨테이너 */
+/* 상단 로고 외부 원 */
 export const LogoCircle = styled.div`
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 120px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 120px; /* 원의 너비 */
-  height: 120px; /* 원의 높이 */
-  background: #ffffff; /* 배경색 */
-  border-radius: 50%; /* 완전한 원 모양 */
-  margin: -84px auto 30px; /* 위치 조정 */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* 그림자 */
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 4px 4px 20px 0px #00000040;
 `;
 
-/* 로고 내부의 작은 원 */
+/* 로고 내부 원 */
 export const SubLogoCircle = styled.div`
-  width: 95px; /* 내부 원의 너비 */
-  height: 95px; /* 내부 원의 높이 */
-  background: #2e2e2e; /* 배경색 */
-  border-radius: 50%; /* 완전한 원 모양 */
+  width: 95px;
+  height: 95px;
+  font-family: 'BMJUA';
+  background-color: #000;
+  color: #fff;
+  background-size: cover;
+  background: var(--black);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 34px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  .yellow {
+    color: #eff697;
+  }
+  .blue {
+    color: #57e7fe;
+  }
 `;
 
 /* 회원가입 페이지 제목 */
 export const RegisterTitle = styled.span`
-  font-size: 30px; /* 제목 글자 크기 */
-  font-weight: 500; /* 글자 두께 */
-  color: #2e2e2e; /* 글자 색상 */
-  margin-bottom: 20px; /* 하단 여백 */
+  width: 104px;
+  height: 36px;
+  top: 80px;
+  left: 135px;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 35.8px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  position: absolute;
 `;
 
 /* 입력 폼 섹션 */
 export const FormSection = styled.section`
+  position: relative;
   display: flex;
-  flex-direction: column; /* 세로 방향 정렬 */
-  align-items: flex-start; /* 왼쪽 정렬 */
-  gap: 15px; /* 요소 간격 */
-  margin-bottom: 30px; /* 하단 여백 */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  transform: translateY(50px);
+  color: #c2c2c2;
 `;
 
 /* 입력 필드 스타일 */
 export const FormInput = styled.input`
   width: 100%;
-  height: 40px;
+  padding: 12px;
   border: none;
-  border-bottom: 1px solid #c2c2c2; /* 밑줄 스타일 */
-  padding: 10px 0;
+  border-bottom: 1px solid #c2c2c2;
   font-size: 14px;
-  color: #333333;
+  color: #2e2e2e;
   background: none;
-
+  transition: border-color 0.3s;
   :focus {
-    border-bottom: 2px solid #e10707; /* 포커스 상태 밑줄 강조 */
+    border-bottom: 1px solid #b45555;
     outline: none;
   }
 `;
 
-/* 입력 필드와 버튼 그룹 */
+/* 입력필드 라인 */
 export const InputGroup = styled.div`
   display: flex;
-  align-items: center; /* 세로 정렬 */
-  gap: 10px; /* 요소 간격 */
+  align-items: center;
 `;
 
-/* 버튼 스타일 */
+/* 회원가입 버튼 스타일 */
 export const FormButton = styled.button`
-  width: 150px; /* 버튼 너비 */
-  height: 40px; /* 버튼 높이 */
-  font-size: 16px; /* 글자 크기 */
-  font-weight: 700; /* 글자 두께 */
-  background-color: #e10707; /* 버튼 배경색 */
-  color: #ffffff; /* 버튼 글자색 */
-  border: none; /* 테두리 제거 */
-  border-radius: 100px; /* 둥근 버튼 */
-  cursor: pointer; /* 클릭 가능 커서 */
+  width: 150px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: var(--red);
+  color: #ffffff;
+  border: none;
+  border-radius: 100px;
+  transform: translateY(60px);
+  box-shadow: 0px 4px 20px 0px #00000040;
+  cursor: pointer;
   transition:
     transform 0.2s,
-    box-shadow 0.2s; /* 호버 효과 전환 */
+    box-shadow 0.2s;
 
   :hover {
-    transform: translateY(-2px); /* 위로 살짝 이동 */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 그림자 */
+    transform: translateY(58px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   }
 `;
 
 /* 취소 버튼 스타일 */
 export const CancelButton = styled(FormButton)`
-  background-color: #ffffff; /* 배경색 */
-  color: #e10707; /* 글자 색상 */
-  border: 2px solid #e10707; /* 테두리 */
+  background-color: #ffffff;
+  color: var(--red);
+  border: 3px solid var(--red);
 
   :hover {
-    background-color: #f9f9f9; /* 호버 배경색 */
-    color: #e10707; /* 호버 글자 색상 */
+    background-color: #f9f9f9;
+    color: var(--red);
   }
 `;
 
-/* 작은 버튼 스타일 */
+/* 중복확인 버튼 스타일 */
 export const SmallButton = styled.button`
-  width: 90px; /* 버튼 너비 */
-  height: 40px; /* 버튼 높이 */
-  font-size: 16px; /* 글자 크기 */
-  font-weight: 700; /* 글자 두께 */
-  background-color: #e10707; /* 배경색 */
-  color: #ffffff; /* 글자색 */
-  border: none; /* 테두리 없음 */
-  border-radius: 100px; /* 모서리 둥글기 (피그마 기준) */
-  cursor: pointer; /* 클릭 가능한 커서 */
-  display: flex; /* 텍스트 중앙 정렬 */
-  justify-content: center;
-  align-items: center;
-
-  /* 위치 조정 */
-  position: absolute; /* 부모 요소 기준으로 절대 위치 */
-  top: 184px; /* 피그마 기준 상단에서의 위치 */
-  left: 265px; /* 피그마 기준 좌측에서의 위치 */
-
-  /* 호버 효과 */
+  width: 90px;
+  height: 40px;
+  position: absolute;
+  top: 130px;
+  left: 245px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: var(--red);
+  color: #ffffff;
+  border: none;
+  border-radius: 100px;
+  box-shadow: 0px 4px 20px 0px #00000040;
+  cursor: pointer;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease; /* 호버 효과 전환 */
+    transform 0.2s,
+    box-shadow 0.2s;
 
   :hover {
-    transform: translateY(-2px); /* 살짝 위로 이동 */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 그림자 */
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   }
 `;
 
 /* 에러 메시지 스타일 */
 export const ErrorMessage = styled.span`
-  font-size: 12px; /* 글자 크기 */
-  color: #e10707; /* 에러 색상 */
+  font-size: 12px;
+  color: var(--red);
+  height: 10px;
+  margin-top: 4px;
+  position: absolute;
+  top: 40px;
+  display: ${({ children }) => (children ? 'block' : 'none')};
 `;
 
-/* Label 스타일 */
+/* Label 스타일-밑줄 아래부분 */
 export const Label = styled.label`
-  font-size: 14px; /* 글자 크기 */
-  color: #777777; /* 라벨 색상 */
+  font-size: 14px;
+  color: #777777;
+  margin-top: 5px;
 `;
 
 /* 버튼 그룹 스타일 */
 export const ButtonGroup = styled.div`
   display: flex;
-  justify-content: space-between; /* 버튼 간격 */
-  margin-top: 20px; /* 상단 여백 */
-  gap: 20px; /* 버튼 간 간격 */
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
 `;
 
 /* 하단 푸터 스타일 */
 export const Footer = styled.div`
-  margin-top: 30px; /* 상단 여백 */
-  font-size: 14px; /* 글자 크기 */
-  color: #777777; /* 푸터 색상 */
-  text-align: center; /* 중앙 정렬 */
+  margin-top: 30px;
+  font-size: 16px;
+  color: var(--black);
+  transform: translateY(65px);
 `;
 
 /* 로그인 링크 스타일 */
 export const LoginLink = styled.span`
-  font-size: 16px; /* 글자 크기 */
-  color: #e10707; /* 빨간색 텍스트 */
-  cursor: pointer; /* 클릭 가능한 커서 */
-  text-decoration: none; /* 기본 밑줄 제거 */
+  margin-left: 5px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--red);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s;
 
   :hover {
-    text-decoration: underline; /* 호버 시 밑줄 추가 */
+    transform: translateY(-2px);
   }
 `;
 
-export const Background = styled.div`
-  ); /* 배경 그라데이션 */
-  display: flex; /* 유연한 박스 모델 */
-  justify-content: center; /* 가로 정렬 */
-  align-items: center; /* 세로 정렬 */
+/*아이콘 디자인*/
+export const InfoCircledIcon = styled.svg`
+  width: 17px;
+  height: 17px;
+  color: #777777;
+  fill: currentColor;
 `;

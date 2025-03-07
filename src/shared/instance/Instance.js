@@ -15,7 +15,7 @@ const initInstance = (config) => {
   return instance;
 };
 
-export const BASE_URI = 'http://localhost:8080';
+export const BASE_URI = 'https://gongsikdang-be-production.up.railway.app';
 
 export const fetchInstance = initInstance({
   baseURL: BASE_URI,
