@@ -1,29 +1,11 @@
 import styled from '@emotion/styled';
 
-/* 전체 배경 */
-export const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #ffe0e0;
-`;
-
 /* 페이지 레이아웃 */
 export const PageLayout = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  text-align: center;
   align-items: center;
-  width: 390px;
-  height: 720px;
-  top: 2516px;
-  left: 602px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
 `;
 
 /* 음식 이름 */
@@ -35,12 +17,13 @@ export const FoodTitle = styled.h2`
 `;
 
 /* 안내 문구 */
-export const Message = styled.p`
+export const Message = styled.div`
   font-size: 16px;
   font-weight: 500;
   text-align: center;
   color: #4a4a4a;
   margin: 10px 0;
+  display: flex;
 `;
 
 /* 강조 표시 */
