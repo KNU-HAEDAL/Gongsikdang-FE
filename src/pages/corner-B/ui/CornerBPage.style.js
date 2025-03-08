@@ -207,6 +207,7 @@ export const CartSection = styled.div`
   border: 1px solid #c2c2c2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+  margin-bottom: 20px;
 `;
 
 export const CartSummary = styled.div`
@@ -229,14 +230,33 @@ export const CartItem = styled.span`
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  font-weight: 400;
-  font-size: 20px;
   color: #000000;
   gap: 10px;
 `;
 
-export const CartPrice = styled.span`
-  color: #000000;
+export const ItemName = styled.span`
+  flex: 4;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  font-size: 17px;
+`;
+
+export const ItemQuantity = styled.span`
+  flex: 0.7;
+  color: red;
+  text-align: center;
+  font-weight: 400;
+  font-size: 17px;
+`;
+
+export const ItemPrice = styled.span`
+  flex: 1.5;
+  text-align: right;
+  font-weight: 400;
+  font-size: 17px;
 `;
 
 export const RedText = styled.span`

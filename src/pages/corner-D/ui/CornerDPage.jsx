@@ -69,12 +69,6 @@ const CornerDPage = () => {
     setCart(cart.filter((item) => item.foodId !== id));
   };
 
-  const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const totalPrice = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-
   return (
     <div>
       <Styled.MenuList>
@@ -85,7 +79,7 @@ const CornerDPage = () => {
               alt={item.foodName}
             />
             <Styled.MenuTitle>{item.foodName}</Styled.MenuTitle>
-            <Styled.MenuPrice>{item.price.toLocaleString()}원</Styled.MenuPrice>
+            <Styled.MenuPrice>{item.price}원</Styled.MenuPrice>
             <Styled.Review>
               {[...Array(5)].map((_, index) => (
                 <FilledStarIcon
@@ -126,11 +120,13 @@ const CornerDPage = () => {
           {cart.length > 0
             ? cart.map((item) => (
                 <Styled.CartItem key={item.foodId}>
-                  {item.foodName}{' '}
-                  <Styled.RedText>{item.quantity}개</Styled.RedText>
-                  <Styled.CartPrice>
-                    {totalPrice.toLocaleString()}원
-                  </Styled.CartPrice>
+                  <Styled.ItemName>{item.foodName}</Styled.ItemName>
+                  <Styled.ItemQuantity>
+                    <Styled.RedText>{item.quantity}개</Styled.RedText>
+                  </Styled.ItemQuantity>
+                  <Styled.ItemPrice>
+                    {item.price * item.quantity}원
+                  </Styled.ItemPrice>
                   <Styled.RemoveButton
                     onClick={() => removeFromCart(item.foodId)}
                   >
