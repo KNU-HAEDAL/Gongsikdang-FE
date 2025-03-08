@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import EmptyStarIcon from '@/pages/_assets/icons/EmptyStarIcon.jsx';
 import FilledStarIcon from '@/pages/_assets/icons/FilledStarIcon.jsx';
@@ -7,21 +8,28 @@ import { reviewFoodListAPI } from '../apis/reviewfood.api.js';
 import * as Styled from './ReviewFoodPage.style';
 
 const ReviewFoodPage = () => {
+  const { foodId } = useParams();
   const [reviews, setReviews] = useState([]);
   const [foodName, setFoodName] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const data = await reviewFoodListAPI();
-      if (data.length > 0) {
-        setFoodName(`음식 ${data[0].foodId}`); // 음식 이름은 서버에서 따로 받아야 함 (임시 설정)
+      const data = await reviewFoodListAPI(Number(foodId));
+      const filteredReviews = data.filter(
+        (review) => review.foodId === Number(foodId)
+      );
+
+      if (filteredReviews.length > 0) {
+        setFoodName(`음식 ${foodId}`); //스웨거에 음식이름 추가해달라하기
+        setReviews(filteredReviews.sort((a, b) => b.rating - a.rating));
+      } else {
+        setFoodName('리뷰 없음');
       }
-      setReviews(data.sort((a, b) => b.rating - a.rating));
     };
 
     fetchReviews();
-  }, []);
+  }, [foodId]);
 
   const sortReviews = (order) => {
     const sortedReviews = [...reviews].sort((a, b) =>
