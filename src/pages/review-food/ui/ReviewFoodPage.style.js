@@ -6,6 +6,7 @@ export const FoodTitle = styled.h2`
   font-weight: 700;
   color: #2e2e2e;
   margin-left: 20px;
+  justify-content: center;
 `;
 
 /* 정렬순서 버튼 박스 */
