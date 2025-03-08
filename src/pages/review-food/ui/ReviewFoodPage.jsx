@@ -1,59 +1,58 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import EmptyStarIcon from '@/pages/_assets/icons/EmptyStarIcon.jsx';
 import FilledStarIcon from '@/pages/_assets/icons/FilledStarIcon.jsx';
 
-import { Header } from '@/shared/index.js';
-
+import { reviewFoodListAPI } from '../apis/reviewfood.api.js';
 import * as Styled from './ReviewFoodPage.style';
 
-// 임시 데이터
-const reviewsData = [
-  {
-    id: 1,
-    user: '호반우',
-    rating: 5,
-    text: '육회 양이 많아서 너무 좋았어요! 제가 가장 좋아하는 메뉴입니다!!',
-  },
-  {
-    id: 2,
-    user: '김해달',
-    rating: 3,
-    text: '야채 양도 적고, 밥도 적고... 이걸 왜 먹나요? 그냥 조금 비싼 근처 식당가서 먹는게 더 맛있겠어요.',
-  },
-  {
-    id: 3,
-    user: '호반우',
-    rating: 5,
-    text: '육회 양이 많아서 너무 좋았어요! 제가 가장 좋아하는 메뉴입니다!!',
-  },
-  {
-    id: 4,
-    user: '호반우',
-    rating: 5,
-    text: '육회 양이 많아서 너무 좋았어요! 제가 가장 좋아하는 메뉴입니다!!',
-  },
-];
-
 const ReviewFoodPage = () => {
-  const [reviews] = useState(reviewsData);
-  const foodName = '육회비빔밥';
+  const [reviews, setReviews] = useState([]);
+  const [foodName, setFoodName] = useState('');
+  const [sortOrder, setSortOrder] = useState('desc');
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const data = await reviewFoodListAPI();
+      if (data.length > 0) {
+        setFoodName(`음식 ${data[0].foodId}`); // 음식 이름은 서버에서 따로 받아야 함 (임시 설정)
+      }
+      setReviews(data.sort((a, b) => b.rating - a.rating));
+    };
+
+    fetchReviews();
+  }, []);
+
+  const sortReviews = (order) => {
+    const sortedReviews = [...reviews].sort((a, b) =>
+      order === 'desc' ? b.rating - a.rating : a.rating - b.rating
+    );
+    setReviews(sortedReviews);
+    setSortOrder(order);
+  };
 
   return (
     <div>
       <Styled.FoodTitle>{foodName}</Styled.FoodTitle>
       <Styled.FilterContainer>
-        <Styled.FilterButton>
-          <FilledStarIcon color='#FFD600' />
+        <Styled.FilterButton
+          onClick={() => sortReviews('desc')}
+          active={sortOrder === 'desc'}
+        >
+          <FilledStarIcon
+            color={sortOrder === 'desc' ? '#FFD600' : '#C2C2C2'}
+          />
           별점 높은 순
         </Styled.FilterButton>
-        <Styled.FilterButton>
-          <EmptyStarIcon color='#c2c2c2' />
+        <Styled.FilterButton
+          onClick={() => sortReviews('asc')}
+          active={sortOrder === 'asc'}
+        >
+          <EmptyStarIcon color={sortOrder === 'asc' ? '#ffd600' : '#c2c2c2'} />
           별점 낮은 순
         </Styled.FilterButton>
       </Styled.FilterContainer>
 
-      {/* 리뷰 전체 */}
       <Styled.ReviewList>
         {reviews.map((review) => (
           <Styled.ReviewCard key={review.id}>
