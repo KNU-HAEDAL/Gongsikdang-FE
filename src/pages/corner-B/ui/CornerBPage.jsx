@@ -37,6 +37,10 @@ const CornerBPage = () => {
     fetchMenu();
   }, []);
 
+  useEffect(() => {
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -13,18 +13,24 @@ import tossPay from '../assets/toss-pay.png';
 import * as Payment from './PaymentPage.style';
 
 const PaymentPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { cart } = location.state || { cart: [] };
-
-  const [selectedPayment, setSelectedPayment] = useState('credit-card'); // 기본 결제 수단: 신용카드
-  const [pgProvider, setPgProvider] = useState('html5_inicis'); // 기본 PG사: 이니시스 (신용카드)
-
+  const [cart, setCart] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState('credit-card');
+  const [pgProvider, setPgProvider] = useState('html5_inicis');
   const [usedPoints, setUsedPoints] = useState(0);
+
+  useEffect(() => {
+    const storedCart = sessionStorage.getItem('cart');
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, []);
+
   const totalAmount = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
   const pointBalance = 100000;
   const pointUsage = pointBalance >= totalAmount ? totalAmount : pointBalance;
   const finalAmount = totalAmount - pointUsage;
@@ -47,21 +53,18 @@ const PaymentPage = () => {
       buyer_postcode: '123-456',
     };
 
-    // 결제 요청
     IMP.request_pay(paymentData, async (response) => {
       if (response.success) {
         try {
           const token = sessionStorage.getItem('token');
-
           if (!token) {
             alert('로그인 정보가 없습니다. 다시 로그인해주세요.');
             navigate('/login');
             return;
           }
 
-          // 백엔드로 결제 데이터 전송
           await fetchInstance.post(
-            'http://localhost:8080/api/purchases', // 백엔드 API 주소
+            'http://localhost:8080/api/purchases',
             {
               merchantUid,
               date: new Date().toISOString(),
@@ -77,37 +80,30 @@ const PaymentPage = () => {
             },
             {
               headers: {
-                Authorization: `Bearer ${token}`, // JWT 토큰 전달
+                Authorization: `Bearer ${token}`,
               },
             }
           );
 
-          // **재고 감소 요청 추가**
           await axios.post(
-            'http://localhost:8080/menu/reduce', // 백엔드 재고 감소 API 주소
+            'http://localhost:8080/menu/reduce',
             cart.map((item) => ({
               name: item.name,
               quantity: item.quantity,
             })),
             {
               headers: {
-                Authorization: `Bearer ${token}`, // JWT 토큰 전달
+                Authorization: `Bearer ${token}`,
               },
             }
           );
 
           alert('결제 성공 및 재고 감소 완료!');
           navigate('/barcode', {
-            state: {
-              merchantUid,
-              cart,
-            },
+            state: { merchantUid, cart },
           });
         } catch (error) {
-          console.error(
-            '재고 감소 요청 실패:',
-            error.response ? error.response.data : error.message
-          );
+          console.error('재고 감소 요청 실패:', error);
           alert('결제 성공했지만 재고 감소 중 문제가 발생했습니다.');
         }
       } else {
@@ -117,35 +113,30 @@ const PaymentPage = () => {
       }
     });
   };
-
   return (
     <Payment.Page>
-      <Payment.SubTitle>상품 결제</Payment.SubTitle>
-      <Payment.WhiteBox>
-        <Payment.Wrapper>
-          <Payment.TotalText>육회비빔밥 x 1개</Payment.TotalText>
-        </Payment.Wrapper>
-        <Payment.WrapperWithBorder>
+      <Payment.SubTitle>선택한 상품</Payment.SubTitle>
+      {cart.length > 0 ? (
+        <Payment.WhiteBox>
+          {cart.map((item, index) => (
+            <Payment.Wrapper key={index}>
+              <Payment.TotalText>
+                {item.foodName} x {item.quantity}개
+              </Payment.TotalText>
+            </Payment.Wrapper>
+          ))}
+          <Payment.WrapperWithBorder></Payment.WrapperWithBorder>
           <Payment.Wrapper>
-            <Payment.TotalText> 총 수량 :1개</Payment.TotalText>
-            <Payment.TotalText>{totalAmount}원</Payment.TotalText>
-          </Payment.Wrapper>{' '}
-        </Payment.WrapperWithBorder>
-      </Payment.WhiteBox>
-
-      {/* {cart.map((item, index) => (
-        <Payment.WhiteBox key={index}>
-          <Payment.Wrapper>
-            <Payment.TotalText>
-              {item.name} x {item.quantity}개
-            </Payment.TotalText>
-          </Payment.Wrapper>
-          <Payment.Wrapper>
-            <Payment.TotalText>총수량 : {item.quantity}개</Payment.TotalText>
+            <Payment.TotalText>총 수량 : {totalQuantity}개</Payment.TotalText>
             <Payment.TotalText>{totalAmount}원</Payment.TotalText>
           </Payment.Wrapper>
         </Payment.WhiteBox>
-      ))} */}
+      ) : (
+        <Payment.WhiteBox>
+          <Payment.TotalText>장바구니가 비어 있습니다.</Payment.TotalText>
+        </Payment.WhiteBox>
+      )}
+
       <Payment.SubTitle>포인트 사용</Payment.SubTitle>
       <Payment.WhiteBox>
         <Payment.Wrapper>
