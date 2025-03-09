@@ -37,6 +37,11 @@ const CornerAPage = () => {
     fetchMenu();
   }, []);
 
+  // 🔥 장바구니 정보가 변경될 때마다 세션 스토리지에 저장
+  useEffect(() => {
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
@@ -88,9 +93,7 @@ const CornerAPage = () => {
                 />
               ))}
             </Styled.Review>
-            <Styled.ReviewButton
-              onClick={() => navigate(`/review/food/${item.foodId}`)}
-            >
+            <Styled.ReviewButton onClick={() => navigate('/review/food')}>
               리뷰보기
             </Styled.ReviewButton>
             <Styled.QuantityControl>
