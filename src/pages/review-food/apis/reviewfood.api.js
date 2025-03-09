@@ -6,6 +6,7 @@ export const reviewFoodListAPI = async () => {
   try {
     const response = await fetchInstance.get(reviewFoodListPath);
     return response.data.map((review) => ({
+      foodname: review.foodName,
       id: review.reviewId,
       user: review.userId,
       foodId: review.foodId,
