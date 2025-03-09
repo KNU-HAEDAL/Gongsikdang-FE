@@ -88,7 +88,9 @@ const CornerDPage = () => {
                 />
               ))}
             </Styled.Review>
-            <Styled.ReviewButton onClick={() => navigate('/review/food')}>
+            <Styled.ReviewButton
+              onClick={() => navigate(`/review/food/${item.foodId}`)}
+            >
               리뷰보기
             </Styled.ReviewButton>
             <Styled.QuantityControl>

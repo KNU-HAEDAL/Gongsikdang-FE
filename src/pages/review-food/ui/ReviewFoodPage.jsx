@@ -21,7 +21,7 @@ const ReviewFoodPage = () => {
       );
 
       if (filteredReviews.length > 0) {
-        setFoodName(`음식 ${foodId}`); //스웨거에 음식이름 추가해달라하기
+        setFoodName(foodName); //스웨거에 음식이름 추가해달라하기
         setReviews(filteredReviews.sort((a, b) => b.rating - a.rating));
       } else {
         setFoodName('리뷰 없음');
@@ -29,7 +29,7 @@ const ReviewFoodPage = () => {
     };
 
     fetchReviews();
-  }, [foodId]);
+  }, [foodId, foodName]);
 
   const sortReviews = (order) => {
     const sortedReviews = [...reviews].sort((a, b) =>

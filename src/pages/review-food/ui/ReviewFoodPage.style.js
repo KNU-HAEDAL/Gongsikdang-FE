@@ -59,6 +59,8 @@ export const ReviewCard = styled.div`
   background-color: #ffffff;
   border: 1px solid #c2c2c2;
   border-radius: 10px;
+  max-height: 110px;
+  overflow-y: auto;
   width: 350px;
   height: 113px;
   padding: 15px;
