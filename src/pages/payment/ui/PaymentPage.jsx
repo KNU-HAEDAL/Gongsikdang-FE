@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Header } from '@/shared/index.js';
 import { fetchInstance } from '@/shared/instance/Instance';
 import * as Common from '@/shared/styles';
+import { pointAPI } from  '../apis/point.api.js';
 
 import creditCard from '../assets/credit-card.png';
 import kakaoPay from '../assets/kakao-pay.png';
@@ -17,7 +18,11 @@ const PaymentPage = () => {
   const [cart, setCart] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState('credit-card');
   const [pgProvider, setPgProvider] = useState('html5_inicis');
-  const [usedPoints, setUsedPoints] = useState(0);
+  const [pointBalance, setPointBalance] = useState(0);
+  const [inputPoints, setInputPoints] = useState(0); 
+  const [usedPoints, setUsedPoints] = useState(0); 
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [finalAmount, setFinalAmount] = useState(0);
 
   useEffect(() => {
     const storedCart = sessionStorage.getItem('cart');
@@ -26,15 +31,41 @@ const PaymentPage = () => {
     }
   }, []);
 
-  const totalAmount = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const pointBalance = 100000;
-  const pointUsage = pointBalance >= totalAmount ? totalAmount : pointBalance;
-  const finalAmount = totalAmount - pointUsage;
+  useEffect(() => {
+    const fetchPoints = async () => {
+      try {
+        const data = await pointAPI();
+        setPointBalance(data.points ?? data ?? 0); 
+      } catch (error) {
+        setPointBalance(0);
+      }
+    };
+    fetchPoints();
+  }, []);
 
+  // ✅ cart 변경 시 totalAmount 업데이트
+  useEffect(() => {
+    if (cart.length > 0) {
+      setTotalAmount(cart.reduce((sum, item) => sum + item.price * item.quantity, 0));
+    }
+  }, [cart]);
+
+  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+ 
+  useEffect(() => {
+    setFinalAmount(totalAmount - usedPoints);
+  }, [totalAmount, usedPoints]);
+
+ 
+  const handleUsePoints = () => {
+    const validPoints = Math.min(inputPoints, pointBalance, totalAmount);
+    setUsedPoints(validPoints);
+    setInputPoints(validPoints); 
+  };
+
+
+  ///////////@@@@@@@@@@
   const handlePayment = () => {
     const IMP = window.IMP;
     IMP.init('imp17808248');
@@ -141,25 +172,29 @@ const PaymentPage = () => {
       <Payment.WhiteBox>
         <Payment.Wrapper>
           <Payment.TotalText>현재 내 포인트: </Payment.TotalText>
-          <Payment.TotalText>100,000 point</Payment.TotalText>
-          <Payment.PointButton>충전하기</Payment.PointButton>
+          <Payment.TotalText> {pointBalance} point</Payment.TotalText>
+          <Payment.PointButton onClick={() => navigate('/mypage/point')}>
+  충전하기
+</Payment.PointButton>
+
         </Payment.Wrapper>
         <Payment.Wrapper>
           <Payment.TotalText>사용할 포인트: </Payment.TotalText>
           <Payment.TotalText>
-            <Payment.PointInput
-              min='0'
-              max={pointBalance}
-              value={usedPoints}
-              onChange={(e) =>
-                setUsedPoints(Math.min(e.target.value, pointBalance))
-              }
+          <Payment.PointInput
+              type="number"
+              min="0"
+              max={Math.min(pointBalance, totalAmount)}
+              value={inputPoints}
+              onChange={(e) => setInputPoints(Number(e.target.value))} 
             />
             point
           </Payment.TotalText>
-          <Payment.PointButton>사용</Payment.PointButton>
+          <Payment.PointButton onClick={handleUsePoints}>사용</Payment.PointButton>
         </Payment.Wrapper>
       </Payment.WhiteBox>
+
+
       <Payment.SubTitle>총 결제 금액</Payment.SubTitle>
       <Payment.WhiteBox>
         <Payment.Wrapper>
@@ -168,12 +203,12 @@ const PaymentPage = () => {
         </Payment.Wrapper>
         <Payment.Wrapper>
           <Payment.TotalText> 포인트 사용 </Payment.TotalText>
-          <Payment.TotalText> 1,000 point</Payment.TotalText>
+          <Payment.TotalText> {usedPoints} point</Payment.TotalText>
         </Payment.Wrapper>
         <Payment.WrapperWithBorder>
           <Payment.Wrapper>
             <Payment.TotalText>총 결제 금액</Payment.TotalText>
-            <Payment.TotalText>{totalAmount}원 </Payment.TotalText>
+            <Payment.TotalText>{finalAmount} 원 </Payment.TotalText>
           </Payment.Wrapper>
         </Payment.WrapperWithBorder>
       </Payment.WhiteBox>
