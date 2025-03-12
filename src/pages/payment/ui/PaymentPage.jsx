@@ -7,6 +7,8 @@ import { Header } from '@/shared/index.js';
 import { fetchInstance } from '@/shared/instance/Instance';
 import * as Common from '@/shared/styles';
 import { pointAPI } from  '../apis/point.api.js';
+import { purchaseAPI } from '../apis/purchases.api.js';
+import { reduceStockAPI } from '../apis/reduce.api.js';
 
 import creditCard from '../assets/credit-card.png';
 import kakaoPay from '../assets/kakao-pay.png';
@@ -43,7 +45,6 @@ const PaymentPage = () => {
     fetchPoints();
   }, []);
 
-  // ✅ cart 변경 시 totalAmount 업데이트
   useEffect(() => {
     if (cart.length > 0) {
       setTotalAmount(cart.reduce((sum, item) => sum + item.price * item.quantity, 0));
@@ -57,6 +58,16 @@ const PaymentPage = () => {
     setFinalAmount(totalAmount - usedPoints);
   }, [totalAmount, usedPoints]);
 
+  // ✅ 포트원 SDK 로드
+  useEffect(() => {
+    if (!window.IMP) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.iamport.kr/v1/iamport.js';
+      script.async = true;
+      script.onload = () => console.log('포트원 SDK 로드 완료');
+      document.body.appendChild(script);
+    }
+  }, []);
  
   const handleUsePoints = () => {
     const validPoints = Math.min(inputPoints, pointBalance, totalAmount);
@@ -71,6 +82,14 @@ const PaymentPage = () => {
     IMP.init('imp17808248');
 
     const merchantUid = `mid_${new Date().getTime()}`;
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+      alert('로그인 정보가 없습니다. 다시 로그인해주세요.');
+      navigate('/login');
+      return;
+    }
+
     const paymentData = {
       pg: pgProvider,
       pay_method: selectedPayment,
@@ -86,55 +105,40 @@ const PaymentPage = () => {
 
     IMP.request_pay(paymentData, async (response) => {
       if (response.success) {
+        console.log("✅ [프론트] imp_uid:", response.imp_uid);
+        console.log("✅ [프론트] merchant_uid:", response.merchant_uid);
         try {
-          const token = sessionStorage.getItem('token');
-          if (!token) {
-            alert('로그인 정보가 없습니다. 다시 로그인해주세요.');
-            navigate('/login');
-            return;
-          }
-
-          await fetchInstance.post(
-            'http://localhost:8080/api/purchases',
+          // ✅ 결제 API 호출
+          await purchaseAPI(
             {
+              impUid: response.imp_uid,
               merchantUid,
               date: new Date().toISOString(),
-              totalAmount,
+              totalAmount: finalAmount,
               paymentMethod: selectedPayment,
               pgProvider,
               items: cart.map((item) => ({
-                name: item.name,
+                foodId: item.foodId,
+                foodName: item.name,
                 quantity: item.quantity,
                 price: item.price,
               })),
               status: 'SUCCESS',
             },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
+            token
           );
-
-          await axios.post(
-            'http://localhost:8080/menu/reduce',
-            cart.map((item) => ({
-              name: item.name,
-              quantity: item.quantity,
-            })),
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          // ✅ 재고 감소 API 호출 (reduceStockAPI 사용)
+          await reduceStockAPI(cart, token);
 
           alert('결제 성공 및 재고 감소 완료!');
-          navigate('/barcode', {
+          navigate('/mypage', {
             state: { merchantUid, cart },
           });
         } catch (error) {
-          console.error('재고 감소 요청 실패:', error);
+          console.error('❌ 결제 또는 재고 감소 요청 실패:', {
+            status: error.response?.status,
+            message: error.response?.data || error.message,
+          });
           alert('결제 성공했지만 재고 감소 중 문제가 발생했습니다.');
         }
       } else {
@@ -143,7 +147,8 @@ const PaymentPage = () => {
         );
       }
     });
-  };
+};
+
   return (
     <Payment.Page>
       <Payment.SubTitle>선택한 상품</Payment.SubTitle>
