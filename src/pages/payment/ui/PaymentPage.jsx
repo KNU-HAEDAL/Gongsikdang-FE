@@ -6,10 +6,10 @@ import axios from 'axios';
 import { Header } from '@/shared/index.js';
 import { fetchInstance } from '@/shared/instance/Instance';
 import * as Common from '@/shared/styles';
-import { pointAPI } from  '../apis/point.api.js';
+
+import { pointAPI } from '../apis/point.api.js';
 import { purchaseAPI } from '../apis/purchases.api.js';
 import { reduceStockAPI } from '../apis/reduce.api.js';
-
 import creditCard from '../assets/credit-card.png';
 import kakaoPay from '../assets/kakao-pay.png';
 import tossPay from '../assets/toss-pay.png';
@@ -21,8 +21,8 @@ const PaymentPage = () => {
   const [selectedPayment, setSelectedPayment] = useState('credit-card');
   const [pgProvider, setPgProvider] = useState('html5_inicis');
   const [pointBalance, setPointBalance] = useState(0);
-  const [inputPoints, setInputPoints] = useState(0); 
-  const [usedPoints, setUsedPoints] = useState(0); 
+  const [inputPoints, setInputPoints] = useState(0);
+  const [usedPoints, setUsedPoints] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [finalAmount, setFinalAmount] = useState(0);
 
@@ -37,7 +37,7 @@ const PaymentPage = () => {
     const fetchPoints = async () => {
       try {
         const data = await pointAPI();
-        setPointBalance(data.points ?? data ?? 0); 
+        setPointBalance(data.points ?? data ?? 0);
       } catch (error) {
         setPointBalance(0);
       }
@@ -47,18 +47,18 @@ const PaymentPage = () => {
 
   useEffect(() => {
     if (cart.length > 0) {
-      setTotalAmount(cart.reduce((sum, item) => sum + item.price * item.quantity, 0));
+      setTotalAmount(
+        cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      );
     }
   }, [cart]);
 
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
 
- 
   useEffect(() => {
     setFinalAmount(totalAmount - usedPoints);
   }, [totalAmount, usedPoints]);
 
-  // ✅ 포트원 SDK 로드
   useEffect(() => {
     if (!window.IMP) {
       const script = document.createElement('script');
@@ -68,15 +68,13 @@ const PaymentPage = () => {
       document.body.appendChild(script);
     }
   }, []);
- 
+
   const handleUsePoints = () => {
     const validPoints = Math.min(inputPoints, pointBalance, totalAmount);
     setUsedPoints(validPoints);
-    setInputPoints(validPoints); 
+    setInputPoints(validPoints);
   };
 
-
-  ///////////@@@@@@@@@@
   const handlePayment = () => {
     const IMP = window.IMP;
     IMP.init('imp17808248');
@@ -105,10 +103,7 @@ const PaymentPage = () => {
 
     IMP.request_pay(paymentData, async (response) => {
       if (response.success) {
-        console.log("✅ [프론트] imp_uid:", response.imp_uid);
-        console.log("✅ [프론트] merchant_uid:", response.merchant_uid);
         try {
-          // ✅ 결제 API 호출
           await purchaseAPI(
             {
               impUid: response.imp_uid,
@@ -127,7 +122,7 @@ const PaymentPage = () => {
             },
             token
           );
-          // ✅ 재고 감소 API 호출 (reduceStockAPI 사용)
+
           await reduceStockAPI(cart, token);
 
           alert('결제 성공 및 재고 감소 완료!');
@@ -147,7 +142,7 @@ const PaymentPage = () => {
         );
       }
     });
-};
+  };
 
   return (
     <Payment.Page>
@@ -179,26 +174,26 @@ const PaymentPage = () => {
           <Payment.TotalText>현재 내 포인트: </Payment.TotalText>
           <Payment.TotalText> {pointBalance} point</Payment.TotalText>
           <Payment.PointButton onClick={() => navigate('/mypage/point')}>
-  충전하기
-</Payment.PointButton>
-
+            충전하기
+          </Payment.PointButton>
         </Payment.Wrapper>
         <Payment.Wrapper>
           <Payment.TotalText>사용할 포인트: </Payment.TotalText>
           <Payment.TotalText>
-          <Payment.PointInput
-              type="number"
-              min="0"
+            <Payment.PointInput
+              type='number'
+              min='0'
               max={Math.min(pointBalance, totalAmount)}
               value={inputPoints}
-              onChange={(e) => setInputPoints(Number(e.target.value))} 
+              onChange={(e) => setInputPoints(Number(e.target.value))}
             />
             point
           </Payment.TotalText>
-          <Payment.PointButton onClick={handleUsePoints}>사용</Payment.PointButton>
+          <Payment.PointButton onClick={handleUsePoints}>
+            사용
+          </Payment.PointButton>
         </Payment.Wrapper>
       </Payment.WhiteBox>
-
 
       <Payment.SubTitle>총 결제 금액</Payment.SubTitle>
       <Payment.WhiteBox>

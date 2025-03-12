@@ -1,21 +1,23 @@
 import { fetchInstance } from '@/shared';
 
-export const reduceStockPath = '/api/menu/reduce';
-
-export const reduceStockAPI = async (cartItems, token) => {
-  const response = await fetchInstance.post(
-    reduceStockPath,
-    cartItems.map(item => ({
-      foodId: item.foodId,
-      foodName: item.foodName,
-      quantity: item.quantity,
-    })),
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-  return response.data;
+export const reduceStockAPI = async (cartItems) => {
+  try {
+    const response = await fetchInstance.post(
+      '/api/menu/reduce',
+      cartItems.map((item) => ({
+        foodId: item.foodId,
+        foodName: item.foodName,
+        quantity: item.quantity,
+      }))
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      '재고 감소 요청 실패:',
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || '재고 감소 요청에 실패했습니다.'
+    );
+  }
 };
