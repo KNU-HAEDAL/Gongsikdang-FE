@@ -51,12 +51,6 @@ export const WrapperWithBorder = styled.div`
   border-top: 1px solid var(--gray);
   padding-bottom: 5px;
 `;
-export const PaymentMethods = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin: 20px 0;
-`;
 
 export const PointInput = styled.input`
   width: 50px;
@@ -87,20 +81,27 @@ export const PointButton = styled.button`
     transform: scale(1.02);
   }
 `;
+export const PaymentMethods = styled.div`
+  display: flex;
+  padding: 15px;
+  gap: 10px;
+`;
 
 export const MethodBox = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 15px;
+  width: 100px;
   height: 100px;
+  border-width: 1px;
+  border-radius: 10px;
+  gap: 15px;
+  padding: 15px;
   cursor: pointer;
-  transition:
-    background-color 0.3s,
-    transform 0.2s;
+  border: 1px solid #ccc;
+  &.selected {
+    border: 2px solid #e10707;
+  }
 `;
 
 export const Image = styled.img`
