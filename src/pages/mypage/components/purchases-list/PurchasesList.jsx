@@ -57,6 +57,16 @@ export const PurchasesList = () => {
                 <Mypage.QRCodeBox>
                   <Mypage.QRCode />
                   <Mypage.QRText
+                    onClick={() =>
+                      navigate('/mypage/barcode', {
+                        state: {
+                          foodName:
+                            purchase.items[0]?.foodName || '상품명 없음',
+                          date: purchase.date,
+                          merchantUid: purchase.merchantUid,
+                        },
+                      })
+                    }
                     style={{
                       pointerEvents: confirmedPurchases[index]
                         ? 'none'
