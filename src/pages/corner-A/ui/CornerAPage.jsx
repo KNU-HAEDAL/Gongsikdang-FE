@@ -37,7 +37,6 @@ const CornerAPage = () => {
     fetchMenu();
   }, []);
 
-  // 🔥 장바구니 정보가 변경될 때마다 세션 스토리지에 저장
   useEffect(() => {
     sessionStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
@@ -80,7 +79,7 @@ const CornerAPage = () => {
         {menuData.map((item) => (
           <Styled.MenuCard key={item.foodId}>
             <Styled.Image
-              src={item.image || '/images/default.jpg'}
+              src={item.image || `/images/${item.foodId}.jpg`}
               alt={item.foodName}
             />
             <Styled.MenuTitle>{item.foodName}</Styled.MenuTitle>
@@ -93,7 +92,9 @@ const CornerAPage = () => {
                 />
               ))}
             </Styled.Review>
-            <Styled.ReviewButton onClick={() => navigate('/review/food')}>
+            <Styled.ReviewButton
+              onClick={() => navigate(`/review/food/${item.foodId}`)}
+            >
               리뷰보기
             </Styled.ReviewButton>
             <Styled.QuantityControl>

@@ -74,7 +74,6 @@ const PaymentPage = () => {
     setUsedPoints(validPoints);
     setInputPoints(validPoints);
   };
-
   const handlePayment = () => {
     const IMP = window.IMP;
     IMP.init('imp17808248');
@@ -104,36 +103,32 @@ const PaymentPage = () => {
     IMP.request_pay(paymentData, async (response) => {
       if (response.success) {
         try {
-          await purchaseAPI(
-            {
-              impUid: response.imp_uid,
-              merchantUid,
-              date: new Date().toISOString(),
-              totalAmount: finalAmount,
-              paymentMethod: selectedPayment,
-              pgProvider,
-              items: cart.map((item) => ({
-                foodId: item.foodId,
-                foodName: item.name,
-                quantity: item.quantity,
-                price: item.price,
-              })),
-              status: 'SUCCESS',
-            },
-            token
-          );
+          const purchaseData = {
+            impUid: response.imp_uid,
+            merchantUid,
+            date: new Date().toISOString(),
+            totalAmount: finalAmount,
+            paymentMethod: selectedPayment,
+            pgProvider,
+            status: 'SUCCESS',
+            items: cart.map((item) => ({
+              foodId: item.foodId ?? null,
+              foodName: item.foodName ?? '상품명 없음',
+              quantity: item.quantity,
+              price: item.price,
+            })),
+          };
 
+          await purchaseAPI(purchaseData);
           await reduceStockAPI(cart, token);
 
+          const previousUsedPoints =
+            Number(sessionStorage.getItem('usedPoints')) || 0;
+          sessionStorage.setItem('usedPoints', previousUsedPoints + usedPoints);
+
           alert('결제 성공 및 재고 감소 완료!');
-          navigate('/mypage', {
-            state: { merchantUid, cart },
-          });
+          navigate('/mypage', { state: { merchantUid, cart } });
         } catch (error) {
-          console.error('❌ 결제 또는 재고 감소 요청 실패:', {
-            status: error.response?.status,
-            message: error.response?.data || error.message,
-          });
           alert('결제 성공했지만 재고 감소 중 문제가 발생했습니다.');
         }
       } else {
@@ -152,13 +147,13 @@ const PaymentPage = () => {
           {cart.map((item, index) => (
             <Payment.Wrapper key={index}>
               <Payment.TotalText>
-                {item.foodName} x {item.quantity}개
+                {item.foodName} x{item.quantity}개
               </Payment.TotalText>
             </Payment.Wrapper>
           ))}
           <Payment.WrapperWithBorder></Payment.WrapperWithBorder>
           <Payment.Wrapper>
-            <Payment.TotalText>총 수량 : {totalQuantity}개</Payment.TotalText>
+            <Payment.TotalText>총 수량 :{totalQuantity}개</Payment.TotalText>
             <Payment.TotalText>{totalAmount}원</Payment.TotalText>
           </Payment.Wrapper>
         </Payment.WhiteBox>

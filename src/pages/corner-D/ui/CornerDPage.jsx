@@ -79,7 +79,7 @@ const CornerDPage = () => {
         {menuData.map((item) => (
           <Styled.MenuCard key={item.foodId}>
             <Styled.Image
-              src={item.image || '/images/default.jpg'}
+              src={item.image || `/images/${item.foodId}.jpg`}
               alt={item.foodName}
             />
             <Styled.MenuTitle>{item.foodName}</Styled.MenuTitle>

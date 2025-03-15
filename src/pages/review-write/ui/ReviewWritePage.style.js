@@ -1,36 +1,13 @@
 import styled from '@emotion/styled';
 
-/* 전체 배경 */
-export const Background = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #ffe0e0;
-`;
-
-/* 페이지 레이아웃 */
-export const PageLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 390px;
-  height: 623px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-`;
-
 /* 음식 이름 */
 export const FoodTitle = styled.h2`
   font-size: 24px;
   font-weight: 700;
   color: #2e2e2e;
   margin-top: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  text-align: center;
 `;
 
 /* 섹션 (별점/리뷰 작성) */
@@ -87,12 +64,16 @@ export const Textarea = styled.textarea`
 /* 버튼 */
 export const Button = styled.button`
   background-color: #e10707;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
   color: white;
   font-size: 20px;
   font-weight: 600;
   border: none;
   margin-top: 20px;
-  width: 320px;
+  width: 100%;
   height: 47px;
   border-radius: 10px;
   cursor: pointer;
