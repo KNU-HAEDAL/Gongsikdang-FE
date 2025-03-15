@@ -160,6 +160,10 @@ const router = createBrowserRouter([
             index: true,
             element: <ReviewFoodPage />,
           },
+          {
+            path: ':foodId',
+            element: <ReviewFoodPage />,
+          },
         ],
       },
     ],

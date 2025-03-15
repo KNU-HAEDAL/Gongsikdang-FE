@@ -37,6 +37,10 @@ const CornerAPage = () => {
     fetchMenu();
   }, []);
 
+  useEffect(() => {
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
@@ -69,22 +73,17 @@ const CornerAPage = () => {
     setCart(cart.filter((item) => item.foodId !== id));
   };
 
-  const totalPrice = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-
   return (
     <div>
       <Styled.MenuList>
         {menuData.map((item) => (
           <Styled.MenuCard key={item.foodId}>
             <Styled.Image
-              src={item.image || '/images/default.jpg'}
+              src={item.image || `/images/${item.foodId}.jpg`}
               alt={item.foodName}
             />
             <Styled.MenuTitle>{item.foodName}</Styled.MenuTitle>
-            <Styled.MenuPrice>{item.price.toLocaleString()}원</Styled.MenuPrice>
+            <Styled.MenuPrice>{item.price}원</Styled.MenuPrice>
             <Styled.Review>
               {[...Array(5)].map((_, index) => (
                 <FilledStarIcon
@@ -93,7 +92,9 @@ const CornerAPage = () => {
                 />
               ))}
             </Styled.Review>
-            <Styled.ReviewButton onClick={() => navigate('/review/food')}>
+            <Styled.ReviewButton
+              onClick={() => navigate(`/review/food/${item.foodId}`)}
+            >
               리뷰보기
             </Styled.ReviewButton>
             <Styled.QuantityControl>
@@ -125,11 +126,13 @@ const CornerAPage = () => {
           {cart.length > 0
             ? cart.map((item) => (
                 <Styled.CartItem key={item.foodId}>
-                  {item.foodName}{' '}
-                  <Styled.RedText>{item.quantity}개</Styled.RedText>
-                  <Styled.CartPrice>
-                    {totalPrice.toLocaleString()}원
-                  </Styled.CartPrice>
+                  <Styled.ItemName>{item.foodName}</Styled.ItemName>
+                  <Styled.ItemQuantity>
+                    <Styled.RedText>{item.quantity}개</Styled.RedText>
+                  </Styled.ItemQuantity>
+                  <Styled.ItemPrice>
+                    {item.price * item.quantity}원
+                  </Styled.ItemPrice>
                   <Styled.RemoveButton
                     onClick={() => removeFromCart(item.foodId)}
                   >
