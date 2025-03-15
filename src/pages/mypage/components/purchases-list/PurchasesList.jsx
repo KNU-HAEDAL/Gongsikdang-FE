@@ -7,48 +7,8 @@ import { Section, Title } from '../../ui';
 import * as Mypage from './PurchasesList.style';
 
 export const PurchasesList = () => {
-  const { data: purchaseListData, isPending } = useGetPurchaseList();
-
-  const purchasesList = Array.isArray(purchaseListData) ? purchaseListData : [];
-
+  const { data: purchasesList, isPending } = useGetPurchaseList();
   const navigate = useNavigate();
-
-  const handleBarcodeClick = (purchase) => {
-    navigate('/barcode', {
-      state: {
-        name: purchase.items[0]?.foodName || '상품명 없음',
-        date: purchase.status,
-      },
-    });
-  };
-
-  // const handleButtonClick = (id) => {
-  //   setPurchases((prevPurchases) =>
-  //     prevPurchases.map((purchase) =>
-  //       purchase.id === id
-  //         ? {
-  //             ...purchase,
-  //             date: purchase.date.replace('구매', '사용'),
-  //             status: '사용 완료',
-  //             buttonType: '리뷰작성',
-  //             buttonColor: 'red',
-  //             disabled: false,
-  //           }
-  //         : purchase
-  //     )
-  //   );
-
-  //   console.log(`구매 ID ${id} 버튼 클릭`);
-  // };
-
-  const handleReviewClick = (purchase) => {
-    navigate('/review/write', {
-      state: {
-        name: purchase.items[0]?.foodName || '상품명 없음',
-        date: purchase.status,
-      },
-    });
-  };
 
   if (isPending) {
     return <LoadingView />;
@@ -57,61 +17,62 @@ export const PurchasesList = () => {
   return (
     <Section>
       <Title>구매 내역</Title>
+      <Mypage.InfoText>
+        QR 코드는 <span className='red'>구매 후 1시간 이내</span>
+        에만 에만 사용가능합니다.
+        <br />
+        1시간이 지난 QR 코드는 포인트로 <span className='blue'>자동 환불</span>
+        됩니다.
+      </Mypage.InfoText>
       <Mypage.PurchaseBox>
         {purchasesList.length > 0 ? (
           <Mypage.PurchaseList>
-            {purchasesList.map((purchase) => {
-              const buttonType = purchase.buttonType || 'QR 확인';
-              const buttonColor = purchase.buttonColor || 'gray';
-              const isDisabled = purchase.disabled ?? true;
+            {purchasesList.map((purchase, index) => (
+              <Mypage.PurchaseCard key={index}>
+                <Mypage.PurchaseTitle>
+                  {purchase.items[0]?.foodName}
+                </Mypage.PurchaseTitle>
 
-              return (
-                <Mypage.PurchaseCard key={purchase.purchaseId ?? Math.random()}>
-                  <Mypage.PurchaseTitle>
-                    {purchase.items[0]?.foodName || '상품명 없음'}
-                  </Mypage.PurchaseTitle>
-                  <Mypage.PurchaseDate>{purchase.status}</Mypage.PurchaseDate>
+                <Mypage.PurchaseDate>{purchase.date}</Mypage.PurchaseDate>
+
+                <Mypage.QRCodeBox>
                   <Mypage.QRCode />
-                  <Mypage.QRText isFirstCase={buttonType === '구매확정'}>
-                    QR코드확인하기
+                  <Mypage.QRText
+                    onClick={() =>
+                      navigate('/mypage/barcode', {
+                        state: {
+                          foodName:
+                            purchase.items[0]?.foodName || '상품명 없음',
+                          date: purchase.date,
+                        },
+                      })
+                    }
+                  >
+                    QR 코드 확인하기
                   </Mypage.QRText>
+                </Mypage.QRCodeBox>
 
-                  <Mypage.ButtonBox>
-                    <Mypage.Status>{purchase.status}</Mypage.Status>
-                    <Mypage.ActionButton
-                      style={{
-                        backgroundColor:
-                          buttonColor === 'blue'
-                            ? '#007bff'
-                            : buttonColor === 'red'
-                              ? '#e10707'
-                              : '#d3d3d3',
-                      }}
-                      disabled={isDisabled}
-                      // onClick={() => {
-                      //   if (buttonType === '구매확정') {
-                      //     handleButtonClick(purchase.purchaseId);
-                      //   } else if (buttonType === '리뷰작성') {
-                      //     handleReviewClick(purchase);
-                      //   } else {
-                      //     handleBarcodeClick(purchase);
-                      //   }
-                      // }}
-                    >
-                      {buttonType}
-                    </Mypage.ActionButton>
-                  </Mypage.ButtonBox>
-                </Mypage.PurchaseCard>
-              );
-            })}
-            <button onClick={() => navigate('/mypage/barcode')}>
-              바코드 확인
-            </button>
+                <Mypage.ButtonBox>
+                  <Mypage.StatusText>사용가능</Mypage.StatusText>
+                  <Mypage.ActionButton
+                    onClick={() => {
+                      navigate('/mypage/barcode', {
+                        state: {
+                          foodName:
+                            purchase.items[0]?.foodName || '상품명 없음',
+                          date: purchase.date,
+                        },
+                      });
+                    }}
+                  >
+                    구매확정
+                  </Mypage.ActionButton>
+                </Mypage.ButtonBox>
+              </Mypage.PurchaseCard>
+            ))}
           </Mypage.PurchaseList>
         ) : (
-          <Mypage.PurchaseUndefined>
-            구매 내역이 없습니다.
-          </Mypage.PurchaseUndefined>
+          <Mypage.InfoText>구매 내역이 없습니다.</Mypage.InfoText>
         )}
       </Mypage.PurchaseBox>
     </Section>

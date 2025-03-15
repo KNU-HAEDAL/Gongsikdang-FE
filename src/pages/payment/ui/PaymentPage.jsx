@@ -74,7 +74,6 @@ const PaymentPage = () => {
     setUsedPoints(validPoints);
     setInputPoints(validPoints);
   };
-
   const handlePayment = () => {
     const IMP = window.IMP;
     IMP.init('imp17808248');
@@ -104,24 +103,29 @@ const PaymentPage = () => {
     IMP.request_pay(paymentData, async (response) => {
       if (response.success) {
         try {
-          await purchaseAPI(
-            {
-              impUid: response.imp_uid,
-              merchantUid,
-              date: new Date().toISOString(),
-              totalAmount: finalAmount,
-              paymentMethod: selectedPayment,
-              pgProvider,
-              items: cart.map((item) => ({
-                foodId: item.foodId,
-                foodName: item.name,
-                quantity: item.quantity,
-                price: item.price,
-              })),
-              status: 'SUCCESS',
-            },
-            token
+          const purchaseData = {
+            impUid: response.imp_uid,
+            merchantUid,
+            date: new Date().toISOString(),
+            totalAmount: finalAmount,
+            paymentMethod: selectedPayment,
+            pgProvider,
+            status: 'SUCCESS',
+            items: cart.map((item) => ({
+              foodId: item.foodId ?? null,
+              foodName: item.foodName ?? '상품명 없음',
+              quantity: item.quantity,
+              price: item.price,
+            })),
+          };
+
+          console.log(
+            'POST 요청 데이터:',
+            JSON.stringify(purchaseData, null, 2)
           );
+
+          // ✅ 토큰을 자동으로 `Authorization` 헤더에 포함
+          await purchaseAPI(purchaseData);
 
           await reduceStockAPI(cart, token);
 
@@ -152,13 +156,13 @@ const PaymentPage = () => {
           {cart.map((item, index) => (
             <Payment.Wrapper key={index}>
               <Payment.TotalText>
-                {item.foodName} x {item.quantity}개
+                {item.foodName} x{item.quantity}개
               </Payment.TotalText>
             </Payment.Wrapper>
           ))}
           <Payment.WrapperWithBorder></Payment.WrapperWithBorder>
           <Payment.Wrapper>
-            <Payment.TotalText>총 수량 : {totalQuantity}개</Payment.TotalText>
+            <Payment.TotalText>총 수량 :{totalQuantity}개</Payment.TotalText>
             <Payment.TotalText>{totalAmount}원</Payment.TotalText>
           </Payment.Wrapper>
         </Payment.WhiteBox>
