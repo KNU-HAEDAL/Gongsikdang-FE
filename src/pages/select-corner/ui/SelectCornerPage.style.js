@@ -69,7 +69,7 @@ export const CornerCard = styled.div`
 
   li {
     margin-bottom: 10px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: #000000;
   }
