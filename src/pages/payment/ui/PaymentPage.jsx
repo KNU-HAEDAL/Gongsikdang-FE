@@ -119,25 +119,16 @@ const PaymentPage = () => {
             })),
           };
 
-          console.log(
-            'POST 요청 데이터:',
-            JSON.stringify(purchaseData, null, 2)
-          );
-
-          // ✅ 토큰을 자동으로 `Authorization` 헤더에 포함
           await purchaseAPI(purchaseData);
-
           await reduceStockAPI(cart, token);
 
+          const previousUsedPoints =
+            Number(sessionStorage.getItem('usedPoints')) || 0;
+          sessionStorage.setItem('usedPoints', previousUsedPoints + usedPoints);
+
           alert('결제 성공 및 재고 감소 완료!');
-          navigate('/mypage', {
-            state: { merchantUid, cart },
-          });
+          navigate('/mypage', { state: { merchantUid, cart } });
         } catch (error) {
-          console.error('❌ 결제 또는 재고 감소 요청 실패:', {
-            status: error.response?.status,
-            message: error.response?.data || error.message,
-          });
           alert('결제 성공했지만 재고 감소 중 문제가 발생했습니다.');
         }
       } else {
