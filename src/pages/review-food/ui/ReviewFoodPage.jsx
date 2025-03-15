@@ -21,7 +21,7 @@ const ReviewFoodPage = () => {
       );
 
       if (filteredReviews.length > 0) {
-        setFoodName(foodName); //스웨거에 음식이름 추가해달라하기
+        setFoodName(filteredReviews[0].foodName);
         setReviews(filteredReviews.sort((a, b) => b.rating - a.rating));
       } else {
         setFoodName('리뷰 없음');
@@ -39,47 +39,61 @@ const ReviewFoodPage = () => {
     setSortOrder(order);
   };
 
+  const groupedReviews = reviews.reduce((acc, review) => {
+    if (!acc[review.foodName]) {
+      acc[review.foodName] = [];
+    }
+    acc[review.foodName].push(review);
+    return acc;
+  }, {});
+
   return (
     <div>
-      <Styled.FoodTitle>{foodName}</Styled.FoodTitle>
-      <Styled.FilterContainer>
-        <Styled.FilterButton
-          onClick={() => sortReviews('desc')}
-          active={sortOrder === 'desc'}
-        >
-          <FilledStarIcon
-            color={sortOrder === 'desc' ? '#FFD600' : '#C2C2C2'}
-          />
-          별점 높은 순
-        </Styled.FilterButton>
-        <Styled.FilterButton
-          onClick={() => sortReviews('asc')}
-          active={sortOrder === 'asc'}
-        >
-          <EmptyStarIcon color={sortOrder === 'asc' ? '#ffd600' : '#c2c2c2'} />
-          별점 낮은 순
-        </Styled.FilterButton>
-      </Styled.FilterContainer>
+      {Object.keys(groupedReviews).map((foodName) => (
+        <div key={foodName}>
+          <Styled.FoodTitle>{foodName}</Styled.FoodTitle>
+          <Styled.FilterContainer>
+            <Styled.FilterButton
+              onClick={() => sortReviews('desc')}
+              active={sortOrder === 'desc'}
+            >
+              <FilledStarIcon
+                color={sortOrder === 'desc' ? '#FFD600' : '#C2C2C2'}
+              />
+              별점 높은 순
+            </Styled.FilterButton>
+            <Styled.FilterButton
+              onClick={() => sortReviews('asc')}
+              active={sortOrder === 'asc'}
+            >
+              <EmptyStarIcon
+                color={sortOrder === 'asc' ? '#ffd600' : '#c2c2c2'}
+              />
+              별점 낮은 순
+            </Styled.FilterButton>
+          </Styled.FilterContainer>
 
-      <Styled.ReviewList>
-        {reviews.map((review) => (
-          <Styled.ReviewCard key={review.id}>
-            <Styled.ReviewHeader>
-              <Styled.ReviewerName>{review.user}</Styled.ReviewerName>
-              <Styled.Stars>
-                {[...Array(5)].map((_, index) =>
-                  index < review.rating ? (
-                    <FilledStarIcon key={index} color='#FFD600' />
-                  ) : (
-                    <EmptyStarIcon key={index} color='#c2c2c2' />
-                  )
-                )}
-              </Styled.Stars>
-            </Styled.ReviewHeader>
-            <Styled.ReviewText>{review.text}</Styled.ReviewText>
-          </Styled.ReviewCard>
-        ))}
-      </Styled.ReviewList>
+          <Styled.ReviewList>
+            {groupedReviews[foodName].map((review) => (
+              <Styled.ReviewCard key={review.id}>
+                <Styled.ReviewHeader>
+                  <Styled.ReviewerName>{review.user}</Styled.ReviewerName>
+                  <Styled.Stars>
+                    {[...Array(5)].map((_, index) =>
+                      index < review.rating ? (
+                        <FilledStarIcon key={index} color='#FFD600' />
+                      ) : (
+                        <EmptyStarIcon key={index} color='#c2c2c2' />
+                      )
+                    )}
+                  </Styled.Stars>
+                </Styled.ReviewHeader>
+                <Styled.ReviewText>{review.text}</Styled.ReviewText>
+              </Styled.ReviewCard>
+            ))}
+          </Styled.ReviewList>
+        </div>
+      ))}
     </div>
   );
 };

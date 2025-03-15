@@ -37,7 +37,6 @@ const CornerAPage = () => {
     fetchMenu();
   }, []);
 
-  // 🔥 장바구니 정보가 변경될 때마다 세션 스토리지에 저장
   useEffect(() => {
     sessionStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
