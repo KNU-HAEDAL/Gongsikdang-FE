@@ -99,3 +99,13 @@ export const ReviewText = styled.p`
   color: #000000;
   line-height: 1.5;
 `;
+
+export const NoReviewMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  line-height: 1.5;
+  margin-top: 20px;
+`;
