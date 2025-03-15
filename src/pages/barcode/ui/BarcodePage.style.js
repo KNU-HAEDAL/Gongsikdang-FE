@@ -44,11 +44,9 @@ export const BarcodeContainer = styled.div`
   border-radius: 10px;
 `;
 
-/* 바코드 자리 (임시) */
-export const BarcodePlaceholder = styled.div`
-  width: 200px;
-  height: 200px;
-  background-color: #f5f5f5;
+export const NoQRMessage = styled.p`
+  font-size: 14px;
+  color: gray;
 `;
 
 /* 버튼 */
