@@ -15,10 +15,6 @@ export const reviewFoodListAPI = async (foodId) => {
       rating: review.grade,
     }));
   } catch (error) {
-    console.error(
-      '리뷰 데이터 불러오기 오류:',
-      error.response?.data || error.message
-    );
     return [];
   }
 };
