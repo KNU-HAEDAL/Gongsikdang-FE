@@ -86,7 +86,6 @@ const PaymentPage = () => {
       buyer_tel: '010-1234-5678',
       buyer_addr: '서울특별시 강남구',
       buyer_postcode: '123-456',
-      m_redirect_url: 'https://d3lz1uigms4ul3.cloudfront.net/mypage',
     };
 
     IMP.request_pay(paymentData, async (response) => {
@@ -113,7 +112,7 @@ const PaymentPage = () => {
           await reduceStockAPI(cart, token);
 
           alert('결제 성공 및 재고 감소 완료!');
-          navigate('/mypage', { state: { merchantUid, cart } });
+          window.location.href = '/mypage';
         } catch (error) {
           alert('결제 성공했지만 재고 감소 중 문제가 발생했습니다.');
         }
