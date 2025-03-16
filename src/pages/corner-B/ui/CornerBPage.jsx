@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import CloseIcon from '@/pages/_assets/icons/CloseIcon.jsx';
@@ -6,36 +6,24 @@ import FilledStarIcon from '@/pages/_assets/icons/FilledStarIcon';
 import LeftTriangleIcon from '@/pages/_assets/icons/LeftTriangleIcon';
 import RightTriangleIcon from '@/pages/_assets/icons/RightTriangleIcon';
 
-import { cornerBListAPI } from '../apis/cornerB.api.js';
+import { LoadingView, useGetMenuList } from '@/shared';
+
 import * as Styled from './CornerBPage.style.js';
 
 const CornerBPage = () => {
   const navigate = useNavigate();
-  const [menuData, setMenuData] = useState([]);
   const [cart, setCart] = useState([]);
   const [quantities, setQuantities] = useState({});
 
+  const { data: menuBData, isPending } = useGetMenuList('B');
+
   useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        console.log('메뉴 데이터 요청 시작');
-        const response = await cornerBListAPI();
-        console.log('API 응답 데이터:', response.data);
-
-        setMenuData(response.data);
-        setQuantities(
-          response.data.reduce(
-            (acc, item) => ({ ...acc, [item.foodId]: 1 }),
-            {}
-          )
-        );
-      } catch (error) {
-        console.error('메뉴 데이터 불러오기 오류:', error);
-      }
-    };
-
-    fetchMenu();
-  }, []);
+    if (menuBData) {
+      setQuantities(
+        menuBData.reduce((acc, item) => ({ ...acc, [item.foodId]: 1 }), {})
+      );
+    }
+  }, [menuBData]);
 
   useEffect(() => {
     sessionStorage.setItem('cart', JSON.stringify(cart));
@@ -73,10 +61,14 @@ const CornerBPage = () => {
     setCart(cart.filter((item) => item.foodId !== id));
   };
 
+  if (isPending) {
+    return <LoadingView />;
+  }
+
   return (
     <div>
       <Styled.MenuList>
-        {menuData.map((item) => (
+        {menuBData.map((item) => (
           <Styled.MenuCard key={item.foodId}>
             <Styled.Image
               src={item.image || `/images/${item.foodId}.jpg`}
@@ -112,7 +104,7 @@ const CornerBPage = () => {
                 <RightTriangleIcon color='#000' />
               </Styled.QuantityButton>
             </Styled.QuantityControl>
-            <Styled.Stock>남은 수량: {item.number}개</Styled.Stock>
+            <Styled.Stock>남은 수량:{item.number}개</Styled.Stock>
             <Styled.AddToCartButton onClick={() => addToCart(item)}>
               담기
             </Styled.AddToCartButton>

@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 
+import { HEADER_HEIGHT } from '@/shared';
+
 /* 페이지 레이아웃 */
 export const PageLayout = styled.div`
   display: flex;
@@ -79,4 +81,11 @@ export const ErrorMessage = styled.p`
   color: red;
   font-size: 14px;
   margin-top: 10px;
+`;
+
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh -${HEADER_HEIGHT});
 `;

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { LoadingView } from '@/shared';
 
+import QR1 from '../../_assets/QR1.png';
+import QR2 from '../../_assets/QR2.png';
 import { useGetPurchaseList } from '../../hooks';
 import { Section, Title } from '../../ui';
 import * as Mypage from './PurchasesList.style';
@@ -27,8 +29,13 @@ export const PurchasesList = () => {
     );
   };
 
-  const handleReviewClick = () => {
-    navigate('/review/write');
+  const handleReviewClick = (purchase) => {
+    navigate('/review/write', {
+      state: {
+        foodId: purchase.items[0]?.foodId,
+        foodName: purchase.items[0]?.foodName || '상품명 없음',
+      },
+    });
   };
 
   if (isPending) {
@@ -55,7 +62,13 @@ export const PurchasesList = () => {
                 </Mypage.PurchaseTitle>
                 <Mypage.PurchaseDate>{purchase.date}</Mypage.PurchaseDate>
                 <Mypage.QRCodeBox>
-                  <Mypage.QRCode />
+                  <Mypage.QRCode>
+                    <img
+                      src={confirmedPurchases[index] ? QR2 : QR1}
+                      alt='QR Code'
+                      style={{ width: '40px', height: '40px' }}
+                    />
+                  </Mypage.QRCode>
                   <Mypage.QRText
                     onClick={() =>
                       navigate('/mypage/barcode', {
@@ -84,7 +97,7 @@ export const PurchasesList = () => {
                   {confirmedPurchases[index] ? (
                     <Mypage.ActionButton
                       style={{ backgroundColor: 'red' }}
-                      onClick={handleReviewClick}
+                      onClick={() => handleReviewClick(purchase)}
                     >
                       리뷰작성
                     </Mypage.ActionButton>

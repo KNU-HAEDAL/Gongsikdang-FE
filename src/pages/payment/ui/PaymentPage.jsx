@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+import { useGetPoint } from '@/pages/mypage';
 
-import { Header } from '@/shared/index.js';
-import { fetchInstance } from '@/shared/instance/Instance';
-import * as Common from '@/shared/styles';
+import { Spinner } from '@/shared/index.js';
 
-import { pointAPI } from '../apis/point.api.js';
 import { purchaseAPI } from '../apis/purchases.api.js';
 import { reduceStockAPI } from '../apis/reduce.api.js';
 import creditCard from '../assets/credit-card.png';
@@ -20,7 +17,6 @@ const PaymentPage = () => {
   const [cart, setCart] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState('credit-card');
   const [pgProvider, setPgProvider] = useState('html5_inicis');
-  const [pointBalance, setPointBalance] = useState(0);
   const [inputPoints, setInputPoints] = useState(0);
   const [usedPoints, setUsedPoints] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -33,31 +29,20 @@ const PaymentPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchPoints = async () => {
-      try {
-        const data = await pointAPI();
-        setPointBalance(data.points ?? data ?? 0);
-      } catch (error) {
-        setPointBalance(0);
-      }
-    };
-    fetchPoints();
-  }, []);
+  const { data: pointData, isPending: pointIsPending } = useGetPoint();
 
   useEffect(() => {
     if (cart.length > 0) {
-      setTotalAmount(
-        cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      const amount = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
       );
+      setTotalAmount(amount);
+      setFinalAmount(amount);
     }
   }, [cart]);
 
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-  useEffect(() => {
-    setFinalAmount(totalAmount - usedPoints);
-  }, [totalAmount, usedPoints]);
 
   useEffect(() => {
     if (!window.IMP) {
@@ -70,10 +55,13 @@ const PaymentPage = () => {
   }, []);
 
   const handleUsePoints = () => {
-    const validPoints = Math.min(inputPoints, pointBalance, totalAmount);
-    setUsedPoints(validPoints);
-    setInputPoints(validPoints);
+    const validPoints = Math.min(inputPoints, pointData, totalAmount);
+    
+    setUsedPoints(validPoints); // 사용한 포인트 상태 업데이트
+    setInputPoints(validPoints); // 입력 포인트 값 업데이트
+    setFinalAmount(totalAmount - validPoints); // 최종 결제 금액 계산
   };
+
   const handlePayment = () => {
     const IMP = window.IMP;
     IMP.init('imp17808248');
@@ -110,6 +98,7 @@ const PaymentPage = () => {
             totalAmount: finalAmount,
             paymentMethod: selectedPayment,
             pgProvider,
+            usedPoints: usedPoints,
             status: 'SUCCESS',
             items: cart.map((item) => ({
               foodId: item.foodId ?? null,
@@ -121,10 +110,6 @@ const PaymentPage = () => {
 
           await purchaseAPI(purchaseData);
           await reduceStockAPI(cart, token);
-
-          const previousUsedPoints =
-            Number(sessionStorage.getItem('usedPoints')) || 0;
-          sessionStorage.setItem('usedPoints', previousUsedPoints + usedPoints);
 
           alert('결제 성공 및 재고 감소 완료!');
           navigate('/mypage', { state: { merchantUid, cart } });
@@ -167,7 +152,15 @@ const PaymentPage = () => {
       <Payment.WhiteBox>
         <Payment.Wrapper>
           <Payment.TotalText>현재 내 포인트: </Payment.TotalText>
-          <Payment.TotalText> {pointBalance} point</Payment.TotalText>
+          {pointIsPending ? (
+            <Spinner />
+          ) : (
+            <Payment.TotalText>
+              {pointData.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              point
+            </Payment.TotalText>
+          )}
+
           <Payment.PointButton onClick={() => navigate('/mypage/point')}>
             충전하기
           </Payment.PointButton>
@@ -178,7 +171,7 @@ const PaymentPage = () => {
             <Payment.PointInput
               type='number'
               min='0'
-              max={Math.min(pointBalance, totalAmount)}
+              max={Math.min(pointData, totalAmount)}
               value={inputPoints}
               onChange={(e) => setInputPoints(Number(e.target.value))}
             />

@@ -44,10 +44,8 @@ export const MenuTitle = styled.h3`
   font-size: 20px;
   font-weight: 600;
   margin: 5px 0;
-  width: 116;
+  width: 100%;
   height: 21;
-  top: 115px;
-  left: 27px;
   margin-bottom: 10px;
 `;
 

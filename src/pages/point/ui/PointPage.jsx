@@ -1,16 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import CheckIcon from '@/pages/_assets/icons/CheckIcon.jsx';
+import { purchaseAPI } from '@/pages/payment/apis/purchases.api';
 
+import { chargePointAPI } from '../apis/point-charge.api';
 import creditCard from '../assets/credit-card.png';
 import kakaoPay from '../assets/kakao-pay.png';
 import tossPay from '../assets/toss-pay.png';
 import * as Point from './PointPage.style';
 
 const PointPage = () => {
+  const navigate = useNavigate();
   const [selectedPoint, setSelectedPoint] = useState(50000);
   const [currentPoints, setCurrentPoints] = useState(100000);
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
+  const [pgProvider, setPgProvider] = useState('html5_inicis');
+  const [isIMPReady, setIsIMPReady] = useState(false);
+
+  useEffect(() => {
+    if (!window.IMP) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.iamport.kr/v1/iamport.js';
+      script.async = true;
+      script.onload = () => setIsIMPReady(true);
+      document.body.appendChild(script);
+    } else {
+      setIsIMPReady(true);
+    }
+  }, []);
 
   const handlePointSelect = (points) => {
     setSelectedPoint(points);
@@ -18,11 +36,63 @@ const PointPage = () => {
 
   const handlePaymentMethodSelect = (method) => {
     setPaymentMethod(method);
+    if (method === 'credit-card') {
+      setPgProvider('html5_inicis');
+    } else if (method === 'kakaopay') {
+      setPgProvider('kakaopay');
+    } else if (method === 'tosspay') {
+      setPgProvider('tosspay');
+    }
   };
 
-  const handleCharge = () => {
-    alert(`충전 완료! ${selectedPoint} 포인트 충전되었습니다.`);
-    setCurrentPoints(currentPoints + selectedPoint);
+  const handleCharge = async () => {
+    if (!isIMPReady) {
+      alert('아임포트 SDK 로드 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+
+    const IMP = window.IMP;
+    IMP.init('imp17808248');
+
+    const merchantUid = `mid_${new Date().getTime()}`;
+
+    const paymentData = {
+      pg: pgProvider,
+      pay_method: paymentMethod,
+      merchant_uid: merchantUid,
+      name: '포인트 충전',
+      amount: selectedPoint,
+      buyer_email: 'test@example.com',
+      buyer_name: '테스터',
+      buyer_tel: '010-1234-5678',
+      buyer_addr: '서울특별시 강남구',
+      buyer_postcode: '123-456',
+    };
+
+    IMP.request_pay(paymentData, async (response) => {
+      console.log('Payment Response:', response);
+      if (response.success) {
+        try {
+          const chargeData = {
+            impUid: response.imp_uid,
+            money: selectedPoint,
+          };
+          const result = await chargePointAPI(chargeData);
+          console.log('Charge API Response:', result);
+
+          setCurrentPoints((prevPoints) => prevPoints + selectedPoint);
+
+          alert('포인트 충전 성공!');
+          navigate('/mypage');
+        } catch (error) {
+          alert('포인트 충전 중 오류가 발생했습니다.');
+        }
+      } else {
+        alert(
+          `결제 실패: ${response.error_msg || '알 수 없는 오류가 발생했습니다.'}`
+        );
+      }
+    });
   };
 
   return (

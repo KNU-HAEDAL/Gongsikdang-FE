@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { LoadingView, Spinner } from '@/shared/index.js';
+
 import { menuListAPI } from '../apis';
+import { useGetMenuList } from '../hooks';
 import * as Styled from './SelectCornerPage.style.js';
 
 const SelectCornerPage = () => {
@@ -9,22 +12,10 @@ const SelectCornerPage = () => {
   const [menuListData, setMenuListData] = useState([]);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    const fetchMenuData = async () => {
-      try {
-        const response = await menuListAPI();
-        setMenuListData(response.data);
-      } catch (error) {
-        console.error('메뉴 데이터 불러오기 오류:', error);
-        setIsError(true);
-      }
-    };
-
-    fetchMenuData();
-  }, []); //
+  const { data: menuData, isPending } = useGetMenuList();
 
   const menuByCorner =
-    menuListData?.reduce((acc, menu) => {
+    menuData?.reduce((acc, menu) => {
       if (!acc[menu.sector]) {
         acc[menu.sector] = [];
       }
@@ -36,6 +27,10 @@ const SelectCornerPage = () => {
     return (
       <Styled.ErrorMessage>데이터를 불러올 수 없습니다.</Styled.ErrorMessage>
     );
+  }
+
+  if (isPending) {
+    return <LoadingView />;
   }
 
   return (
