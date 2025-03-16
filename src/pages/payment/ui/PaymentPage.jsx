@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+import { useGetPoint } from '@/pages/mypage';
 
-import { Header } from '@/shared/index.js';
-import { fetchInstance } from '@/shared/instance/Instance';
-import * as Common from '@/shared/styles';
+import { Spinner } from '@/shared/index.js';
 
-import { getPointAPI } from '../apis/point.api.js';
 import { purchaseAPI } from '../apis/purchases.api.js';
 import { reduceStockAPI } from '../apis/reduce.api.js';
 import creditCard from '../assets/credit-card.png';
@@ -20,7 +17,6 @@ const PaymentPage = () => {
   const [cart, setCart] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState('credit-card');
   const [pgProvider, setPgProvider] = useState('html5_inicis');
-  const [pointBalance, setPointBalance] = useState(0);
   const [inputPoints, setInputPoints] = useState(0);
   const [usedPoints, setUsedPoints] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -33,17 +29,7 @@ const PaymentPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchPoints = async () => {
-      try {
-        const data = await getPointAPI();
-        setPointBalance(data.points ?? data ?? 0);
-      } catch (error) {
-        setPointBalance(0);
-      }
-    };
-    fetchPoints();
-  }, []);
+  const { data: pointData, isPending: pointIsPending } = useGetPoint();
 
   useEffect(() => {
     if (cart.length > 0) {
@@ -69,10 +55,11 @@ const PaymentPage = () => {
   }, []);
 
   const handleUsePoints = () => {
-    const validPoints = Math.min(inputPoints, pointBalance, totalAmount);
-    setUsedPoints(validPoints);
-    setInputPoints(validPoints);
-    setFinalAmount(totalAmount - validPoints);
+    const validPoints = Math.min(inputPoints, pointData, totalAmount);
+    
+    setUsedPoints(validPoints); // 사용한 포인트 상태 업데이트
+    setInputPoints(validPoints); // 입력 포인트 값 업데이트
+    setFinalAmount(totalAmount - validPoints); // 최종 결제 금액 계산
   };
 
   const handlePayment = () => {
@@ -165,11 +152,15 @@ const PaymentPage = () => {
       <Payment.WhiteBox>
         <Payment.Wrapper>
           <Payment.TotalText>현재 내 포인트: </Payment.TotalText>
-          <Payment.TotalText>
-            {' '}
-            {pointBalance}
-            point
-          </Payment.TotalText>
+          {pointIsPending ? (
+            <Spinner />
+          ) : (
+            <Payment.TotalText>
+              {pointData.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              point
+            </Payment.TotalText>
+          )}
+
           <Payment.PointButton onClick={() => navigate('/mypage/point')}>
             충전하기
           </Payment.PointButton>
@@ -180,7 +171,7 @@ const PaymentPage = () => {
             <Payment.PointInput
               type='number'
               min='0'
-              max={Math.min(pointBalance, totalAmount)}
+              max={Math.min(pointData, totalAmount)}
               value={inputPoints}
               onChange={(e) => setInputPoints(Number(e.target.value))}
             />
