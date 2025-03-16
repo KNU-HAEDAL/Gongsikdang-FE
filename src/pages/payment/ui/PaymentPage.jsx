@@ -20,7 +20,7 @@ const PaymentPage = () => {
   const [inputPoints, setInputPoints] = useState(0);
   const [usedPoints, setUsedPoints] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [finalAmount, setFinalAmount] = useState(0); // finalAmount 초기값 설정
+  const [finalAmount, setFinalAmount] = useState(0);
 
   useEffect(() => {
     const storedCart = sessionStorage.getItem('cart');
@@ -38,7 +38,7 @@ const PaymentPage = () => {
         0
       );
       setTotalAmount(amount);
-      setFinalAmount(amount); // totalAmount와 finalAmount를 동일하게 설정
+      setFinalAmount(amount);
     }
   }, [cart]);
 
@@ -54,9 +54,9 @@ const PaymentPage = () => {
     }
   }, []);
 
-  // 사용한 포인트 계산
   const handleUsePoints = () => {
     const validPoints = Math.min(inputPoints, pointData, totalAmount);
+    
     setUsedPoints(validPoints); // 사용한 포인트 상태 업데이트
     setInputPoints(validPoints); // 입력 포인트 값 업데이트
     setFinalAmount(totalAmount - validPoints); // 최종 결제 금액 계산
