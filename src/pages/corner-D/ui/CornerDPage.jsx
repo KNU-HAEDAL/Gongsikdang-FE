@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import CloseIcon from '@/pages/_assets/icons/CloseIcon.jsx';
@@ -6,36 +6,23 @@ import FilledStarIcon from '@/pages/_assets/icons/FilledStarIcon';
 import LeftTriangleIcon from '@/pages/_assets/icons/LeftTriangleIcon';
 import RightTriangleIcon from '@/pages/_assets/icons/RightTriangleIcon';
 
-import { cornerDListAPI } from '../apis/cornerD.api.js';
+import { LoadingView, useGetMenuList } from '@/shared';
+
 import * as Styled from './CornerDPage.style.js';
 
 const CornerDPage = () => {
   const navigate = useNavigate();
-  const [menuData, setMenuData] = useState([]);
   const [cart, setCart] = useState([]);
   const [quantities, setQuantities] = useState({});
+  const { data: menuDData, isPending } = useGetMenuList('D');
 
   useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        console.log('메뉴 데이터 요청 시작');
-        const response = await cornerDListAPI();
-        console.log('API 응답 데이터:', response.data);
-
-        setMenuData(response.data);
-        setQuantities(
-          response.data.reduce(
-            (acc, item) => ({ ...acc, [item.foodId]: 1 }),
-            {}
-          )
-        );
-      } catch (error) {
-        console.error('메뉴 데이터 불러오기 오류:', error);
-      }
-    };
-
-    fetchMenu();
-  }, []);
+    if (menuDData) {
+      setQuantities(
+        menuDData.reduce((acc, item) => ({ ...acc, [item.foodId]: 1 }), {})
+      );
+    }
+  }, [menuDData]);
 
   useEffect(() => {
     sessionStorage.setItem('cart', JSON.stringify(cart));
@@ -62,6 +49,10 @@ const CornerDPage = () => {
     });
   };
 
+  if (isPending) {
+    return <LoadingView />;
+  }
+
   const handleQuantityChange = (id, delta) => {
     setQuantities((prev) => {
       const newQuantity = Math.max(1, prev[id] + delta);
@@ -76,7 +67,7 @@ const CornerDPage = () => {
   return (
     <div>
       <Styled.MenuList>
-        {menuData.map((item) => (
+        {menuDData.map((item) => (
           <Styled.MenuCard key={item.foodId}>
             <Styled.Image
               src={item.image || `/images/${item.foodId}.jpg`}
@@ -112,7 +103,7 @@ const CornerDPage = () => {
                 <RightTriangleIcon color='#000' />
               </Styled.QuantityButton>
             </Styled.QuantityControl>
-            <Styled.Stock>남은 수량: {item.number}개</Styled.Stock>
+            <Styled.Stock>남은 수량:{item.number}개</Styled.Stock>
             <Styled.AddToCartButton onClick={() => addToCart(item)}>
               담기
             </Styled.AddToCartButton>
