@@ -39,6 +39,16 @@ const ReviewWritePage = () => {
     const success = await postReviewAPI(reviewData);
     if (success) {
       alert('리뷰가 성공적으로 등록되었습니다.');
+
+      // ✅ 리뷰 완료 상태를 localStorage에 저장
+      const reviewedPurchases =
+        JSON.parse(localStorage.getItem('reviewedPurchases')) || {};
+      reviewedPurchases[foodId] = true;
+      localStorage.setItem(
+        'reviewedPurchases',
+        JSON.stringify(reviewedPurchases)
+      );
+
       navigate(`/review/food/${foodId}`);
     } else {
       alert('리뷰 등록에 실패했습니다.');

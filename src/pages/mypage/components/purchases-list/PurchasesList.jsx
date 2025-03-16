@@ -13,11 +13,17 @@ export const PurchasesList = () => {
   const { data: purchasesList, isPending } = useGetPurchaseList();
   const navigate = useNavigate();
   const [confirmedPurchases, setConfirmedPurchases] = useState({});
+  const [reviewedPurchases, setReviewedPurchases] = useState({});
 
+  // ✅ 로컬 스토리지에서 구매확정 및 리뷰완료 상태 불러오기
   useEffect(() => {
-    const storedData =
+    const storedConfirmedPurchases =
       JSON.parse(localStorage.getItem('confirmedPurchases')) || {};
-    setConfirmedPurchases(storedData);
+    setConfirmedPurchases(storedConfirmedPurchases);
+
+    const storedReviewedPurchases =
+      JSON.parse(localStorage.getItem('reviewedPurchases')) || {};
+    setReviewedPurchases(storedReviewedPurchases);
   }, []);
 
   const handleConfirmPurchase = (index) => {
@@ -55,62 +61,71 @@ export const PurchasesList = () => {
       <Mypage.PurchaseBox>
         {purchasesList.length > 0 ? (
           <Mypage.PurchaseList>
-            {purchasesList.map((purchase, index) => (
-              <Mypage.PurchaseCard key={index}>
-                <Mypage.PurchaseTitle>
-                  {purchase.items[0]?.foodName}
-                </Mypage.PurchaseTitle>
-                <Mypage.PurchaseDate>{purchase.date}</Mypage.PurchaseDate>
-                <Mypage.QRCodeBox>
-                  <Mypage.QRCode>
-                    <img
-                      src={confirmedPurchases[index] ? QR2 : QR1}
-                      alt='QR Code'
-                      style={{ width: '40px', height: '40px' }}
-                    />
-                  </Mypage.QRCode>
-                  <Mypage.QRText
-                    onClick={() =>
-                      navigate('/mypage/barcode', {
-                        state: {
-                          foodName:
-                            purchase.items[0]?.foodName || '상품명 없음',
-                          date: purchase.date,
-                          merchantUid: purchase.merchantUid,
-                        },
-                      })
-                    }
-                    style={{
-                      pointerEvents: confirmedPurchases[index]
-                        ? 'none'
-                        : 'auto',
-                      color: confirmedPurchases[index] ? 'gray' : 'black',
-                    }}
-                  >
-                    QR 코드 확인하기
-                  </Mypage.QRText>
-                </Mypage.QRCodeBox>
-                <Mypage.ButtonBox>
-                  <Mypage.StatusText>
-                    {confirmedPurchases[index] ? '사용불가' : '사용가능'}
-                  </Mypage.StatusText>
-                  {confirmedPurchases[index] ? (
-                    <Mypage.ActionButton
-                      style={{ backgroundColor: 'red' }}
-                      onClick={() => handleReviewClick(purchase)}
+            {purchasesList.map((purchase, index) => {
+              const foodId = purchase.items[0]?.foodId;
+              const isReviewed = reviewedPurchases[foodId]; // ✅ 리뷰완료 여부 체크
+
+              return (
+                <Mypage.PurchaseCard key={index}>
+                  <Mypage.PurchaseTitle>
+                    {purchase.items[0]?.foodName}
+                  </Mypage.PurchaseTitle>
+                  <Mypage.PurchaseDate>{purchase.date}</Mypage.PurchaseDate>
+                  <Mypage.QRCodeBox>
+                    <Mypage.QRCode>
+                      <img
+                        src={confirmedPurchases[index] ? QR2 : QR1}
+                        alt='QR Code'
+                        style={{ width: '40px', height: '40px' }}
+                      />
+                    </Mypage.QRCode>
+                    <Mypage.QRText
+                      onClick={() =>
+                        navigate('/mypage/barcode', {
+                          state: {
+                            foodName:
+                              purchase.items[0]?.foodName || '상품명 없음',
+                            date: purchase.date,
+                            merchantUid: purchase.merchantUid,
+                          },
+                        })
+                      }
+                      style={{
+                        pointerEvents: confirmedPurchases[index]
+                          ? 'none'
+                          : 'auto',
+                        color: confirmedPurchases[index] ? 'gray' : 'black',
+                      }}
                     >
-                      리뷰작성
-                    </Mypage.ActionButton>
-                  ) : (
-                    <Mypage.ActionButton
-                      onClick={() => handleConfirmPurchase(index)}
-                    >
-                      구매확정
-                    </Mypage.ActionButton>
-                  )}
-                </Mypage.ButtonBox>
-              </Mypage.PurchaseCard>
-            ))}
+                      QR 코드 확인하기
+                    </Mypage.QRText>
+                  </Mypage.QRCodeBox>
+                  <Mypage.ButtonBox>
+                    <Mypage.StatusText>
+                      {confirmedPurchases[index] ? '사용불가' : '사용가능'}
+                    </Mypage.StatusText>
+
+                    {confirmedPurchases[index] ? (
+                      <Mypage.ActionButton
+                        style={{
+                          backgroundColor: isReviewed ? 'gray' : 'red',
+                          pointerEvents: isReviewed ? 'none' : 'auto',
+                        }}
+                        onClick={() => handleReviewClick(purchase)}
+                      >
+                        {isReviewed ? '리뷰완료' : '리뷰작성'}
+                      </Mypage.ActionButton>
+                    ) : (
+                      <Mypage.ActionButton
+                        onClick={() => handleConfirmPurchase(index)}
+                      >
+                        구매확정
+                      </Mypage.ActionButton>
+                    )}
+                  </Mypage.ButtonBox>
+                </Mypage.PurchaseCard>
+              );
+            })}
           </Mypage.PurchaseList>
         ) : (
           <Mypage.InfoText>구매 내역이 없습니다.</Mypage.InfoText>
