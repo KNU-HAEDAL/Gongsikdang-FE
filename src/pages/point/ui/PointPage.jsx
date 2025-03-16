@@ -61,7 +61,7 @@ const PointPage = () => {
       pay_method: paymentMethod,
       merchant_uid: merchantUid,
       name: '포인트 충전',
-      amount: selectedPoint, // 충전할 포인트 금액
+      amount: selectedPoint,
       buyer_email: 'test@example.com',
       buyer_name: '테스터',
       buyer_tel: '010-1234-5678',
@@ -70,17 +70,17 @@ const PointPage = () => {
     };
 
     IMP.request_pay(paymentData, async (response) => {
-      console.log('Payment Response:', response); // 결제 응답 확인
+      console.log('Payment Response:', response);
       if (response.success) {
         try {
           const chargeData = {
             impUid: response.imp_uid,
-            money: selectedPoint, // 결제된 금액
+            money: selectedPoint,
           };
           const result = await chargePointAPI(chargeData);
-          console.log('Charge API Response:', result); // 충전 API 응답 확인
+          console.log('Charge API Response:', result);
 
-          setCurrentPoints((prevPoints) => prevPoints + selectedPoint); // 포인트 업데이트
+          setCurrentPoints((prevPoints) => prevPoints + selectedPoint);
 
           alert('포인트 충전 성공!');
           navigate('/mypage');
