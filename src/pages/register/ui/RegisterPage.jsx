@@ -16,6 +16,7 @@ const RegisterPage = () => {
   const [name, setName] = useState('');
 
   const [idError, setIdError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [idValid, setIdValid] = useState(null);
@@ -49,16 +50,28 @@ const RegisterPage = () => {
       toast.error('회원가입 실패. 다시 시도해주세요.');
     },
   });
-
-  const handleCheckId = () => {
-    if (!id.trim()) {
-      setIdError('아이디를 입력해주세요.');
-      return;
+  // 아이디 유효성 검사
+  const handleIdValidation = (value) => {
+    setId(value);
+    if (value.length < 6 || value.length > 12) {
+      setIdError('아이디는 6~12자로 입력해주세요.');
+      setIdValid(false);
+    } else {
+      setIdError('');
+      setIdValid(true);
     }
-
-    checkIdDuplicate({ id });
   };
 
+  // 닉네임 유효성 검사
+  const handleNameValidation = (value) => {
+    setName(value);
+    const nameRegex = /^[가-힣a-zA-Z0-9]{3,}$/; // 특수문자 제외, 최소 3자 이상
+    if (!nameRegex.test(value)) {
+      setNameError('닉네임은 특수문자를 제외한 3글자 이상 입력해주세요.');
+    } else {
+      setNameError('');
+    }
+  };
   // 비밀번호 유효성 검사
   const handlePasswordValidation = () => {
     const isValid =
@@ -134,7 +147,7 @@ const RegisterPage = () => {
         </Register.FormSection>
         <Register.SmallButton
           type='button'
-          onClick={handleCheckId}
+          onClick={() => checkIdDuplicate({ id })}
           disabled={isCheckingId}
         >
           {isCheckingId ? '확인 중...' : '중복확인'}
