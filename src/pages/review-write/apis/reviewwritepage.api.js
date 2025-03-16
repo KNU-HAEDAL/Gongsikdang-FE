@@ -1,8 +1,8 @@
 import { fetchInstance } from '@/shared';
 
-export const getPurchasedFoodsAPI = async (userId) => {
+export const getPurchasedFoodsAPI = async () => {
   try {
-    const response = await fetchInstance.get(`/app/api/purchases/${userId}`);
+    const response = await fetchInstance.get('/api/purchases');
     return response.data;
   } catch (error) {
     console.error('구매한 음식 목록 불러오기 오류:', error);
@@ -12,16 +12,12 @@ export const getPurchasedFoodsAPI = async (userId) => {
 
 export const postReviewAPI = async (reviewData) => {
   try {
-    const response = await fetchInstance.post(
-      '/app/api/review/write',
-      reviewData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: '*/*',
-        },
-      }
-    );
+    const response = await fetchInstance.post('/api/review/write', reviewData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: '*/*',
+      },
+    });
 
     console.log('리뷰 등록 응답 데이터:', response);
 

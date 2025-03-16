@@ -36,17 +36,12 @@ const ReviewWritePage = () => {
 
     console.log('리뷰 등록 요청 데이터:', reviewData);
 
-    try {
-      const success = await postReviewAPI(reviewData);
-      if (success) {
-        alert('리뷰가 성공적으로 등록되었습니다.');
-        navigate(`/review/${foodId}`);
-      } else {
-        alert('리뷰 등록에 실패했습니다.');
-      }
-    } catch (error) {
-      console.error('리뷰 등록 중 오류 발생:', error);
-      alert('리뷰 등록 중 오류가 발생했습니다.');
+    const success = await postReviewAPI(reviewData);
+    if (success) {
+      alert('리뷰가 성공적으로 등록되었습니다.');
+      navigate(`/review/food/${foodId}`);
+    } else {
+      alert('리뷰 등록에 실패했습니다.');
     }
   };
 
