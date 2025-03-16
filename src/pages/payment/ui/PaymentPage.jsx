@@ -56,10 +56,10 @@ const PaymentPage = () => {
 
   const handleUsePoints = () => {
     const validPoints = Math.min(inputPoints, pointData, totalAmount);
-    
-    setUsedPoints(validPoints); // 사용한 포인트 상태 업데이트
-    setInputPoints(validPoints); // 입력 포인트 값 업데이트
-    setFinalAmount(totalAmount - validPoints); // 최종 결제 금액 계산
+
+    setUsedPoints(validPoints);
+    setInputPoints(validPoints);
+    setFinalAmount(totalAmount - validPoints);
   };
 
   const handlePayment = () => {
@@ -86,6 +86,7 @@ const PaymentPage = () => {
       buyer_tel: '010-1234-5678',
       buyer_addr: '서울특별시 강남구',
       buyer_postcode: '123-456',
+      m_redirect_url: 'https://d3lz1uigms4ul3.cloudfront.net/mypage',
     };
 
     IMP.request_pay(paymentData, async (response) => {
