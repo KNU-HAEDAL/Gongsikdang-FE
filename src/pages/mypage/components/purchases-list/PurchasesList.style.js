@@ -58,13 +58,14 @@ export const QRCodeBox = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
 export const QRCode = styled.div`
-  width: 50px;
-  height: 50px;
-  background-color: #f0f0f0;
+  width: 40px;
+  height: 40px;
   margin: 5px 0;
   border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 export const QRText = styled.div`
   font-size: 14px;

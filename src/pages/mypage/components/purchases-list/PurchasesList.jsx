@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { LoadingView } from '@/shared';
 
+import QR1 from '../../_assets/QR1.png';
+import QR2 from '../../_assets/QR2.png';
 import { useGetPurchaseList } from '../../hooks';
 import { Section, Title } from '../../ui';
 import * as Mypage from './PurchasesList.style';
@@ -60,7 +62,13 @@ export const PurchasesList = () => {
                 </Mypage.PurchaseTitle>
                 <Mypage.PurchaseDate>{purchase.date}</Mypage.PurchaseDate>
                 <Mypage.QRCodeBox>
-                  <Mypage.QRCode />
+                  <Mypage.QRCode>
+                    <img
+                      src={confirmedPurchases[index] ? QR2 : QR1}
+                      alt='QR Code'
+                      style={{ width: '40px', height: '40px' }}
+                    />
+                  </Mypage.QRCode>
                   <Mypage.QRText
                     onClick={() =>
                       navigate('/mypage/barcode', {
