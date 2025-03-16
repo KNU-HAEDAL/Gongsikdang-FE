@@ -1,10 +1,11 @@
 import { fetchInstance } from '@/shared';
 
-export const reviewFoodListPath = '/api/review/read/1?sort=desc';
-
-export const reviewFoodListAPI = async () => {
+export const reviewFoodListAPI = async (foodId) => {
   try {
-    const response = await fetchInstance.get(reviewFoodListPath);
+    const response = await fetchInstance.get(
+      `/api/review/read/${foodId}?sort=desc`
+    );
+
     return response.data.map((review) => ({
       foodName: review.foodName,
       id: review.reviewId,
@@ -14,7 +15,10 @@ export const reviewFoodListAPI = async () => {
       rating: review.grade,
     }));
   } catch (error) {
-    console.error('리뷰 데이터 불러오기 오류:', error);
+    console.error(
+      '리뷰 데이터 불러오기 오류:',
+      error.response?.data || error.message
+    );
     return [];
   }
 };

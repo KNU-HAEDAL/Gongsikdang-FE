@@ -27,8 +27,13 @@ export const PurchasesList = () => {
     );
   };
 
-  const handleReviewClick = () => {
-    navigate('/review/write');
+  const handleReviewClick = (purchase) => {
+    navigate('/review/write', {
+      state: {
+        foodId: purchase.items[0]?.foodId,
+        foodName: purchase.items[0]?.foodName || '상품명 없음',
+      },
+    });
   };
 
   if (isPending) {
@@ -84,7 +89,7 @@ export const PurchasesList = () => {
                   {confirmedPurchases[index] ? (
                     <Mypage.ActionButton
                       style={{ backgroundColor: 'red' }}
-                      onClick={handleReviewClick}
+                      onClick={() => handleReviewClick(purchase)}
                     >
                       리뷰작성
                     </Mypage.ActionButton>
