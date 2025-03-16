@@ -16,21 +16,18 @@ const ReviewFoodPage = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       const data = await reviewFoodListAPI(Number(foodId));
-      const filteredReviews = data.filter(
-        (review) => review.foodId === Number(foodId)
-      );
 
-      if (filteredReviews.length > 0) {
-        setFoodName(filteredReviews[0].foodName);
-        setReviews(filteredReviews.sort((a, b) => b.rating - a.rating));
+      if (data.length > 0) {
+        setFoodName(data[0].foodName);
+        setReviews(data.sort((a, b) => b.rating - a.rating));
       } else {
-        setFoodName(`${foodName}`);
+        setFoodName('리뷰 없음');
         setReviews([]);
       }
     };
 
     fetchReviews();
-  }, [foodId, foodName]);
+  }, [foodId]);
 
   const sortReviews = (order) => {
     const sortedReviews = [...reviews].sort((a, b) =>
