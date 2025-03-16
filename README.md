@@ -3,7 +3,11 @@
 
 ## 🚢 배포 주소
 ### Frontend
-http://gongsikdang.s3-website.ap-northeast-2.amazonaws.com/
+https://d3lz1uigms4ul3.cloudfront.net
+
+### 웹앱 사용방법
+<img width="720" alt="image" src="https://github.com/user-attachments/assets/f0751f6e-929e-4bb9-b3d9-48d6ca37a7bd" />
+
 
 ### Backend
 https://gongsikdang-be-production.up.railway.app
@@ -35,7 +39,7 @@ https://gongsikdang-be-production.up.railway.app/swagger-ui/swagger-ui/index.htm
 
 
 ### Frontend
-![Tech Spec_FE](https://github.com/user-attachments/assets/b79ee575-59f5-4d52-ae18-f4fc5ee9d51c)
+![Tech Spec_FE_2](https://github.com/user-attachments/assets/6d09b037-6b6c-4861-b92a-be0cebba93e0)
 
 ### Backend
 ![Tech Spec_BE](https://github.com/user-attachments/assets/ce8b224b-6ae4-4385-b96f-f5c59d60c89b)
