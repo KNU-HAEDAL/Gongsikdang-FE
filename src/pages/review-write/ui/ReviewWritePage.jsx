@@ -14,12 +14,14 @@ const ReviewWritePage = () => {
   const [rating, setRating] = useState(3);
   const [reviewContent, setReviewContent] = useState('');
 
-  // 별점 선택
+  useEffect(() => {
+    console.log('받아온 음식 정보:', location.state);
+  }, [location.state]);
+
   const handleRating = (index) => {
     setRating(index + 1);
   };
 
-  // 리뷰 제출
   const handleSubmit = async () => {
     if (!foodId) {
       alert('유효한 음식 정보가 없습니다.');
@@ -32,18 +34,25 @@ const ReviewWritePage = () => {
       grade: rating,
     };
 
-    const success = await postReviewAPI(reviewData);
-    if (success) {
-      alert('리뷰가 성공적으로 등록되었습니다.');
-      navigate(-1);
-    } else {
-      alert('리뷰 등록에 실패했습니다.');
+    console.log('리뷰 등록 요청 데이터:', reviewData);
+
+    try {
+      const success = await postReviewAPI(reviewData);
+      if (success) {
+        alert('리뷰가 성공적으로 등록되었습니다.');
+        navigate(`/review/${foodId}`);
+      } else {
+        alert('리뷰 등록에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('리뷰 등록 중 오류 발생:', error);
+      alert('리뷰 등록 중 오류가 발생했습니다.');
     }
   };
 
   return (
     <div>
-      <Styled.FoodTitle>{foodName || '음식1'}</Styled.FoodTitle>
+      <Styled.FoodTitle>{foodName || '상품명 없음'}</Styled.FoodTitle>
 
       <Styled.Section>
         <Styled.Subtitle>별점</Styled.Subtitle>
