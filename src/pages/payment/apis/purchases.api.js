@@ -9,6 +9,7 @@ export const purchaseAPI = async (purchaseData) => {
       totalAmount: purchaseData.totalAmount,
       paymentMethod: purchaseData.paymentMethod,
       pgProvider: purchaseData.pgProvider,
+      usedPoints: purchaseData.usedPoints || 0,
       status: 'SUCCESS',
       items: purchaseData.items.map((item) => ({
         foodId: item.foodId ?? null,
