@@ -25,15 +25,16 @@ const pageHeight = 'auto';
 export const globalStyle = css`
   @font-face {
     font-family: 'Pretendard-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-      format('woff');
+    src: url('/font/PretendardVariable.woff2') format('woff2');
     font-style: normal;
+    font-weight: normal;
   }
 
   @font-face {
     font-family: 'BMJUA';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff')
-      format('woff');
+    src:
+      url('/font/BMJUA.otf') format('opentype'),
+      url('/font/BMJUA.otf') format('truetype');
     font-weight: normal;
     font-style: normal;
   }
@@ -68,7 +69,8 @@ export const globalStyle = css`
   }
 
   body {
-    font-family: 'Pretendard-Regular', 'BMJUA', Arial, sans-serif;
+    font-family: 'Pretendard-Regular', 'BMJUA', 'Apple SD Gothic Neo', Arial,
+      sans-serif;
     font-size: var(--font-md);
     background: linear-gradient(135deg, #ffb3b3, #fffefe);
     display: flex;
