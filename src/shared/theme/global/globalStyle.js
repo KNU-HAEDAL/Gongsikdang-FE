@@ -25,18 +25,22 @@ const pageHeight = 'auto';
 export const globalStyle = css`
   @font-face {
     font-family: 'Pretendard-Regular';
-    src: url('/font/PretendardVariable.woff2') format('woff2');
+    src:
+      url('/font/PretendardVariable.woff2') format('woff2'),
+      url('/font/PretendardVariable.ttf') format('truetype');
     font-style: normal;
     font-weight: normal;
+    display: swap;
   }
 
   @font-face {
     font-family: 'BMJUA';
     src:
       url('/font/BMJUA.otf') format('opentype'),
-      url('/font/BMJUA.otf') format('truetype');
+      url('/font/BMJUA.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    display: swap;
   }
 
   :root {
